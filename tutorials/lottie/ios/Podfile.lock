@@ -1,0 +1,39 @@
+PODS:
+  - dartnative_ios (0.1.0):
+    - DartNativeCore
+    - FlexLayout (= 2.0.10)
+  - dartnative_lottie (0.1.0):
+    - DartNativeCore
+    - lottie-ios (~> 4.6.0)
+  - DartNativeCore (1.0.0)
+  - FlexLayout (2.0.10)
+  - lottie-ios (4.6.0)
+
+DEPENDENCIES:
+  - dartnative_ios (from `.symlinks/plugins/dartnative_ios/ios`)
+  - dartnative_lottie (from `.symlinks/plugins/dartnative_lottie/ios`)
+  - DartNativeCore (from `DartNative`)
+
+SPEC REPOS:
+  trunk:
+    - FlexLayout
+    - lottie-ios
+
+EXTERNAL SOURCES:
+  dartnative_ios:
+    :path: ".symlinks/plugins/dartnative_ios/ios"
+  dartnative_lottie:
+    :path: ".symlinks/plugins/dartnative_lottie/ios"
+  DartNativeCore:
+    :path: DartNative
+
+SPEC CHECKSUMS:
+  dartnative_ios: bb9d11e56f5904d0afbfd001554e1eee22e8c2ea
+  dartnative_lottie: 035c1dcde064eb97d464ca184e4abca01abbe38f
+  DartNativeCore: 9eecfba03ffd35341736d4464b498c38454a56d0
+  FlexLayout: ea94491c923485f7f28891cb5b10245d22df380b
+  lottie-ios: 8f959969761e9c45d70353667d00af0e5b9cadb3
+
+PODFILE CHECKSUM: 7ebfe451e66b5eadb0cc21fd30abfd19d621dd60
+
+COCOAPODS: 1.16.2

@@ -1,0 +1,30 @@
+name: google_maps_example
+description: Example app for dartnative_google_maps — Google Maps demos.
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.9.0-0
+
+dependencies:
+  dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  dartnative_skia: ^1.0.0
+  dartnative_google_maps: ^1.0.0
+  dartnative_splash: ^1.0.0
+
+dev_dependencies:
+  lints: ^6.0.0
+
+dartnative_skia:
+  variant: full
+
+dartnative_splash:
+  background_color: "#000000"
+  image: assets/dn-logo.png
+  ios: true
+  android: true
+
+dartnative:
+

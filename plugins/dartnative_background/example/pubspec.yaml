@@ -1,0 +1,41 @@
+name: background_example
+description: >
+  Example for dartnative_background — schedules one-off / delayed / periodic /
+  processing tasks and runs them in a headless isolate over FFI (iOS + Android).
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.9.0-0
+
+dependencies:
+  dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  dartnative_skia: ^1.0.0
+  dartnative_background: ^1.0.0
+  # Used by the headless dispatcher to prove FFI plugins work in the background isolate.
+  dartnative_path_provider: ^1.0.0
+  # The dispatcher posts a notification when a task runs (visible in the background).
+  # Also requests the notification permission. (Apps that centralize permissions can
+  # use dartnative_permissions' Permission.notification.request() instead.)
+  dartnative_notifications: ^1.0.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  dartnative_splash: ^1.0.0
+
+dartnative_skia:
+  variant: full
+
+# Run:  dart run dartnative_splash:setup
+# Regenerate any time you change the logo or background color.
+dartnative_splash:
+  background_color: "#000000"
+  image: assets/dn-logo.png
+  android: true
+  ios: true
+
+dartnative:
+  assets:
+    - assets/dn-logo.png

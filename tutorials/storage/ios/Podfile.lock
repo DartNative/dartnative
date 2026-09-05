@@ -1,0 +1,47 @@
+PODS:
+  - dartnative_ios (0.1.0):
+    - DartNativeCore
+    - FlexLayout (= 2.0.10)
+  - dartnative_path_provider (0.2.0):
+    - DartNativeCore
+  - dartnative_secure_storage (0.1.0):
+    - DartNativeCore
+  - dartnative_shared_preferences (0.1.0):
+    - DartNativeCore
+  - DartNativeCore (1.0.0)
+  - FlexLayout (2.0.10)
+
+DEPENDENCIES:
+  - dartnative_ios (from `.symlinks/plugins/dartnative_ios/ios`)
+  - dartnative_path_provider (from `.symlinks/plugins/dartnative_path_provider/ios`)
+  - dartnative_secure_storage (from `.symlinks/plugins/dartnative_secure_storage/ios`)
+  - dartnative_shared_preferences (from `.symlinks/plugins/dartnative_shared_preferences/ios`)
+  - DartNativeCore (from `DartNative`)
+
+SPEC REPOS:
+  trunk:
+    - FlexLayout
+
+EXTERNAL SOURCES:
+  dartnative_ios:
+    :path: ".symlinks/plugins/dartnative_ios/ios"
+  dartnative_path_provider:
+    :path: ".symlinks/plugins/dartnative_path_provider/ios"
+  dartnative_secure_storage:
+    :path: ".symlinks/plugins/dartnative_secure_storage/ios"
+  dartnative_shared_preferences:
+    :path: ".symlinks/plugins/dartnative_shared_preferences/ios"
+  DartNativeCore:
+    :path: DartNative
+
+SPEC CHECKSUMS:
+  dartnative_ios: bb9d11e56f5904d0afbfd001554e1eee22e8c2ea
+  dartnative_path_provider: 98e132917c80058aadbc1080ac9f9e5210a109a5
+  dartnative_secure_storage: 419ce2552b33b51add75204a5b8e5306c7a027d0
+  dartnative_shared_preferences: fe1e803a94d40761bb590cbccded9d800ca553ea
+  DartNativeCore: 9eecfba03ffd35341736d4464b498c38454a56d0
+  FlexLayout: ea94491c923485f7f28891cb5b10245d22df380b
+
+PODFILE CHECKSUM: 7ebfe451e66b5eadb0cc21fd30abfd19d621dd60
+
+COCOAPODS: 1.16.2

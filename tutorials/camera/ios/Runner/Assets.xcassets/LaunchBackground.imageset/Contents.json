@@ -1,0 +1,8 @@
+{
+  "images" : [
+    {"filename" : "background.png", "idiom" : "universal", "scale" : "1x"},
+    {"idiom" : "universal", "scale" : "2x"},
+    {"idiom" : "universal", "scale" : "3x"}
+  ],
+  "info" : {"author" : "dartnative_splash", "version" : 1}
+}

@@ -1,0 +1,38 @@
+name: dartnative_firebase_example
+description: >
+  Internal example app for dartnative_firebase. Tests FCM (foreground + tap +
+  background + topics + APNs token + initial message) on iOS and Android with
+  no upstream Flutter dependency.
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.9.0-0
+
+dependencies:
+
+  # ─── dartnative framework ────────────────────────────────────────────────
+  dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  dartnative_skia: ^1.0.0
+
+  # ─── Plugin under test ───────────────────────────────────────────────────
+  dartnative_firebase: ^1.0.0
+
+  # HTTP client for the "Send" button (POSTs to FCM legacy API).
+  http: ^1.2.0
+  ffi: ^2.1.0
+  dartnative_splash: ^1.0.0
+
+dev_dependencies:
+  lints: ^6.0.0
+
+dartnative_splash:
+  background_color: "#000000"
+  image: assets/dn-logo.png
+  ios: true
+  android: true
+
+dartnative:
+

@@ -1,0 +1,97 @@
+Copyright (c) 2026 Presence Network Inc. All rights reserved.
+DartNative (https://dartnative.com) is a product of Presence Network Inc.
+
+DARTNATIVE FRAMEWORK LICENSE
+
+1. DEFINITIONS
+   "Licensor" means Presence Network Inc., owner of the DartNative
+   framework.
+   "Software" means the DartNative framework, including its source code,
+   binaries, and tooling, which are the exclusive property of Licensor.
+   "Licensee" means the holder of a valid license token obtained through
+   https://dartpub.dev.
+   "First-Party Plugins" means Licensor's plugins distributed through
+   https://dartpub.dev.
+
+2. LICENSE GRANT
+   A valid license token grants Licensee a limited, non-exclusive,
+   non-transferable, non-sublicensable right to:
+   (a) use the Software to build and deploy applications;
+   (b) access the Software via the DartNative private package registry while
+       the subscription is active; and
+   (c) Continuity for Shipped Applications: applications built and
+       distributed to end users under a valid subscription remain licensed
+       to run for those end users after the subscription expires. Expiry
+       ends the rights in (a) and (b); it never ends the right of an
+       already-distributed application to keep running. This continuity
+       does not apply where the license token is revoked for breach of this
+       license or for fraud.
+
+3. RESTRICTIONS
+   Licensee may not:
+   (a) copy, modify, distribute, sublicense, or create derivative works of
+       the Software;
+   (b) reverse-engineer, decompile, or disassemble the Software;
+   (c) remove or obscure any proprietary notices;
+   (d) share license tokens with third parties; or
+   (e) develop, build, or deploy applications with the Software after
+       subscription expiry or token revocation. This does not limit the
+       Continuity for Shipped Applications in Section 2(c).
+
+4. SUNSET COMMITMENT
+   4.1 Discontinuation. The Software shall be deemed "Discontinued" upon the
+       earlier of: (a) Licensor's formal public announcement that the
+       Software has reached end-of-life; or (b) the expiration of a
+       continuous period of twelve (12) months during which Licensor has
+       published no update to the Software — no fixes, improvements, or new
+       features — and has made no public statement of continued maintenance.
+   4.2 Source Release. Within ninety (90) days of Discontinuation, Licensor
+       shall publish the then-current source code of the Software — together
+       with the First-Party Plugins — under the BSD 3-Clause License. This
+       obligation does not extend to: (i) third-party components, which
+       remain governed by their own licenses; (ii) Licensor's trademarks; or
+       (iii) Licensor's license-enforcement infrastructure, credentials, and
+       signing keys.
+   4.3 Survival; Benefit. This Sunset Commitment is binding upon Licensor
+       and its successors and assigns, survives any sale, merger, or other
+       transfer of the Software or of Licensor, and is made for the benefit
+       of each Licensee holding a valid license at the time of
+       Discontinuation, each of whom may rely upon and enforce it.
+
+5. THIRD-PARTY COMPONENTS
+   The Software includes open-source components, principally: Zero —
+   Licensor's fork of Flutter Zero (https://github.com/knopp/flutter_zero,
+   created by Matej Knopp) and the Flutter SDK
+   (https://github.com/flutter/flutter) — together with the Dart SDK
+   (https://github.com/dart-lang/sdk; the Dart VM and runtime are embedded
+   in every application binary), Yoga (https://github.com/facebook/yoga),
+   FlexLayout (https://github.com/layoutBox/FlexLayout), and Skia
+   (https://skia.org). These components are not covered by this license:
+   each remains governed by its own license (BSD 3-Clause or MIT), whose
+   copyright notices and full terms are reproduced in the accompanying
+   THIRD_PARTY_NOTICES file. The further open-source components the
+   embedded Flutter engine carries ship their notices inside every
+   application built with the Software, in the flutter_assets/NOTICES
+   asset (stored compressed as NOTICES.Z).
+
+6. WARRANTY DISCLAIMER
+   THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND. IN NO
+   EVENT SHALL THE LICENSOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+   LIABILITY ARISING FROM USE OF THE SOFTWARE.
+
+7. GENERAL PROVISIONS
+   7.1 Governing Law; Venue. This license is governed by the laws of the
+       State of Wyoming, United States, without regard to its
+       conflict-of-laws principles. The state and federal courts located in
+       Wyoming have exclusive jurisdiction over any dispute arising out of
+       or relating to this license, and the parties consent to their
+       jurisdiction and venue.
+   7.2 Severability. If any provision of this license is held
+       unenforceable, the remaining provisions remain in full force, and the
+       unenforceable provision shall be reformed to the minimum extent
+       necessary to make it enforceable.
+   7.3 Successors; Assigns. This license binds and benefits the parties'
+       permitted successors and assigns.
+   7.4 Trademarks. The names of the third-party components in Section 5 are
+       the marks of their respective owners and identify those components
+       only. DartNative is an independent product of Presence Network Inc.

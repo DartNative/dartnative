@@ -1,0 +1,33 @@
+# This file tracks properties of this DartNative project.
+# Used by the dn tool to assess capabilities and perform upgrades etc.
+#
+# This file should be version controlled and should not be manually edited.
+
+version:
+  revision: "a1d7470db4c505e194302e9a54e796757e02e67c"
+  channel: "[user-branch]"
+
+project_type: app
+
+# Tracks metadata for the dn migrate command
+migration:
+  platforms:
+    - platform: root
+      create_revision: a1d7470db4c505e194302e9a54e796757e02e67c
+      base_revision: a1d7470db4c505e194302e9a54e796757e02e67c
+    - platform: android
+      create_revision: a1d7470db4c505e194302e9a54e796757e02e67c
+      base_revision: a1d7470db4c505e194302e9a54e796757e02e67c
+    - platform: ios
+      create_revision: a1d7470db4c505e194302e9a54e796757e02e67c
+      base_revision: a1d7470db4c505e194302e9a54e796757e02e67c
+
+  # User provided section
+
+  # List of Local paths (relative to this file) that should be
+  # ignored by the migrate tool.
+  #
+  # Files that are not part of the templates will be ignored by default.
+  unmanaged_files:
+    - 'lib/main.dart'
+    - 'ios/Runner.xcodeproj/project.pbxproj'

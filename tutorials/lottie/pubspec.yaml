@@ -1,0 +1,19 @@
+name: lottie
+description: DartNative tutorial — Lottie animations on the native renderers.
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: ^3.5.0
+
+# Consumer-shaped dependencies: `dn pub get` fetches the prebuilt dartnative
+# packages from dartpub.dev (no pub registry, no token needed to build).
+dependencies:
+  dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  dartnative_lottie: ^1.0.0
+
+dev_dependencies:
+  lints: ^6.0.0
+

@@ -1,0 +1,34 @@
+name: path_provider_example
+description: >
+  Example for dartnative_path_provider — resolves and shows the app documents,
+  support, and temporary directories (synchronously, no MethodChannel).
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.9.0-0
+
+dependencies:
+  dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  dartnative_skia: ^1.0.0
+  dartnative_path_provider: ^1.0.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  dartnative_splash: ^1.0.0
+
+dartnative_skia:
+  variant: full
+
+# Run:  dart run dartnative_splash:setup
+dartnative_splash:
+  background_color: "#000000"
+  image: assets/dn-logo.png
+  android: true
+  ios: true
+
+dartnative:
+  assets:
+    - assets/dn-logo.png

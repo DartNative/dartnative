@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    FileProvider paths used by dart_native_share.
+
+    Only exposes the dedicated `dn_share/` subdirectory inside the host
+    app's cacheDir — DNShareBridge.kt#shareFile copies the outgoing file
+    into that folder before vending a content:// URI. This keeps the
+    surface area to exactly what we share, nothing else.
+-->
+<paths>
+    <cache-path
+        name="dn_share"
+        path="dn_share/" />
+</paths>

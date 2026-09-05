@@ -1,0 +1,121 @@
+name: Report a bug
+description: A DartNative framework or first-party plugin behaves incorrectly.
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for using DartNative!
+
+        Filing bug reports is open to developers with an active DartNative
+        subscription (a paid license). We don't verify it at submission time,
+        but issues from non-subscribed users are closed as **not planned**.
+
+        Before filling the form:
+
+        - Search the [existing issues](https://github.com/DartNative/dartnative/issues)
+        - Check the [documentation](https://dartnative.com/docs)
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: I have an active DartNative subscription (paid license).
+          required: true
+        - label: I searched the existing issues and this is not a duplicate.
+          required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Framework or plugin?
+      options:
+        - Framework
+        - Plugin
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: plugin
+    attributes:
+      label: Plugin name and version
+      description: Only if the problem is in a plugin — the version as declared in your `pubspec.yaml`.
+      placeholder: e.g. dartnative_video_player 0.1.0
+    validations:
+      required: false
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      description: Where does the problem happen?
+      options:
+        - iOS
+        - Android
+        - Both
+      default: 2
+    validations:
+      required: true
+
+  - type: input
+    id: repro-repo
+    attributes:
+      label: Public reproduction repo
+      description: >
+        Link to a public, runnable DartNative app that reproduces the problem —
+        the minimal code that shows the issue, pushed to GitHub. We can't debug
+        what we can't run: issues without a runnable reproduction are closed
+        as **not planned**.
+      placeholder: https://github.com/you/dn-bug-repro
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: >
+        Tell us the exact steps that trigger the problem — what to run, what
+        to tap, and where it goes wrong — using the public reproduction repo
+        you linked above. Please also share a screenshot or a short video of
+        the problem in the media field below.
+      value: |
+        1. Clone the reproduction repo linked above and run `dn run`
+        2. Tap / navigate to ...
+        3. Observe ... — what happens, and what you expected instead
+    validations:
+      required: true
+
+  - type: textarea
+    id: media
+    attributes:
+      label: Screenshots or video
+      description: >
+        Upload screenshots or a short video of the bug if it helps. Please
+        don't screenshot text (code, logs) — paste it in the fields above.
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: >
+        The full output of the failing command — run it with `--verbose`
+        (for example `dn run --verbose`). If the logs are too large, attach
+        them as a .txt file.
+      render: console
+    validations:
+      required: false
+
+  - type: textarea
+    id: doctor
+    attributes:
+      label: dn doctor output
+      description: The full output of `dn doctor -v`.
+      render: console
+    validations:
+      required: true
+

@@ -1,0 +1,8 @@
+# Bundled model files are fetched at build time, not committed.
+# Populate with: ../../scripts/fetch_bundled_models.sh
+*
+!.gitignore
+!.gitkeep
+!voice_styles/
+voice_styles/*
+!voice_styles/.gitkeep

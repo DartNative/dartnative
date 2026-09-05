@@ -1,0 +1,5 @@
+# .dnkeys.example — committed; documents required keys (no values).
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+API_BASE_URL=
+FEATURE_FLAGS=

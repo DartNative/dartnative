@@ -1,0 +1,60 @@
+name: dartnative_lottie_example
+description: Example app for dartnative_lottie — Lottie animation demos.
+publish_to: none
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.9.0-0
+
+dependencies:
+  dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  dartnative_skia: ^1.0.0
+  dartnative_lottie: ^1.0.0
+  archive: ^3.4.0
+  dartnative_splash: ^1.0.0
+
+dev_dependencies:
+  lints: ^6.0.0
+
+dartnative_skia:
+  variant: full
+
+dartnative_splash:
+  background_color: "#000000"
+  image: assets/dn-logo.png
+  ios: true
+  android: true
+
+dartnative:
+  assets:
+    - assets/animations/LottieLogo2.json
+    - assets/animations/Boat_Loader.json
+    - assets/animations/TwitterHeart.json
+    - assets/lotties/0.json
+    - assets/lotties/1.json
+    - assets/lotties/2.json
+    - assets/lotties/3.json
+    - assets/lotties/4.json
+    - assets/lotties/5.json
+    - assets/lotties/6.json
+    - assets/lotties/7.json
+    - assets/lotties/8.json
+    - assets/lotties/9.json
+    - assets/lotties/10.json
+    - assets/lotties/11.json
+    - assets/lotties/12.json
+    - assets/lotties/13.json
+    - assets/lotties/14.json
+    - assets/lotties/15.json
+    - assets/lotties/16.json
+    - assets/lotties/17.json
+    - assets/lotties/18.json
+    - assets/lotties/19.json
+    - assets/lotties/20.json
+    - assets/lotties/21.json
+    - assets/lotties/22.json
+    - assets/lotties/23.json
+    - assets/lotties/24.json
+    - assets/lotties/25.json

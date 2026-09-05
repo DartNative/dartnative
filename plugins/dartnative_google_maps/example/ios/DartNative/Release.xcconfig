@@ -1,0 +1,4 @@
+#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
+#include "Generated.xcconfig"
+// Optional: defines MAPS_API_KEY (gitignored; copy from Secrets.example.xcconfig).
+#include? "Secrets.xcconfig"

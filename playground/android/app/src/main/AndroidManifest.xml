@@ -1,0 +1,107 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Required for image loading (Coil) and HTTP fetches in all build modes.
+         Debug/profile overlays also declare it for Flutter hot-reload, but release
+         needs it explicitly here or networking silently fails. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- AudioRecorder demo: microphone capture is a runtime permission too. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+        <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+
+    <!-- Permission for handling the appbar launcher -->
+    <!-- Samsung -->
+    <uses-permission android:name="com.sec.android.provider.badge.permission.READ"/>
+    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE"/>
+
+    <!-- HTC -->
+    <uses-permission android:name="com.htc.launcher.permission.READ_SETTINGS"/>
+    <uses-permission android:name="com.htc.launcher.permission.UPDATE_SHORTCUT"/>
+
+    <!-- Sony -->
+    <uses-permission android:name="com.sonyericsson.home.permission.BROADCAST_BADGE"/>
+    <uses-permission android:name="com.sonymobile.home.permission.PROVIDER_INSERT_BADGE"/>
+
+    <!-- Apex -->
+    <uses-permission android:name="com.anddoes.launcher.permission.UPDATE_COUNT"/>
+
+    <!-- Solid -->
+    <uses-permission android:name="com.majeur.launcher.permission.UPDATE_BADGE"/>
+
+    <!-- Huawei -->
+    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
+    <application
+        android:label="DartNative Playground"
+        android:name=".Application"
+        android:icon="@mipmap/ic_launcher">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:taskAffinity=""
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustNothing">
+            <meta-data
+              android:name="io.flutter.embedding.android.NormalTheme"
+              android:resource="@style/NormalTheme"
+              />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <!-- Extra settings to bypassing android manufacturer restrictions on notifications -->
+            <!-- Xiaomi (MiUI) -->
+            <meta-data
+                android:name="com.miui.securitycenter.Thermal"
+                android:value="false" />
+            <meta-data
+                android:name="com.miui.optimizecenter"
+                android:value="false" />
+
+            <!-- Huawei (EMUI) -->
+            <meta-data
+                android:name="com.huawei.hms.client.channel.androidMarket"
+                android:value="false" />
+            <meta-data
+                android:name="com.huawei.hwid.permission.SELFSTARTING"
+                android:value="true" />
+
+            <!-- Oppo (ColorOS) -->
+            <meta-data
+                android:name="com.coloros.safecenter.permission.START_ACTIVITY"
+                android:value="true" />
+            <meta-data
+                android:name="com.oppo.feature.background_freeze_delay"
+                android:value="true" />
+
+            <!-- Vivo (FuntouchOS) -->
+            <meta-data
+                android:name="com.vivo.permission.START_ACTIVITY"
+                android:value="true" />
+            <meta-data
+                android:name="com.vivo.abeem.permission.START_ACTIVITY"
+                android:value="true" />
+
+            <!-- Samsung (OneUI) -->
+            <meta-data
+                android:name="com.samsung.android.sm.policy.keepalive"
+                android:value="true" />
+            <meta-data
+                android:name="com.samsung.android.sm.deviceidle.skip"
+                android:value="true" />
+
+        </activity>
+        <!-- Required by the Flutter tool to generate GeneratedPluginRegistrant -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+    </application>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT"/>
+            <data android:mimeType="text/plain"/>
+        </intent>
+    </queries>
+</manifest>

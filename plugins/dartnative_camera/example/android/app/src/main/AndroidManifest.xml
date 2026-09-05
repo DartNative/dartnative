@@ -1,0 +1,52 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Required for Flutter hot-reload / dart_native dev-mode connection. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Camera plugin permissions: the plugin's own AndroidManifest already
+         declares CAMERA + RECORD_AUDIO via manifest merger, but listing them
+         here makes the host's intent explicit. -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
+    <!-- Gallery / media library access. v0.1 of dart_native_camera writes
+         captured photos and videos to the app's cache directory and therefore
+         does NOT strictly need these permissions to function. They are
+         declared here so a future "browse / save to gallery" feature works
+         without manifest changes, and so the example app shows the canonical
+         permission set a camera-consuming app typically wants.
+
+         Android 13+ (API 33+) split READ_EXTERNAL_STORAGE into per-media
+         permissions. READ_MEDIA_VISUAL_USER_SELECTED (API 34+) backs the
+         "Selected Photos" picker — if declared, the system lets the user grant
+         access to just specific items rather than the whole library. -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED"/>
+
+    <application
+        android:label="Camera"
+        android:name=".Application"
+        android:icon="@mipmap/ic_launcher">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:taskAffinity=""
+            android:screenOrientation="portrait"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustNothing">
+            <meta-data
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme"/>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2"/>
+    </application>
+</manifest>

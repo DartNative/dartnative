@@ -1,0 +1,44 @@
+# Each tutorial ships its native iOS/Android project so the folder is
+# clone-and-run (`dn pub get`, `dn run`). Only build output, `dn create`
+# defaults, and machine-specific files are ignored. Per-tutorial .gitignore
+# files (e.g. google_maps' secret-key exclusions) are tracked and still apply.
+
+# Dart / Flutter
+*/.dart_tool/
+*/build/
+*/.flutter-plugins
+*/.flutter-plugins-dependencies
+*/.dn-plugins-dependencies
+*/.metadata
+*/pubspec.lock
+
+# dn create defaults (regenerated per project; test/ pulls flutter_test, which
+# dn does not ship, so it must not be committed)
+*/test/
+*/tool/
+*/analysis_options.yaml
+
+# LOCAL-ONLY maintainer files that map deps onto the private monorepo
+*/pubspec_overrides.yaml
+# dn create drops its default logo here (icon/splash generation input)
+*/assets/dn-logo.png
+
+# iOS — generated / machine-specific only
+*/ios/Pods/
+*/ios/.symlinks/
+*/ios/Flutter/ephemeral/
+*/ios/Flutter/Generated.xcconfig
+*/ios/Flutter/flutter_export_environment.sh
+*/ios/**/xcuserdata/
+*/ios/**/*.xcuserstate
+*/ios/**/xcshareddata/IDEWorkspaceChecks.plist
+*/ios/**/xcshareddata/WorkspaceSettings.xcsettings
+
+# Android — generated / machine-specific only
+*/android/.gradle/
+*/android/build/
+*/android/app/build/
+*/android/.cxx/
+*/android/captures/
+*/android/local.properties
+*/android/**/*.iml

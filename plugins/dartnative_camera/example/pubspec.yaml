@@ -1,0 +1,42 @@
+name: camera_example
+description: Example app for dartnative_camera — enumerate cameras + take a photo.
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.9.0-0
+
+dependencies:
+  dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  dartnative_skia: ^1.0.0
+  dartnative_camera: ^1.0.0
+  # Used only by the example to play the camera-shutter / start-rec / stop-rec
+  # sound effects (assets/audios/camera/*.mp3).
+  dartnative_audio: ^1.0.0
+  # Used to post-crop captured photos to the selected display aspect ratio.
+  # Cross-platform (iOS + Android).
+  dartnative_image_crop: ^1.0.0
+  # Used to extract a frame-0 JPEG thumbnail from the recorded MP4 so the
+  # gallery thumb on the shutter row updates after a video save.
+  dartnative_compressor: ^1.0.0
+  dartnative_splash: ^1.0.0
+
+dev_dependencies:
+  lints: ^6.0.0
+
+# Selected by dartnative_skia/ios/variant_resolver.rb — see Podfile.
+dartnative_skia:
+  variant: full
+
+dartnative_splash:
+  background_color: "#000000"
+  image: assets/dn-logo.png
+  ios: true
+  android: true
+
+dartnative:
+  uses-material-design: false
+  assets:
+    - assets/audios/camera/

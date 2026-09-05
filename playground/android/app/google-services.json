@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "4558499673",
+    "project_id": "dartnative",
+    "storage_bucket": "dartnative.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4558499673:android:be518e624594f8161e6648",
+        "android_client_info": {
+          "package_name": "com.dartnative.playground"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAPxnu2y86NTyUH_RoC6EGNs3xwyDwjKk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

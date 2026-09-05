@@ -1,0 +1,58 @@
+name: dartnative_starter
+description: "A skeleton dartnative app with onboarding, sign in, a drawer and local storage already wired."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+
+dependencies:
+  dartnative: ^1.0.0
+  # Platform bindings. iOS uses dartnative_ios, Android uses dartnative_android.
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  dartnative_skia: ^1.0.0
+
+  # Auth: Supabase session handling plus the native Apple and Google sign in.
+  dartnative_supabase: ^1.0.0
+  dartnative_social_sign_in: ^1.0.0
+
+  # Storage: key value preferences and the SQLite database.
+  dartnative_shared_preferences: ^1.0.0
+  dartnative_sqlite: ^1.0.0
+  dartnative_path_provider: ^1.0.0
+
+  # Reads the bundled .dnkeys file (your Supabase URL and keys live there).
+  dartnative_keys: ^1.0.0
+
+  # Opens links in the system browser (the drawer's website item).
+  dartnative_url_launcher: ^1.0.0
+
+  # Branded launch splash.
+  dartnative_splash: ^1.0.0
+
+  # Used by the Apple sign in nonce (sha256).
+  crypto: ^3.0.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  image: ^4.0.0
+
+dartnative_skia:
+  variant: full
+
+dartnative:
+  assets:
+    - assets/dn-logo.png
+    - assets/apple-logo.png
+    - assets/google-logo.png
+    - .dnkeys
+
+# Branded launch splash + app icon. Replace assets/dn-logo.png with your logo, then:
+#   dart run tool/generate_app_assets.dart --source=assets/dn-logo.png --bg=#000000
+# (Splash only: dart run dartnative_splash:setup)
+dartnative_splash:
+  background_color: "#000000"
+  image: assets/dn-logo.png
+  ios: true
+  android: true

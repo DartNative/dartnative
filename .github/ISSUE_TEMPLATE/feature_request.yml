@@ -1,0 +1,78 @@
+name: Request a feature
+description: Something DartNative or a first-party plugin should be able to do.
+labels: ["feature", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for using DartNative!
+
+        Filing feature requests is open to developers with an active
+        DartNative subscription (a paid license). We don't verify it at
+        submission time, but requests from non-subscribed users are closed
+        as **not planned**.
+
+        Before filling the form:
+
+        - Search the [existing feature requests](https://github.com/DartNative/dartnative/issues?q=is%3Aissue+label%3Afeature)
+        - Check the [documentation](https://dartnative.com/docs)
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: I have an active DartNative subscription (paid license).
+          required: true
+        - label: I searched the existing feature requests and this is not a duplicate.
+          required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Framework or plugin?
+      options:
+        - Framework
+        - Plugin
+        - Not sure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      description: Which platform is this for?
+      options:
+        - iOS
+        - Android
+        - Both
+        - Not platform-specific
+      default: 2
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case
+      description: >
+        Tell us the problem you are running into that led to you wanting a
+        new feature. What are you building, and what's in the way? Describe
+        the alternatives you've considered — is there a plugin on dartpub.dev
+        that already solves this?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: >
+        Briefly but precisely describe what you would like DartNative to be
+        able to do. Attach anything that shows what you are imagining —
+        images, videos, code samples. If this could live in a plugin rather
+        than the framework, consider building and publishing one on
+        dartpub.dev.
+    validations:
+      required: true

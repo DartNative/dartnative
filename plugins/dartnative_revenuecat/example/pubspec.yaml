@@ -1,0 +1,34 @@
+name: revenuecat_example
+description: Example app for dartnative_revenuecat — configure, fetch offerings, purchase a package, restore, and read customer info on iOS and Android.
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.9.0-0
+
+dependencies:
+  dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  dartnative_skia: ^1.0.0
+  dartnative_revenuecat: ^1.0.0
+  # RevenueCat public SDK keys are loaded from a bundled .dnkeys at runtime.
+  dartnative_keys: ^1.0.0
+  dartnative_splash: ^1.0.0
+
+dev_dependencies:
+  lints: ^6.0.0
+
+dartnative_skia:
+  variant: full
+
+dartnative_splash:
+  background_color: "#000000"
+  image: assets/dn-logo.png
+  ios: true
+  android: true
+
+dartnative:
+  assets:
+    # Bundled RevenueCat keys read by DnKeys.load() (gitignored; see .dnkeys.example).
+    - .dnkeys

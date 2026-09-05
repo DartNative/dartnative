@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://dartnative.com/docs
+    about: Guides, API reference, and tutorials.
+  - name: Getting started
+    url: https://dartnative.com/docs/getting-started/installation
+    about: Install the dn CLI and run your first native build.

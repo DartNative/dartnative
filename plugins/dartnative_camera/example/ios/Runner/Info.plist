@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Camera</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>camera_example</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(DN_BUILD_NAME)</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>$(DN_BUILD_NUMBER)</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Validates your DartNative license with the license server on your local network during development.</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<!-- Camera + microphone usage descriptions — REQUIRED, the system kills
+	     the app if AVCaptureDevice.requestAccess is called without them. -->
+	<key>NSCameraUsageDescription</key>
+	<string>Used to demonstrate the dart_native_camera plugin (photo capture).</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Used by the camera session when video recording is enabled.</string>
+	<!-- Photo library access — v0.1 of dart_native_camera writes captures to
+	     the app sandbox cache directory and does NOT strictly need these keys
+	     to function. Declared so a future "browse" / "save to Photos" feature
+	     works without an Info.plist change, and so the example app shows the
+	     canonical permission set a camera-consuming app typically wants.
+	       • NSPhotoLibraryUsageDescription     — read access (PHPhotoLibrary)
+	       • NSPhotoLibraryAddUsageDescription  — write-only (UIImageWriteToSavedPhotosAlbum,
+	                                              PHPhotoLibrary.shared().performChanges) -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Used to browse captured photos and videos saved by the camera demo.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Used to save captured photos and videos to the Photos library.</string>
+	<!-- Locked to portrait to match the Presence-style demo UX. -->
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Default Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
+</dict>
+</plist>

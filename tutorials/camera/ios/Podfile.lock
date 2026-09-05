@@ -1,0 +1,52 @@
+PODS:
+  - dartnative_audio (0.1.0)
+  - dartnative_camera (0.1.0):
+    - DartNativeCore
+  - dartnative_compressor (0.1.0):
+    - DartNativeCore
+  - dartnative_image_crop (0.1.0):
+    - DartNativeCore
+  - dartnative_ios (0.1.0):
+    - DartNativeCore
+    - FlexLayout (= 2.0.10)
+  - DartNativeCore (1.0.0)
+  - FlexLayout (2.0.10)
+
+DEPENDENCIES:
+  - dartnative_audio (from `.symlinks/plugins/dartnative_audio/ios`)
+  - dartnative_camera (from `.symlinks/plugins/dartnative_camera/ios`)
+  - dartnative_compressor (from `.symlinks/plugins/dartnative_compressor/ios`)
+  - dartnative_image_crop (from `.symlinks/plugins/dartnative_image_crop/ios`)
+  - dartnative_ios (from `.symlinks/plugins/dartnative_ios/ios`)
+  - DartNativeCore (from `DartNative`)
+
+SPEC REPOS:
+  trunk:
+    - FlexLayout
+
+EXTERNAL SOURCES:
+  dartnative_audio:
+    :path: ".symlinks/plugins/dartnative_audio/ios"
+  dartnative_camera:
+    :path: ".symlinks/plugins/dartnative_camera/ios"
+  dartnative_compressor:
+    :path: ".symlinks/plugins/dartnative_compressor/ios"
+  dartnative_image_crop:
+    :path: ".symlinks/plugins/dartnative_image_crop/ios"
+  dartnative_ios:
+    :path: ".symlinks/plugins/dartnative_ios/ios"
+  DartNativeCore:
+    :path: DartNative
+
+SPEC CHECKSUMS:
+  dartnative_audio: 1914cfb8a63fc155566680df4d669b93dfe06db3
+  dartnative_camera: f66dbf3b132aa2f2c6d0fa89d1159a4a014ea30e
+  dartnative_compressor: 56898fa69a6a008681878226fb345065332c5034
+  dartnative_image_crop: 8b59c00aa897575f743229c1157001cb5bf75d37
+  dartnative_ios: bb9d11e56f5904d0afbfd001554e1eee22e8c2ea
+  DartNativeCore: 9eecfba03ffd35341736d4464b498c38454a56d0
+  FlexLayout: ea94491c923485f7f28891cb5b10245d22df380b
+
+PODFILE CHECKSUM: 7ebfe451e66b5eadb0cc21fd30abfd19d621dd60
+
+COCOAPODS: 1.16.2

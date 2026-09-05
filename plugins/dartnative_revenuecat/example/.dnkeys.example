@@ -1,0 +1,9 @@
+# .dnkeys.example — copy to .dnkeys (gitignored) to run the example.
+# Read at launch by dart_native_keys (DnKeys.load()).
+#
+
+# Your RevenueCat PUBLIC SDK keys (app.revenuecat.com → API keys).
+# configure + Customer info work with any key; offerings/purchases need products
+# in your own RevenueCat app — see ../README.md (Android is the simplest to test).
+REVENUECAT_IOS_API_KEY=
+REVENUECAT_ANDROID_API_KEY=

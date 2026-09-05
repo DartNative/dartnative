@@ -1,0 +1,44 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Sharing via Intent.ACTION_SEND requires no special permissions. -->
+
+    <!--
+        Android 11+ package-visibility query — apps that can RECEIVE
+        an ACTION_SEND intent are visible to us when we call
+        PackageManager.queryIntentActivities() to pre-grant URI read
+        permission. Without this we cannot enumerate the chooser
+        targets to grant them read access to the shared file.
+    -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:mimeType="*/*" />
+        </intent>
+    </queries>
+
+    <application>
+        <!--
+            FileProvider used by shareFile(...) to vend file URIs to the
+            receiving app via Intent.EXTRA_STREAM.
+            Authority is the host app's applicationId + a fixed suffix
+            (see PROVIDER_AUTHORITY_SUFFIX in DNShareBridge.kt).
+        -->
+        <provider
+            android:name="com.dartnative.share.ShareFileProvider"
+            android:authorities="${applicationId}.dartnative.share.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/dn_share_paths" />
+        </provider>
+
+        <!--
+            Receives the chooser's "target chosen" broadcast for the
+            *WithResult share variants (Intent.EXTRA_CHOSEN_COMPONENT).
+            Not exported — only the system's PendingIntent targets it.
+        -->
+        <receiver
+            android:name="com.dartnative.share.ShareResultReceiver"
+            android:exported="false" />
+    </application>
+</manifest>

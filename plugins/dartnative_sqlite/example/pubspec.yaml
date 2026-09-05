@@ -1,0 +1,41 @@
+name: sqlite_example
+description: "Example app for dartnative_sqlite — a SQLite database over FFI."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.12.0-192.0.dev
+
+dependencies:
+  dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  dartnative_skia: ^1.0.0
+  dartnative_splash: ^1.0.0
+  dartnative_sqlite: ^1.0.0
+  dartnative_path_provider: ^1.0.0
+  # The documents-path helper resolves DNGetDocumentsDirectory over FFI.
+  ffi: ^2.1.4
+
+dev_dependencies:
+  lints: ^6.0.0
+  image: ^4.0.0
+
+dartnative_skia:
+  variant: full
+
+dartnative:
+  assets:
+    - assets/dn-logo.png
+
+# Branded launch splash + app icon. Replace assets/dn-logo.png with your logo, then:
+#   dart run tool/generate_app_assets.dart --source=assets/dn-logo.png --bg=#000000
+# (Splash only: dart run dartnative_splash:setup)
+dartnative_splash:
+  background_color: "#000000"
+  image: assets/dn-logo.png
+  ios: true
+  # Android splash runtime is pending in the framework, and generating Android
+  # splash assets rewrites styles.xml with a non-AppCompat theme (breaks
+  # MainActivity). Keep it off until the Android splash runtime lands.
+  android: false

@@ -1,0 +1,18 @@
+# Client configuration, bundled into the app and read at launch by
+# DnKeys.load(). Everything here is publishable client config: the Supabase
+# publishable key is protected by Row Level Security, not by secrecy.
+#
+# The app runs WITHOUT these values: onboarding then offers the demo
+# session only. Fill them in to turn on real sign in. See the README for
+# the step by step setup.
+#
+# Copy this file to .dnkeys before your first build:
+#   cp .dnkeys.example .dnkeys
+
+# Your Supabase project, from Project Settings > API.
+SUPABASE_URL=
+SUPABASE_PUBLISHABLE_KEY=
+
+# Google sign in on Android: the WEB client id (not the Android one) from
+# Google Cloud Console > Credentials.
+GOOGLE_WEB_CLIENT_ID=

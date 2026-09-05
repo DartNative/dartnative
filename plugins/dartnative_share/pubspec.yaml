@@ -1,0 +1,38 @@
+name: dartnative_share
+description: >
+  Native share sheet for DartNative apps (iOS + Android).
+  Wraps UIActivityViewController / Intent.ACTION_SEND — zero Flutter
+  platform channels.
+version: 1.0.0
+publish_to: 'none'
+
+homepage: https://dartnative.com
+funding:
+  - https://dartnative.com
+maintainer: DartNative Team <dev@dartnative.com>
+
+environment:
+  sdk: ^3.9.0-0
+
+dependencies:
+  dartnative: ^1.0.0
+  ffi: ^2.1.0
+
+# dartnative plugin registrant — consumed by the SDK's injectPlugins
+# pass on every `dn pub get`.
+# The generator discovers this block via .dart_tool/package_config.json
+# and emits the corresponding import + loadSymbols() call into the
+# app's lib/dartnative_plugin_registrant.dart.
+dartnative:
+  plugin:
+    platforms:
+      ios:
+        ffiPlugin: true
+      android:
+        package: com.dartnative.share
+        pluginClass: DartNativeSharePlugin
+  registrant:
+    imports:
+      - package:dartnative_share/dartnative_share.dart
+    calls:
+      - ShareFFIBindings.loadSymbols();

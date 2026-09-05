@@ -1,0 +1,41 @@
+name: supertonic_tts_example
+description: Example app for dartnative_supertonic_tts — on-device multilingual TTS demo (iOS + Android).
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.9.0-0
+
+dependencies:
+  dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  dartnative_skia: ^1.0.0
+  dartnative_supertonic_tts: ^1.0.0
+  # App-support model dir.
+  dartnative_path_provider: ^1.0.0
+  # Playback of the generated PCM (PcmStreamPlayer).
+  dartnative_audio: ^1.0.0
+  dartnative_splash: ^1.0.0
+
+dev_dependencies:
+  lints: ^6.0.0
+
+# dartnative_ios links dartnative_skia; the example must pick a variant.
+dartnative_skia:
+  variant: full
+
+dartnative_splash:
+  background_color: "#000000"
+  image: assets/dn-logo.png
+  ios: true
+  android: true
+
+dartnative:
+  assets:
+    # Bundled model files (all but the ~78 MB vector_estimator), so the
+    # first-launch download is halved. Populate with:
+    #   ./scripts/fetch_bundled_models.sh
+    # The dir ships empty (.gitkeep) — if not populated, everything downloads.
+    - assets/supertonic/
+    - assets/supertonic/voice_styles/

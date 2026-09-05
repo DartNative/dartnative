@@ -1,0 +1,22 @@
+name: storage
+description: DartNative tutorial — on-device storage, all four kinds.
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: ^3.5.0
+
+# Consumer-shaped dependencies: `dn pub get` fetches the prebuilt dartnative
+# packages from dartpub.dev (no pub registry, no token needed to build).
+dependencies:
+  dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  dartnative_shared_preferences: ^1.0.0
+  dartnative_secure_storage: ^1.0.0
+  dartnative_hive: ^1.0.0
+  dartnative_sqlite: ^1.0.0
+  dartnative_path_provider: ^1.0.0
+
+dev_dependencies:
+  lints: ^6.0.0
