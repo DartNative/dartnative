@@ -12,7 +12,7 @@ Your Dart code drives UIKit on iOS and the Android View system on Android direct
 
 ## See it in action
 
-https://github.com/user-attachments/assets/578baa1b-0e5e-4d48-9f7d-8ca82027fe96
+https://github.com/user-attachments/assets/6e472fc2-25c6-4718-9e75-dd490569e4a5
 
 All features available at [dartnative.com](https://dartnative.com/).
 

@@ -84,6 +84,11 @@ To build and ship **your own** apps, subscribe at
 `dn run` just works as usual. Keep the key private, and regenerate it on the
 Framework panel if it ever leaks.
 
+The licence check runs inside `runApp`, from a token already on the device, in
+a few milliseconds and never waiting on the network, so it does not slow your
+app's launch. If your subscription ends, the apps you have already shipped keep
+running for their users; a lapse only stops new builds.
+
 **Activate and run:**
 
 ```bash
