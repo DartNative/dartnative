@@ -10,31 +10,32 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 8.0)
     - PromisesObjC (~> 2.4)
   - Cache (6.0.0)
-  - dartnative_audio (0.1.0)
-  - dartnative_camera (0.1.0)
-  - dartnative_compressor (0.1.0)
-  - dartnative_connectivity (0.1.0)
-  - dartnative_firebase (0.1.0):
+  - dartnative_audio (1.0.0)
+  - dartnative_camera (1.0.0)
+  - dartnative_compressor (1.0.0)
+  - dartnative_connectivity (1.0.0)
+  - dartnative_firebase (1.0.0):
     - FirebaseCore
     - FirebaseCrashlytics
     - FirebaseMessaging
-  - dartnative_image_crop (0.1.0)
-  - dartnative_ios (0.1.0):
+  - dartnative_image_crop (1.0.0)
+  - dartnative_ios (1.0.0):
     - FlexLayout (= 2.0.10)
-  - dartnative_lottie (0.1.0):
+  - dartnative_lottie (1.0.0):
     - lottie-ios (~> 4.6.0)
-  - dartnative_media_picker (0.1.0)
-  - dartnative_notifications (0.1.0)
+  - dartnative_media_picker (1.1.0)
+  - dartnative_notifications (1.0.0)
   - dartnative_onnxruntime (1.6.4):
     - onnxruntime-objc (~> 1.21)
-  - dartnative_path_provider (0.2.0)
-  - dartnative_secure_storage (0.1.0)
-  - dartnative_shared_preferences (0.1.0)
-  - dartnative_skia (0.1.0)
-  - dartnative_social_sign_in (0.2.0):
+  - dartnative_path_provider (1.0.0)
+  - dartnative_permissions (1.0.0)
+  - dartnative_secure_storage (1.0.0)
+  - dartnative_shared_preferences (1.0.0)
+  - dartnative_skia (1.0.0)
+  - dartnative_social_sign_in (1.0.0):
     - GoogleSignIn (~> 8.0)
-  - dartnative_system (0.1.0)
-  - dartnative_video_player (0.1.0):
+  - dartnative_system (1.0.0)
+  - dartnative_video_player (1.0.0):
     - Cache (~> 6.0)
     - GCDWebServer
     - PINCache
@@ -156,6 +157,7 @@ DEPENDENCIES:
   - dartnative_notifications (from `.symlinks/plugins/dartnative_notifications/ios`)
   - dartnative_onnxruntime (from `.symlinks/plugins/dartnative_onnxruntime/ios`)
   - dartnative_path_provider (from `.symlinks/plugins/dartnative_path_provider/ios`)
+  - dartnative_permissions (from `.symlinks/plugins/dartnative_permissions/ios`)
   - dartnative_secure_storage (from `.symlinks/plugins/dartnative_secure_storage/ios`)
   - dartnative_shared_preferences (from `.symlinks/plugins/dartnative_shared_preferences/ios`)
   - dartnative_skia (from `.symlinks/plugins/dartnative_skia/ios`)
@@ -219,6 +221,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/dartnative_onnxruntime/ios"
   dartnative_path_provider:
     :path: ".symlinks/plugins/dartnative_path_provider/ios"
+  dartnative_permissions:
+    :path: ".symlinks/plugins/dartnative_permissions/ios"
   dartnative_secure_storage:
     :path: ".symlinks/plugins/dartnative_secure_storage/ios"
   dartnative_shared_preferences:
@@ -238,25 +242,26 @@ SPEC CHECKSUMS:
   AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
   AppCheckCore: cc8fd0a3a230ddd401f326489c99990b013f0c4f
   Cache: 4ca7e00363fca5455f26534e5607634c820ffc2d
-  dartnative_audio: 1f9ee3fe720cf48d77baf10f0682602890110dec
-  dartnative_camera: 241bb38a405ffd0d6799e9f4745d697c767156fc
-  dartnative_compressor: 53bd37ea33a9850051cd347c0a26d34828a50d75
-  dartnative_connectivity: dcd6f4b9b24fc4835b7e154738b3d5527d6f0010
-  dartnative_firebase: c1067d43f3597c7012647de10af71457f3ef6a51
-  dartnative_image_crop: 2cb51d7facaea9506237acce0bae72309ce525a8
-  dartnative_ios: 4f31dd9140e4d87fd3cea40aaa9d74dd0c2d7f64
-  dartnative_lottie: a7f70d982b7cad374c6b562141b0cd95d8fb3e39
-  dartnative_media_picker: 225b4d0fa78a12636036a1dac7706e001e1a185d
-  dartnative_notifications: 540e1246f30b0b6f294004881f7a6bff963751a9
+  dartnative_audio: 699f37c16ada9787952b121ee80998a6e806d3c5
+  dartnative_camera: 333b5b424a979748ed7aab529e480a6175d98b53
+  dartnative_compressor: 6b1629e01d5ac8ff698247cbae2ac7175b16e455
+  dartnative_connectivity: b92e376910df710d3887cb6e21cb8271a36bdff3
+  dartnative_firebase: 65db3e696c5596d351eb5ad26ef3c63cd3a0248a
+  dartnative_image_crop: f1c1faf5c95857188581c451563c925fea679da7
+  dartnative_ios: 690c8d6c31802126ff8fd1dec37338e2cb60cbe8
+  dartnative_lottie: 9afb8c21e1857620a6804e542af4a6c4cb83c098
+  dartnative_media_picker: 40d66ec01fb29ea267640e71d56291b30bd3c472
+  dartnative_notifications: 094ead93c21cba85e52a10808d0efa64af1fcd9a
   dartnative_onnxruntime: 21a8c041c6fc68e7681a74e2e9856ecccbee601b
-  dartnative_path_provider: a7585ec818f127366e2425856d5da548a1e80a99
-  dartnative_secure_storage: c1830f010fd0da14232253e20b5d2e9cf1c0b5f6
-  dartnative_shared_preferences: 70e6422228d4833f99b259102430aeda7b3d9865
-  dartnative_skia: b97c6114ab158334b2fdac0047541473a8cebfab
-  dartnative_social_sign_in: 7deeb10882372dc7dce6a2ce9a8ae846586358e2
-  dartnative_system: 52de3212798f980f5bbe99b17956f52b9f7f098d
-  dartnative_video_player: a4ef02619536c312520215e9113e956d232ddb1c
-  DartNativeCore: 9eecfba03ffd35341736d4464b498c38454a56d0
+  dartnative_path_provider: c70d5d38a31ebf4a132a67dfa8de9f435fb11ed6
+  dartnative_permissions: 8557fd4d71d7bc1388c82a932a952317de81d90d
+  dartnative_secure_storage: 5c838b5528d26c429576c27be0c099d22eba6935
+  dartnative_shared_preferences: f019d4d8e4e114cc557fe415eacef45e48a8280a
+  dartnative_skia: 48e95f6c81e1fa8dffa06018e1dd89a3de0a3e72
+  dartnative_social_sign_in: aa8e068003d7ee724b3a4fd390f90b64a2315278
+  dartnative_system: 7c5082ad91c93afbaf882129cd2c6e2c97ef35d2
+  dartnative_video_player: 02afa6a2dd2cea931e63aca7b0e83eed4a36f688
+  DartNativeCore: 97106aef3a975e6b1a268568d58dfb74dcbebd9f
   FirebaseCore: 58905958aa00a061397a0fd759ae4b55bddb3576
   FirebaseCoreExtension: 5b94169f1ee96ecc2dbde40bc53690e4d65eb652
   FirebaseCoreInternal: 37bee58388fc6d183f0ab1b32d69ae44f2cf8aad
