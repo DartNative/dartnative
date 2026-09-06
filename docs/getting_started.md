@@ -129,15 +129,22 @@ build is available, `dn` tells you, and `dn upgrade` installs it.
 
 ## 4. IDE setup
 
-Already a Flutter developer? Your IDE is ready as is. Coming from something
-else, like React Native? Install the **Flutter** extension (VS Code) or plugin
-(Android Studio). Either way, hot reload, autocomplete, and debugging all run
-through DartNative.
+Install the **Dart** and **Flutter** extensions (VS Code) or the Flutter plugin
+(Android Studio). Hot reload, autocomplete and debugging all run through
+DartNative: the installer put `zero/bin` on your PATH, so `which flutter` in a
+terminal prints a path inside your `zero` folder, and that is what the IDE
+picks up.
 
-There's nothing to configure. Your IDE now runs DartNative under the hood —
-the installer arranged that when it added `zero/bin` to your PATH. To confirm, run
-`which flutter` in a terminal — the path it prints leads into your `zero`
-folder.
+One thing to know about VS Code: the Dart extension runs its own `dart pub get`
+whenever you save `pubspec.yaml` in a project it does not recognise as Flutter,
+and plain pub cannot resolve the DartNative packages, which ship with the SDK.
+Projects made with `dn create` carry a `.vscode/settings.json` that turns that
+off. For a project created another way, add it yourself, then run `dn pub get`
+in a terminal after editing the pubspec:
+
+```json
+{ "dart.runPubGetOnPubspecChanges": "never" }
+```
 
 Have both Flutter and DartNative on your machine? DartNative wins by default.
 To keep a Flutter project on stock Flutter, point its SDK setting —
