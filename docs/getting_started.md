@@ -10,7 +10,7 @@ DartNative supports two target platforms. Your development machine requirements 
 
 | Target | Development OS | Required tooling |
 |---|---|---|
-| iOS | macOS only | Xcode 15+, a physical device or simulator |
+| iOS | macOS only | Xcode 26.3 or newer, a physical device or simulator |
 | Android | macOS, Windows, or Linux | **Android SDK 36** + build-tools, a device or emulator |
 
 > iOS builds require macOS because Xcode only runs on macOS. Android builds are cross-platform — you can develop for Android on Windows or Linux with no macOS involvement.
