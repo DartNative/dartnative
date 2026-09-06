@@ -4,17 +4,24 @@
 ///   - Sign in with Apple (ASAuthorizationController via FFI)
 ///   - Sign in with Google (GIDSignIn via FFI)
 ///
-/// Requires:
-///   • "Sign in with Apple" capability enabled in Runner.xcodeproj
-///   • GoogleService-Info.plist + REVERSED_CLIENT_ID URL scheme for Google
-///
-/// The demo handles missing configuration gracefully — buttons are shown,
-/// and auth errors are displayed inline.
+/// What the playground ships without: the Sign in with Apple capability,
+/// because it needs a paid Apple developer account and the playground is
+/// meant to build on a free Apple ID. Add it under Signing & Capabilities in
+/// Xcode and the Apple buttons work; until then they report that in place.
+/// Google needs only the shipped GoogleService-Info.plist and its
+/// REVERSED_CLIENT_ID URL scheme, so it works as is.
 import 'dart:io' show Platform;
 
 import 'package:dartnative/dartnative.dart';
 import 'package:dartnative_social_sign_in/social_sign_in.dart';
 import 'home/demo_ui.dart';
+
+/// The playground ships without the Sign in with Apple capability, so a free
+/// Apple ID can sign it. Adding it is one checkbox in Xcode, on a paid account.
+const String _kNeedsAppleCapability =
+    'Needs Sign in with Apple under Signing & Capabilities in Xcode, which '
+    'requires a paid Apple developer account. The playground ships without it '
+    'so a free Apple ID can build it.';
 
 class SocialSignInDemo extends StatefulWidget {
   const SocialSignInDemo({super.key});
@@ -67,9 +74,13 @@ class _SocialSignInDemoState extends State<SocialSignInDemo> {
     } on SignInWithAppleAuthorizationException catch (e) {
       if (!mounted) return;
       setState(() {
-        _appleStatus = e.code == AuthorizationErrorCode.canceled
-            ? 'Canceled by user'
-            : 'Auth error: ${e.message}';
+        _appleStatus = switch (e.code) {
+          AuthorizationErrorCode.canceled => 'Canceled by user',
+          // Error 1000: the system found no Sign in with Apple entitlement
+          // on the app. The expected outcome on a free account.
+          AuthorizationErrorCode.unknown => _kNeedsAppleCapability,
+          _ => 'Auth error: ${e.message}',
+        };
       });
     } catch (e) {
       if (mounted) setState(() => _appleStatus = 'Error: $e');
@@ -144,10 +155,7 @@ class _SocialSignInDemoState extends State<SocialSignInDemo> {
                 'Sign in with Apple (FFI → ASAuthorizationController)'),
             const SizedBox(height: 8),
             Text(
-              'Requires "Sign in with Apple" capability in Xcode.\n'
-              'To enable: open Runner.xcworkspace → select the Runner target → '
-              'Signing & Capabilities tab → tap + Capability → '
-              'add "Sign in with Apple". Without it tapping the button returns error 1000.',
+              _kNeedsAppleCapability,
               style: TextStyle(color: kTextTertiary, fontSize: 12),
             ),
             const SizedBox(height: 16),

@@ -73,6 +73,13 @@ The [playground](../playground/), the [tutorials](../tutorials/), and every
 [plugin example](../plugins/) are free to build and run — **including release
 builds**, so you can measure real performance.
 
+On the iOS Simulator nothing needs signing. To run on a physical iPhone, open
+`ios/Runner.xcworkspace` once, and under Signing & Capabilities pick your team
+and set a bundle identifier of your own; a free Apple ID is enough, the
+playground asks for no capability that needs a paid account. The push token
+and Sign in with Apple demos are the exception: they switch on when you add
+those two capabilities there, which does need the paid program.
+
 ---
 
 ## 3. Create your own project

@@ -6,13 +6,15 @@
 ///   - Send a standard local alert notification (via FCM foreground handler)
 ///   - Send a Communication-style iOS 15+ notification (chat banner with avatar)
 ///
-/// ## Prerequisites (replace with your own configs before testing)
-///   • Supply your own Firebase config at
-///     playground/ios/Runner/GoogleService-Info.plist.
-///   • Push Notifications + Background Modes (Remote notifications) capabilities
-///     must be enabled in the Runner target.
-///   • dartnative_notifications added to pubspec.yaml (path dep).
-///   • The device must be physical (APNs does not work on the simulator).
+/// ## What the playground ships without
+/// The playground carries no capability that needs a paid Apple developer
+/// account, so a free Apple ID can sign it for a device. Fetching a push
+/// token is the one thing here that needs one: add Push Notifications under
+/// Signing & Capabilities in Xcode and the token button works. The
+/// communication-style banner shows without its own entitlement too, only
+/// without the sender's avatar. Everything else on this screen runs as is.
+/// A physical device is needed for the token (APNs does not run on the
+/// simulator).
 ///
 /// The demo works read-only without a backend — it shows the local token and
 /// lets you trigger a *local* communication notification so you can see the
@@ -26,6 +28,13 @@ import 'package:dartnative/dartnative.dart';
 import 'package:dartnative_firebase/dartnative_firebase.dart';
 import 'package:dartnative_notifications/dartnative_notifications.dart';
 import 'home/demo_ui.dart';
+
+/// The playground ships without the Push Notifications capability, so a free
+/// Apple ID can sign it. Adding it is one checkbox in Xcode, on a paid account.
+const String _kNeedsPushCapability =
+    'Needs Push Notifications under Signing & Capabilities in Xcode, which '
+    'requires a paid Apple developer account. The playground ships without it '
+    'so a free Apple ID can build it.';
 
 // ── Screen ────────────────────────────────────────────────────────────────────
 
@@ -97,14 +106,14 @@ class _NotificationsDemoState extends State<NotificationsDemo> {
     try {
       final token = await FirebaseMessaging.getToken();
       if (!mounted) return;
-      setState(() => _fcmToken = token ?? '(null — check APNs entitlements)');
+      setState(() => _fcmToken = token ?? _kNeedsPushCapability);
     } on TimeoutException {
       if (!mounted) return;
-      setState(() => _fcmToken =
-          'Timed out — Push Notifications capability missing in Runner target, '
-              'or Firebase init failed (check logs).');
+      setState(() => _fcmToken = _kNeedsPushCapability);
     } catch (e) {
-      if (mounted) setState(() => _fcmToken = 'Error: $e');
+      // Without the entitlement APNs refuses the registration; that is the
+      // expected outcome on a free account, not a fault to print raw.
+      if (mounted) setState(() => _fcmToken = _kNeedsPushCapability);
     } finally {
       if (mounted) setState(() => _tokenLoading = false);
     }
@@ -229,6 +238,11 @@ class _NotificationsDemoState extends State<NotificationsDemo> {
                 'It is fetched via FFI → Messaging.token — no MethodChannel.',
                 style: TextStyle(color: kTextSecondary, fontSize: 13),
               ),
+              const SizedBox(height: 6),
+              Text(
+                _kNeedsPushCapability,
+                style: TextStyle(color: kTextTertiary, fontSize: 12),
+              ),
               const SizedBox(height: 12),
               _ActionButton(
                 label: 'Get FCM Token',
@@ -277,6 +291,16 @@ class _NotificationsDemoState extends State<NotificationsDemo> {
                       'and the avatar as a circle in the notification.',
               style: TextStyle(color: kTextSecondary, fontSize: 13),
             ),
+            if (Platform.isIOS) ...[
+              const SizedBox(height: 6),
+              Text(
+                'The banner shows as is. The avatar on it needs Communication '
+                'Notifications under Signing & Capabilities in Xcode, which '
+                'requires a paid Apple developer account; the playground ships '
+                'without it so a free Apple ID can build it.',
+                style: TextStyle(color: kTextTertiary, fontSize: 12),
+              ),
+            ],
             const SizedBox(height: 12),
             _ActionButton(
               label: 'Show Chat Notification',
