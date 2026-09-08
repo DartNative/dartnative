@@ -3,7 +3,7 @@
 <!-- Generated file — edits here are overwritten on the next release.
      The changelog is maintained at https://dartnative.com/changelog -->
 
-## One navigation bar on iOS 26, and a search bar that says when it closes — Preview (2026-09-08)
+## iOS 26 fixes: navigation bars, search bar, date picker — Preview (2026-09-08)
 
 Seven fixes, most of them reported through the public repo, all verified
 on an iPhone running iOS 26. To get them, install the SDK again with the
