@@ -102,8 +102,9 @@ update Xcode (which ships the Simulator runtimes).
 
 ### Symptom
 
-App builds, installs, and runs. The Dart license validates ("License valid" in
-logs). No crash. No error card. The device shows only a blank white screen.
+App builds, installs, and runs. The licence validates (a debug build prints
+"Licence valid" in the console; profile and release builds print nothing). No
+crash. No error card. The device shows only a blank white screen.
 
 ### Root cause
 

@@ -878,6 +878,8 @@ class _SystemComponentsDemoState extends State<SystemComponentsDemo> {
                       final date = await showDatePicker(
                         context: context,
                         mode: NativeDatePickerMode.dateAndTime,
+                        // The platform's own confirm control unless labelled.
+                        confirmText: 'Done',
                       );
                       if (date == null) return;
                       setState(() {
