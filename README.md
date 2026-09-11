@@ -30,10 +30,10 @@ install command.
 
 ## The work behind it
 
-**Half a million lines of original code**, already used in production — with
+**Nearly 600,000 lines of original code**, already used in production — with
 34 first-party plugins, all free, every one backed by the platform's own APIs.
 
-| 527k | 3,900 | 40 | 100% |
+| ~600k | 6,500 | 40 | 100% |
 |:---:|:---:|:---:|:---:|
 | lines of original code | commits | repositories | of plugins always free |
 
