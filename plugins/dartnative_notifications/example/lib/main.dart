@@ -1,5 +1,5 @@
 import 'package:dartnative/dartnative.dart';
-
+import 'package:dartnative_notifications/dartnative_notifications.dart';
 import 'dartnative_plugin_registrant.dart';
 import 'screens/notifications_demo.dart';
 
