@@ -72,7 +72,8 @@ This reference covers what is available, what isn't, and what to use instead whe
 |---|---|---|
 | `Text` | ✅ | `UILabel` |
 | `RichText` / `TextSpan` | ✅ | `NSMutableAttributedString` — per-span font, color, weight, italic, underline, strikethrough. `TextSpan.recognizer: TapGestureRecognizer` supported for tappable spans. `TextSpan` is not `const` — remove `const` from all `TextSpan(...)` calls |
-| `TextField` | ✅ | `UITextField` / `UITextView`. If `InputDecoration.contentPadding` is omitted, dartnative provides a default `EdgeInsets.symmetric(vertical: 14, horizontal: 14)` (override explicitly to customize). |
+| `TextField` | ✅ | `UITextField` / `UITextView`. If `InputDecoration.contentPadding` is omitted, dartnative provides a default `EdgeInsets.symmetric(vertical: 14, horizontal: 14)` (override explicitly to customize). `inputFormatters` run on every edit before the keystroke is drawn, caret included: `FilteringTextInputFormatter` (`digitsOnly`, `allow`, `deny`), `LengthLimitingTextInputFormatter`, or your own `TextInputFormatter` over `TextEditingValue` / `TextSelection` |
+| `TextEditingController` | ✅ | `text`, `value`, `selection`, `clear()`. Typing updates the controller before `onChanged`; setting `selection` or `value` moves the caret, setting `text` keeps it where the field has it |
 
 > **Font size units.** dartnative renders text using real native APIs, so `TextStyle.fontSize` follows each platform's conventional unit — **UIKit points** on iOS (fixed, does not scale with Dynamic Type) and **SP** on Android (scales with the user's font-size accessibility setting). This is identical to what you get writing native UIKit or Android code directly.
 | `TextPainter` | ✅ | Drop-in replacement backed by the platform's text measurement — call `layout(maxWidth:)` then read `.size` |
@@ -1148,9 +1149,11 @@ For a classic blue system-style text button, use a `GestureDetector` wrapping a 
 
 #### How it works
 
-**iOS.** The `bottomInputBar` / `bottomNavigationBar` and the body ride the keyboard's **own** animations — show, hide, and rotation — the way Apple Messages' input bar does. That makes the avoidance rotation-proof: iOS 26 dismisses and re-presents the keyboard around a rotation, and anything driven from keyboard notifications visibly drops and rises in that gap, while DartNative's views stay glued above the keyboard.
+**Only the `bottomInputBar` rides the keyboard.** A `bottomNavigationBar` stays at the bottom and the keyboard covers it, the way a native tab bar does on both platforms and the way Flutter's `Scaffold` behaves too. Put a composer in `bottomInputBar` when it must stay above the keyboard.
 
-When the focused field is in the **body** (a form, not a chat), the body is lifted by exactly the amount the field is obscured, demand-driven — a field that already has clearance above the keyboard doesn't move at all.
+**iOS.** The `bottomInputBar` and the body ride the keyboard's **own** animations — show, hide, and rotation — the way Apple Messages' input bar does. That makes the avoidance rotation-proof: iOS 26 dismisses and re-presents the keyboard around a rotation, and anything driven from keyboard notifications visibly drops and rises in that gap, while DartNative's views stay glued above the keyboard.
+
+When the focused field is in the **body** (a form, not a chat), the body is lifted by exactly the amount the field is obscured, demand-driven — a field that already has clearance above the keyboard doesn't move at all, and the body's bottom edge never rises past the keyboard's top.
 
 **Android** lifts the body the same demand-driven way.
 

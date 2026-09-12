@@ -302,8 +302,9 @@ Taken from the starter app; adopt them in any app you generate.
 1. `App(home: screen)` as root → white screen. Pass the screen to `runApp`.
 2. Missing `DartNativePluginRegistrant.registerAll()` first in `main()` →
    white screen, no crash.
-3. `bottomNavigationBar` used for a chat input → broken keyboard animation.
-   Keyboard-attached bars go in `bottomInputBar`.
+3. `bottomNavigationBar` used for a chat input → the keyboard covers it,
+   as it covers a native tab bar. Keyboard-attached bars go in
+   `bottomInputBar`.
 4. A custom top bar inside `body` → the keyboard pushes it off-screen. Top
    bars belong in `Scaffold.appBar` (it's a real `UINavigationBar`, pinned
    by the OS). If you must, set `resizeToAvoidBottomInset: false`.
