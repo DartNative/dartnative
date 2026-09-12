@@ -42,6 +42,9 @@ This reference covers what is available, what isn't, and what to use instead whe
 | `IgnorePointer` / `AbsorbPointer` | ✅ | Blocks hit testing for the subtree. Decided when a pointer goes down: a drag already in progress keeps flowing when `ignoring` flips mid-gesture |
 | `IndexedStack` | ✅ | One child visible at a time; all children stay mounted (state + scroll position preserved — the tab-switcher pattern). Sizing note: fills its parent (Flutter sizes to the largest child) — wrap in a `SizedBox` when you need an intrinsic size |
 | `LayoutBuilder` | ✅ | Provides parent `BoxConstraints` to the builder |
+| `Directionality` | ✅ | `Directionality.of(context)` works everywhere: every screen starts from the direction the platform lays the app out in, which is right-to-left only when the app declares a right-to-left language (`CFBundleLocalizations` on iOS, `android:supportsRtl` on Android). Wrap a subtree to override it. `MediaQueryData.textDirection` carries the same value |
+| `EdgeInsetsDirectional` / `AlignmentDirectional` | ✅ | `start` and `end` follow the nearest `Directionality`; `AlignmentDirectional` is its own type, as in Flutter, and `AlignmentGeometry.resolve` gives the physical `Alignment` |
+| `TextAlign.start` / `TextAlign.end` | ✅ | Follow `Text.textDirection` when given, else the nearest `Directionality`. `Row`, `Column` and `Wrap` mirror on their own under right-to-left |
 | `Card` | ✅ | Material card — elevation, shape, margin |
 | `ListTile` | ✅ | Leading / title / subtitle / trailing row |
 | `Table` | ✅ | Column-sized grid layout |
