@@ -3,6 +3,44 @@
 <!-- Generated file — edits here are overwritten on the next release.
      The changelog is maintained at https://dartnative.com/changelog -->
 
+## Right-to-left layout, text input formatters, keyboard and tab bar behaviour — Preview (2026-09-12)
+
+Three fixes, two of them reported through the public repo by a team
+building an Arabic-first app, all verified on an iPhone and on an Android
+phone. To get them, install the SDK again with the install command for
+your system from the getting started guide, then run `dn upgrade`. The
+reinstall matters: the fixes live in the native iOS and Android bindings,
+and only the latest `dn` replaces those on upgrade. `dn` tells you the
+update is there on your next command.
+
+### What changed
+
+- **Layout follows the app's direction.** `Directionality` is here, and
+  `EdgeInsetsDirectional`, `AlignmentDirectional`, `TextAlign.start` and
+  `TextAlign.end`, `CrossAxisAlignment.start` and `MainAxisAlignment.start`
+  resolve against it, on both platforms. The root direction comes from the
+  platform: an app that declares Arabic in its localizations lays out
+  right-to-left under an Arabic device language, as a native app does,
+  and every `Row`, `Column`, padding, alignment and tab bar mirrors with
+  it. Wrap a subtree in `Directionality` to set it by hand.
+- **`TextField.inputFormatters`.** `TextInputFormatter`,
+  `FilteringTextInputFormatter` (`digitsOnly`, `allow`, `deny`),
+  `LengthLimitingTextInputFormatter`, `TextEditingValue`, `TextSelection`
+  and `TextRange` are exported, and `TextEditingController` carries the
+  selection. Formatters run on every edit before the keystroke is drawn,
+  caret included, so a phone field that keeps digits only shows nothing
+  else, even on a paste.
+- **The keyboard covers the tab bar.** A `bottomNavigationBar` stays at
+  the bottom and the keyboard slides over it, the way a native tab bar
+  behaves on both platforms and the way Flutter's `Scaffold` behaves. Only
+  `bottomInputBar` rides the keyboard. The body still lifts to show the
+  focused field, and never past the point where its bottom edge meets the
+  keyboard's top; a field further down its list is scrolled the rest of
+  the way. Before, the tab bar was lifted over the body and a field could
+  stay under the keyboard.
+
+---
+
 ## iOS 26 fixes: navigation bars, search bar, date picker — Preview (2026-09-08)
 
 Seven fixes, most of them reported through the public repo, all verified
