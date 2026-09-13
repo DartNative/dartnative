@@ -4,9 +4,11 @@ import '../home/demo_ui.dart';
 
 // ── Sticker URLs ──────────────────────────────────────────────────────────────
 
-/// The 26 unique sticker-pack URLs (…/0.zip … 25.zip).
-final stickerUrlsBase = List.generate(26,
-    (i) => 'https://cdn.presence.is/stickers/cl69ghdwt000100bx966hxbp6/$i.zip');
+/// The Hot Cherry pack's 32 sticker URLs, one zip each.
+final stickerUrlsBase = [
+  for (final n in const ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '27', '28', '29', '30', '31', '32', '33'])
+    'https://cdn.presence.is/stickers/cl6hzvshj000000bw9kfyzjgq/$n.zip',
+];
 
 /// Grid data: the unique set repeated 3× (scroll / recycling test data).
 final _stickerUrls = [for (var r = 0; r < 3; r++) ...stickerUrlsBase];

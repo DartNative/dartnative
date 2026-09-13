@@ -16,12 +16,13 @@ URL — driven by Airbnb's Lottie engine. iOS and Android.
 - **`loop`, `autoplay`, `speed`, `fit`** (`LottieFit`), and **`cachePolicy`** (`LottieCachePolicy.disk` / `.none`) inline.
 - **`LottieController`** — `play()` / `pause()` / `stop()` / `setProgress(0..1)` / `setLoopMode(LottieLoopMode…)`, plus a `progress` `ValueNotifier`.
 - **`LottieCache.preload([urls])`** — warm `.json` / `.zip` / `.lottie` URLs ahead of time; watch `LottieCache.progressStream`.
+- **`LottiePreWarm.warmAssets([paths], size: …)`** — iOS: build bundled animations off-screen at the size they will show at, ahead of their first use, and keep each built view for the first widget that shows it.
 
 ## Install
 
 ```yaml
 dependencies:
-  dartnative_lottie: ^1.0.0   # from dartpub.dev
+  dartnative_lottie: ^1.1.0   # from dartpub.dev
 ```
 
 ```bash

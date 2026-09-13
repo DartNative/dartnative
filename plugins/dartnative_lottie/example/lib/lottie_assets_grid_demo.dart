@@ -5,9 +5,10 @@ import 'package:dartnative_lottie/dartnative_lottie.dart';
 // Toggle to compare FastGrid against a plain GridView.
 const _useFastGrid = true;
 
-/// The 26 unique bundled assets (assets/lotties/0.json … 25.json).
-final _uniqueAssetPaths =
-    List.generate(26, (i) => 'assets/lotties/$i.json');
+/// The Hot Cherry pack's 32 bundled stickers (assets/stickers/hot_cherry/).
+final _uniqueAssetPaths = [
+  for (final n in const ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '27', '28', '29', '30', '31', '32', '33']) 'assets/stickers/hot_cherry/$n.json',
+];
 
 /// Grid data: the unique set repeated 3× — enough rows to exercise scrolling
 /// and cell recycling without hand-duplicating the declaration.

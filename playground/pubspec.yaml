@@ -36,7 +36,7 @@ dependencies:
   # SuperTonic on-device TTS (pulls dartnative_onnxruntime transitively).
   dartnative_supertonic_tts: ^1.0.0
   # Lottie via Skottie (requires the skia `full` or `lottie` variant — see above).
-  dartnative_lottie: ^1.0.0
+  dartnative_lottie: ^1.1.0
   dartnative_splash: ^1.0.0
 
 dev_dependencies:
@@ -74,7 +74,13 @@ dartnative:
     - assets/supertonic/voice_styles/
     # Graphics tab — Lottie demos (Skottie): control animations + sticker grid.
     - assets/animations/
-    - assets/lotties/
+    - assets/stickers/hot_cherry/
+    - assets/stickers/mia_bunny/
+    - assets/stickers/daisy_romashka/
+    - assets/stickers/duck/
+    - assets/stickers/baby_yoda/
+    - assets/stickers/high_fox/
+    - assets/stickers/world_art/
     # Showcase tab — Music demo: album artwork + playable tracks.
     - assets/music/covers/
     - assets/music/tracks/
