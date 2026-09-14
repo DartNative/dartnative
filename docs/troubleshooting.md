@@ -4,6 +4,39 @@ Common issues and their fixes for DartNative app development.
 
 ---
 
+## `flutter` runs DartNative instead of Flutter
+
+### Symptom
+
+You have both Flutter and DartNative installed. In a plain Flutter project,
+`flutter run` builds a DartNative app, or `flutter --version` prints a path
+inside your `zero` folder.
+
+### Root cause
+
+DartNative runs on Zero, our own engine, and its `bin` folder answers to the
+same command names. Whichever comes first on your PATH wins, and installs
+from before the fix put `zero/bin` first even when Flutter was already there.
+
+### Fix
+
+Open the profile the installer edited (`~/.zshrc`, `~/.bashrc` or
+`~/.profile`), find the line ending in `zero/bin:$PATH`, and put your Flutter
+`bin` ahead of it:
+
+```bash
+export PATH="$HOME/flutter/bin:$HOME/zero/bin:$PATH"
+```
+
+Open a new terminal, then check with `which -a flutter`, which lists both in
+order. After that `flutter` is Flutter and `dn` is DartNative. For a one-off,
+run Flutter by its full path instead: `~/flutter/bin/flutter run`.
+
+Current installs handle this themselves: when a `flutter` is already on your
+PATH, the installer adds `zero/bin` after it and says which one wins.
+
+---
+
 ## `dn run` fails with "Connection closed before full header was received"
 
 ### Symptom
@@ -523,3 +556,27 @@ shadow or gradient) is read as the page automatically; a colour painted any
 deeper is not. A screen with no Scaffold reports nothing and keeps the
 system backdrop (white in light mode, black in dark), so give it a Scaffold.
 See "The screen's background belongs on the Scaffold" in the widgets guide.
+
+---
+
+## A run misbehaves and nothing explains it
+
+### Symptom
+
+`dn run` fails, hangs or launches an app that behaves strangely, and nothing
+in the project changed to explain it.
+
+### Root cause
+
+`dn run` is very reliable in normal use. What is left is usually a one-off
+state on the device or the simulator: a half-finished install, a debugger
+connection the system never released, or a stale process from an earlier run.
+
+### Fix
+
+Restart the device or the simulator, then run again. That clears most one-off
+states, and it is the same first move as the connection failure at the top of
+this page.
+
+If the same failure comes back in the same project, it is not a one-off, so
+read the entries above: each names a symptom and its own fix.

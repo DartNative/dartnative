@@ -138,9 +138,10 @@ build is available, `dn` tells you, and `dn upgrade` installs it.
 
 Install the **Dart** and **Flutter** extensions (VS Code) or the Flutter plugin
 (Android Studio). Hot reload, autocomplete and debugging all run through
-DartNative: the installer put `zero/bin` on your PATH, so `which flutter` in a
-terminal prints a path inside your `zero` folder, and that is what the IDE
-picks up.
+DartNative, which the editor finds on your PATH.
+
+If you had no Flutter on this machine, the installer put `zero/bin` first, so
+the editor picks up DartNative's own SDK.
 
 One thing to know about VS Code: the Dart extension runs its own `dart pub get`
 whenever you save `pubspec.yaml` in a project it does not recognise as Flutter,
@@ -153,9 +154,21 @@ in a terminal after editing the pubspec:
 { "dart.runPubGetOnPubspecChanges": "never" }
 ```
 
-Have both Flutter and DartNative on your machine? DartNative wins by default.
-To keep a Flutter project on stock Flutter, point its SDK setting —
-`dart.flutterSdkPath` in its `.vscode/settings.json` — at your Flutter folder.
+### Keeping Flutter and DartNative side by side
+
+Each stays its own command: `flutter` runs Flutter, `dn` runs DartNative. If
+Flutter was already on your PATH when you installed, the installer left it in
+front and told you so.
+
+For the editor, which reads one SDK path, point it at the SDK you use most in
+your **user** settings, not the project's: `dart.flutterSdkPath`. Keep it out
+of a committed `.vscode/settings.json`, where an absolute path breaks every
+other machine on the team.
+
+Installed DartNative before you had Flutter, and now `flutter` runs
+DartNative? Open the profile the installer edited (`~/.zshrc`, `~/.bashrc` or
+`~/.profile`), find the line ending in `zero/bin:$PATH`, and put your Flutter
+`bin` ahead of it. Then open a new terminal.
 
 ---
 
