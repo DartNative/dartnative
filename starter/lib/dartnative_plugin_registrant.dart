@@ -48,7 +48,6 @@ abstract final class DartNativePluginRegistrant {
       'dartnative_keys',
       'dartnative_path_provider',
       'dartnative_shared_preferences',
-      'dartnative_skia',
       'dartnative_social_sign_in',
       'dartnative_splash',
       'dartnative_sqlite',

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dartnative/dartnative.dart';
-import 'package:dartnative_skia/dartnative_skia.dart';
 import 'package:dartnative_keys/dartnative_keys.dart';
 import 'package:dartnative_supabase/dartnative_supabase.dart' hide AuthState;
 
@@ -28,7 +27,6 @@ Future<void> main() async {
       // loads every plugin's FFI symbols. Missing this shows as a white
       // screen with no error.
       DartNativePluginRegistrant.registerAll();
-      registerSkiaFactories();
       // Registers pubspec declared fonts with the OS. No-op on Android.
       DartNativeFontRegistrant.registerAll();
       dnLog('main: [boot] plugins and fonts registered');

@@ -159,7 +159,13 @@ To keep a Flutter project on stock Flutter, point its SDK setting —
 
 ---
 
-## 5. Build your first app
+## 5. What your app will weigh
+
+A new app built for an iPhone in release mode starts at 4.4 MB.
+
+---
+
+## 6. Build your first app
 
 Setup done — from here, build something real. Follow
 [Your first DartNative app](https://dartnative.com/tutorials/your-first-app)

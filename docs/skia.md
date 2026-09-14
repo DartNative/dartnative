@@ -58,17 +58,34 @@ Reach for the canvas only when there's no native equivalent:
 `dartnative_skia` ships in two pre-built tiers. Choose the smallest tier
 that covers your use case. You can always upgrade later.
 
-| Tier | iOS (`Runner` arm64) | Android (`libdartnative_android.so` arm64-v8a) | What you get |
+| Tier | iOS, added to the app | Android (`libdartnative_android.so` arm64-v8a) | What you get |
 |------|----------------------|-------------------------------------------------|--------------|
-| **bare**   | ~7.8 MB | 4.2 MB  | **Canvas** + SkSL runtime shaders + Graphite (Metal/Vulkan); basic Latin text |
-| **full**   | ~20 MB  | 17.6 MB | Everything in **bare** + **rich shaped text** (HarfBuzz, SkParagraph, BiDi, Arabic/CJK/RTL, full ICU) |
+| **bare**   | ~4 MB   | 4.2 MB  | **Canvas** + SkSL runtime shaders + Graphite (Metal/Vulkan); basic Latin text |
+| **full**   | 9.1 MB  | 17.6 MB | Everything in **bare** + **rich shaped text** (HarfBuzz, SkParagraph, BiDi, Arabic/CJK/RTL, full ICU) |
 
-**Not sure which to pick?** Start with **full** — it's the default and covers
-the vast majority of canvas use cases including rich text rendering.
+**Not sure which to pick?** Take **full**, the default, which covers every
+canvas use case including rich text.
+
+**What you get today:** the published package carries the **full** tier and
+the `variant` key does not yet switch between them, so an iPhone app gets
+the 9.1 MB framework either way. Tier selection is coming; until it lands,
+budget for **full**. The iOS figure is the embedded framework in a release
+build for a device, measured; the bare estimate is from the source tree's
+own tier and is not yet purchasable.
+
+**Android carries Skia either way.** On Android the library is compiled into
+the platform binding, so an app pays for it whether or not it depends on
+`dartnative_skia`. Adding the dependency there buys you the `CanvasSurface`
+widget, not extra bytes. Skipping it saves app size on iOS only.
 
 ---
 
 ## Setup
+
+A new app does not depend on Skia. Adding it is two steps, and both are
+needed: the dependency alone gives you the package, the call is what makes
+`CanvasSurface` build. Skia adds about 9 MB to an iPhone app, so add it when
+you want a canvas, not before.
 
 ### 1. Add the dependency
 
@@ -76,20 +93,36 @@ the vast majority of canvas use cases including rich text rendering.
 # pubspec.yaml
 dependencies:
   dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
   dartnative_skia: ^1.0.0
 ```
 
-### 2. Select your tier
+### 2. Register the canvas widget in `main`
 
-Add one line under `dartnative_skia:` in `pubspec.yaml`:
+`registerSkiaFactories()` teaches the framework how to build a
+`CanvasSurface`. Without it a `CanvasSurface` in your tree throws. Call it
+once, right after the plugin registrant and before `runApp`:
 
-```yaml
-dartnative_skia:
-  variant: full   # bare | full  (default: full)
+```dart
+import 'package:dartnative/dartnative.dart';
+import 'package:dartnative_skia/dartnative_skia.dart';
+
+import 'dartnative_plugin_registrant.dart';
+
+void main() {
+  DartNativePluginRegistrant.registerAll();
+  registerSkiaFactories();
+  runApp(const MyApp());
+}
 ```
 
-That's it. Both iOS (CocoaPods) and Android (Gradle) read this key
-automatically — no Podfile or Gradle changes needed.
+Then run `dn pub get`. Nothing else: no Podfile and no Gradle changes.
+
+**Removing it again** is the same two steps backwards, plus one: drop the
+dependency, drop the import and the `registerSkiaFactories()` call, then run
+`dn pub get`, which rewrites `dartnative_plugin_registrant.dart` for you.
+That file is generated, so never edit it by hand.
 
 ### 3. iOS — run pod install
 
@@ -97,14 +130,13 @@ automatically — no Podfile or Gradle changes needed.
 cd ios && pod install
 ```
 
-CocoaPods picks up the correct `libDNSkia_<tier>.a` from the archives bundled
-in the `dartnative_skia` package, based on the variant above.
+CocoaPods picks up the prebuilt Skia framework from the `dartnative_skia`
+package and embeds it in your app.
 
 ### 4. Android — build details
 
-Gradle auto-detects the Skia package, reads the variant from `pubspec.yaml`,
-and passes the right `.a` files to the CMake build. No extra `build.gradle`
-changes needed.
+Gradle auto-detects the Skia package and links its prebuilt library into the
+CMake build. No extra `build.gradle` changes needed.
 
 **Verify Skia is linked:** check logcat for `[DN-Skia]` messages at app
 launch. If they are absent, check that your pubspec includes the
@@ -215,7 +247,7 @@ For shaped text with HarfBuzz — Arabic, CJK, RTL layouts — drawn onto a
 `CanvasSurface`:
 
 ```dart
-// Requires variant: full
+// Rich shaped text, the full tier
 final paragraph = ParagraphBuilder(
   ParagraphStyle(
     textDirection: TextDirection.rtl,

@@ -48,6 +48,27 @@ is on the [changelog](https://dartnative.com/changelog/).*
 
 ---
 
+## App size
+
+Shipping no rasterizer shows up in the binary. A new app, built for an
+iPhone in release mode:
+
+| App | Bundle | Compressed |
+|---|---:|---:|
+| DartNative, new app | 10.6 MB | 4.4 MB |
+| Flutter, new app | 13.4 MB | 5.7 MB |
+
+The compressed column is the closer guide to what a user downloads. The
+difference comes from the engine: ours carries the Dart VM and the platform
+bindings at 4.0 MB, where Flutter's carries a rendering engine as well at
+8.6 MB. Your widgets are real platform views, so there is nothing to paint
+them with.
+
+Adding a GPU canvas with [`dartnative_skia`](docs/skia.md) adds about 9 MB.
+That is the one large option, and it is off unless you ask for it.
+
+---
+
 ## Why DartNative
 
 Flutter proved that a single codebase for mobile could be productive for cross-platform development. But it achieves that by replacing the platform UI stack with its own rendering engine — Impeller / Skia — repainting every pixel of your interface every frame. That design prioritizes multi-platform, pixel-perfect consistency over integration, detaching your app from the operating system it runs on.

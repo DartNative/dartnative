@@ -11,7 +11,9 @@ dependencies:
   # Platform bindings. iOS uses dartnative_ios, Android uses dartnative_android.
   dartnative_ios: ^1.0.0
   dartnative_android: ^1.0.0
-  dartnative_skia: ^1.0.0
+  # Custom 2D drawing, charts and shaders: add dartnative_skia here and call
+  # registerSkiaFactories() in main. It adds about 9 MB to the app, so it is
+  # not here by default. See the Skia page.
 
   # Auth: Supabase session handling plus the native Apple and Google sign in.
   dartnative_supabase: ^1.0.0
@@ -37,9 +39,6 @@ dependencies:
 dev_dependencies:
   lints: ^6.0.0
   image: ^4.0.0
-
-dartnative_skia:
-  variant: full
 
 dartnative:
   assets:
