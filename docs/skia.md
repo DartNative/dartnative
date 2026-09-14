@@ -63,8 +63,10 @@ that covers your use case. You can always upgrade later.
 | **bare**   | ~4 MB   | 4.2 MB  | **Canvas** + SkSL runtime shaders + Graphite (Metal/Vulkan); basic Latin text |
 | **full**   | 9.1 MB  | 17.6 MB | Everything in **bare** + **rich shaped text** (HarfBuzz, SkParagraph, BiDi, Arabic/CJK/RTL, full ICU) |
 
-**Not sure which to pick?** Take **full**, the default, which covers every
-canvas use case including rich text.
+**Not sure which to pick?** Take **bare**. It covers canvas drawing, shaders
+and Latin text at less than half the size. Move to **full** only when text
+you draw *inside* a Skia canvas needs shaping, which shows as boxes instead
+of glyphs; changing tier is one word in `pubspec.yaml`.
 
 **What you get today:** the published package carries the **full** tier and
 the `variant` key does not yet switch between them, so an iPhone app gets

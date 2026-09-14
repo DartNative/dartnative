@@ -13,8 +13,9 @@ dependencies:
   dartnative_android: ^1.0.0
   # Skia GPU canvas: SkSL runtime shaders and rich shaped text. Adds about
   # 9 MB to an iPhone app; for shapes, paths and charts use CustomPaint,
-  # which is native and free. To add it, uncomment the line below and call
-  # registerSkiaFactories() after registerAll() in lib/main.dart.
+  # which is native and free. To add it, uncomment the line below, uncomment
+  # the tier block further down, and call registerSkiaFactories() after
+  # registerAll() in lib/main.dart.
   # dartnative_skia: ^1.0.0
 
   # Auth: Supabase session handling plus the native Apple and Google sign in.
@@ -41,6 +42,17 @@ dependencies:
 dev_dependencies:
   lints: ^6.0.0
   image: ^4.0.0
+
+# Which Skia binary ships with the app, if you added dartnative_skia above.
+# Pick one. See the Skia page for the full comparison.
+#
+#   bare  canvas, SkSL shaders and Latin text        about 4 MB on iPhone
+#   full  bare, plus shaped text drawn inside a      about 9 MB on iPhone
+#         Skia canvas: Arabic, CJK, right-to-left
+#
+# dartnative_skia:
+#   variant: bare
+#   # variant: full
 
 dartnative:
   assets:
