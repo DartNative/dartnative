@@ -36,7 +36,7 @@ dependencies:
   # SuperTonic on-device TTS (pulls dartnative_onnxruntime transitively).
   dartnative_supertonic_tts: ^1.0.0
   # Lottie via Skottie (requires the skia `full` or `lottie` variant — see above).
-  dartnative_lottie: ^1.1.0
+  dartnative_lottie: ^1.2.0
   dartnative_splash: ^1.0.0
 
 dev_dependencies:
