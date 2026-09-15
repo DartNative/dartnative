@@ -10,6 +10,16 @@ photo permission. `gallery.dart` reads the library (albums, assets, thumbnails) 
 Import only the first and your app inherits nothing from the second — this package declares
 no permission of its own.
 
+## See it
+
+| The demo | The system picker | Photo Library (custom UI) |
+|---|---|---|
+| ![The example app's home screen](screenshots/demo.jpg) | ![The system picker on iOS](screenshots/system-picker.jpg) | ![A photo library browsed through the gallery layer](screenshots/gallery.jpg) |
+
+The example app, then the two layers it drives: the system picker, which
+needs no photo permission, and the photo library read through `gallery.dart`,
+here showing albums and a library of more than fifty thousand photos.
+
 ## Why you'll like it
 
 - **The modern system picker** — `PHPicker` (iOS 14+) / `PickVisualMedia` (Android
