@@ -14,7 +14,7 @@ no permission of its own.
 
 | The demo | The system picker | Photo Library (custom UI) |
 |---|---|---|
-| ![The example app's home screen](screenshots/demo.jpg) | ![The system picker on iOS](screenshots/system-picker.jpg) | ![A photo library browsed through the gallery layer](screenshots/gallery.jpg) |
+| ![The example app's home screen](https://raw.githubusercontent.com/DartNative/dartnative/main/plugins/dartnative_media_picker/screenshots/demo.jpg) | ![The system picker on iOS](https://raw.githubusercontent.com/DartNative/dartnative/main/plugins/dartnative_media_picker/screenshots/system-picker.jpg) | ![A photo library browsed through the gallery layer](https://raw.githubusercontent.com/DartNative/dartnative/main/plugins/dartnative_media_picker/screenshots/gallery.jpg) |
 
 The example app, then the two layers it drives: the system picker, which
 needs no photo permission, and the photo library read through `gallery.dart`,
