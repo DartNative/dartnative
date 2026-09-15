@@ -721,3 +721,21 @@ Pass `value` down the subtree via `InheritedWidget`.
 
 ### `Provided.of<T>(BuildContext context) → T`
 Read the nearest `Provided<T>` ancestor. Registers a rebuild dependency.
+
+### `context.dependOnInheritedWidgetOfExactType<T>() → T?`
+The nearest `InheritedWidget` of type `T`, registering a dependency: this
+context rebuilds when that widget changes and `updateShouldNotify` returns
+true. This is what `Provided.of` uses.
+
+### `context.getInheritedWidgetOfExactType<T>() → T?`
+The same lookup without the dependency: this context does **not** rebuild
+when the widget changes. Use it when you want the value as it stands right
+now — the read half of a provider's `read` / `watch` pair — and the
+depending call when you want to be told that it moved. Both return `null`
+when no ancestor of that type exists.
+
+One limit to know: the context handed to an **item builder** — the
+`itemBuilder` of a list or grid — sits outside the element tree, so both
+lookups return `null` there even when an ancestor does exist. Read the
+value from inside the item's own widget instead, where the context is a
+real one.
