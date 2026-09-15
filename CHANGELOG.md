@@ -3,6 +3,58 @@
 <!-- Generated file — edits here are overwritten on the next release.
      The changelog is maintained at https://dartnative.com/changelog -->
 
+## Six fixes from community reports: text input, system appearance, rebuilds, preferences — Preview (2026-09-15)
+
+Six changes, all from reports and requests on the public repo,
+verified on an iPhone and on an Android phone. Five are in the
+framework, one in the
+`dartnative_shared_preferences` plugin. To get the framework fixes, run
+`dn upgrade`. Older `dn` versions kept the native code in place on
+upgrade, so if `dn upgrade` prints an install command, run that first,
+then `dn upgrade` again. The preferences fix is plugin version 1.0.1:
+run `dn pub upgrade` in your app.
+
+### What changed
+
+- **The app follows the system appearance.** An app that takes its
+  colours from `MediaQuery.platformBrightness` now rebuilds when the
+  device switches between light and dark while the app runs, including
+  the common path of toggling it from Control Centre and coming back, on
+  both platforms. Before, the appearance was read at launch and nothing
+  told the framework it had changed.
+  `WidgetsBindingObserver.didChangePlatformBrightness` arrives with it,
+  for an app that keeps a derived palette outside the widget tree.
+- **The keyboard's action key calls `onSubmitted`.** A `TextField` with
+  `textInputAction` set to done, next, go, search or send showed the
+  right key, dismissed the keyboard, and never called `onSubmitted`. It
+  does now, on both platforms, before the field loses focus. Multiline
+  fields keep inserting a newline, as in Flutter.
+- **An input bar is lifted whole on Android.** A `bottomInputBar` with
+  anything below its text field, a send row, a footer button, its own
+  padding, was lifted only far enough to clear the field and the rest
+  stayed behind the keyboard. The bar is now lifted by its own bottom
+  edge, as it already was on iOS.
+- **A style change reaches native text.** A `Text` under a
+  `DefaultTextStyle` whose style changed kept its old colour and size,
+  and the app kept the CPU busy while the screen sat idle. A native
+  element now performs its queued rebuild instead of queuing itself
+  again. `AnimatedDefaultTextStyle` was on the same path and is fixed
+  with it.
+- **Read an inherited value without watching it.**
+  `BuildContext.getInheritedWidgetOfExactType<T>()` finds the nearest
+  inherited widget of a type without registering the caller as a
+  dependent: the read half of the read and watch split a provider
+  library needs, beside `dependOnInheritedWidgetOfExactType`. One limit,
+  unchanged by this release: the context handed to a list or grid item
+  builder sits outside the element tree, so both lookups return null
+  there. Read the value inside the item's own widget instead.
+- **Preferences no longer cut a long value short** (plugin
+  `dartnative_shared_preferences` 1.0.1). `getString` returned the first
+  4095 characters of a longer value, and nothing said so. It now returns
+  the whole value, on both platforms.
+
+---
+
 ## Right-to-left layout, text input formatters, keyboard and tab bar behaviour — Preview (2026-09-12)
 
 Three fixes, two of them reported through the public repo by a team
