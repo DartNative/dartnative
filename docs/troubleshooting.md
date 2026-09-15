@@ -559,6 +559,33 @@ See "The screen's background belongs on the Scaffold" in the widgets guide.
 
 ---
 
+## A plugin's tests or dependencies will not resolve
+
+### Symptom
+
+In a plugin folder that has an `example/` app beside its `pubspec.yaml`,
+`dn pub get` resolves the plugin itself and then stops on the example,
+saying a DartNative package "doesn't exist" and could not be found on
+pub.dev. `dn test` stops at the same point and never runs the tests.
+
+### Root cause
+
+The example was resolved without the SDK's packages prepared for it, so its
+DartNative dependencies were looked up on the public package site, where
+they are not published.
+
+### Fix
+
+Update the SDK: run `dn upgrade`, then `dn pub get` in the plugin folder.
+Both the plugin and its example resolve in that one command.
+
+Two things to know if it still will not resolve. An example app names its
+own dependencies, so a DartNative package it uses belongs in
+`example/pubspec.yaml`, not only in the plugin's; a new example from
+`dn create` already names them. And the SDK's packages are resolved by the
+`dn` commands: `dart test` and `dart pub get` cannot find them, so use
+`dn test` and `dn pub get`.
+
 ## A run misbehaves and nothing explains it
 
 ### Symptom
