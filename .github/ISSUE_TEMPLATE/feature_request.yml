@@ -7,23 +7,32 @@ body:
       value: |
         Thank you for using DartNative!
 
-        Filing feature requests is open to developers with an active
-        DartNative subscription (a paid license). We don't verify it at
-        submission time, but requests from non-subscribed users are closed
-        as **not planned**.
+        Support follows your plan: Community requests get basic support,
+        Standard requests priority support, Pro requests the highest priority.
+        We don't verify the plan at submission time.
 
         Before filling the form:
 
         - Search the [existing feature requests](https://github.com/DartNative/dartnative/issues?q=is%3Aissue+label%3Afeature)
         - Check the [documentation](https://dartnative.com/docs)
 
+  - type: dropdown
+    id: plan
+    attributes:
+      label: Select your plan
+      description: Support follows the plan your license is on.
+      options:
+        - Community - basic support
+        - Standard - priority support
+        - Pro - highest priority support
+    validations:
+      required: true
+
   - type: checkboxes
     id: confirmations
     attributes:
       label: Confirmations
       options:
-        - label: I have an active DartNative subscription (paid license).
-          required: true
         - label: I searched the existing feature requests and this is not a duplicate.
           required: true
 
