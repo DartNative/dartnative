@@ -70,12 +70,7 @@ class _TextFieldDemoState extends State<TextFieldDemo> {
             _FieldShell(
               child: TextField(
                 controller: _singleController,
-                decoration: InputDecoration(
-                  hintText: 'Type something…',
-                  hintStyle: TextStyle(color: kTextSecondary),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 10),
-                ),
+                decoration: _inputBox(hint: 'Type something…', vertical: 18),
                 style: TextStyle(color: kTextPrimary, fontSize: 16),
                 onChanged: (v) => setState(() => _lastChanged = v),
               ),
@@ -86,12 +81,7 @@ class _TextFieldDemoState extends State<TextFieldDemo> {
             _FieldShell(
               child: TextField(
                 controller: _emailController,
-                decoration: InputDecoration(
-                  hintText: 'you@example.com',
-                  hintStyle: TextStyle(color: kTextSecondary),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 10),
-                ),
+                decoration: _inputBox(hint: 'you@example.com', vertical: 18),
                 keyboardType: TextInputType.emailAddress,
                 autocorrect: false,
                 style: TextStyle(color: kTextPrimary, fontSize: 16),
@@ -103,12 +93,7 @@ class _TextFieldDemoState extends State<TextFieldDemo> {
             _FieldShell(
               child: TextField(
                 controller: _numberController,
-                decoration: InputDecoration(
-                  hintText: '0.00',
-                  hintStyle: TextStyle(color: kTextSecondary),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 10),
-                ),
+                decoration: _inputBox(hint: '0.00', vertical: 18),
                 keyboardType: TextInputType.number,
                 style: TextStyle(color: kTextPrimary, fontSize: 16),
               ),
@@ -119,12 +104,7 @@ class _TextFieldDemoState extends State<TextFieldDemo> {
             _FieldShell(
               child: TextField(
                 controller: _passwordController,
-                decoration: InputDecoration(
-                  hintText: 'Password',
-                  hintStyle: TextStyle(color: kTextSecondary),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 10),
-                ),
+                decoration: _inputBox(hint: 'Password', vertical: 18),
                 obscureText: true,
                 style: TextStyle(color: kTextPrimary, fontSize: 16),
               ),
@@ -140,12 +120,7 @@ class _TextFieldDemoState extends State<TextFieldDemo> {
             _FieldShell(
               child: TextField(
                 controller: _multiController,
-                decoration: InputDecoration(
-                  hintText: 'Multiline field — type past 5 to scroll…',
-                  hintStyle: TextStyle(color: kTextSecondary),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 8),
-                ),
+                decoration: _inputBox(hint: 'Multiline field — type past 5 to scroll…', vertical: 16),
                 keyboardType: TextInputType.multiline,
                 textCapitalization: TextCapitalization.sentences,
                 minLines: 5,
@@ -352,21 +327,37 @@ class _FieldLabel extends StatelessWidget {
   }
 }
 
+/// The space between one field and the next. The field draws its own box
+/// (see [_inputBox]); this is the app's spacing around it, which the
+/// keyboard does not keep visible, as on Android.
 class _FieldShell extends StatelessWidget {
   const _FieldShell({required this.child});
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: kRowBg,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFF38383A), width: 0.5),
-      ),
-      child: child,
-    );
+    return Padding(padding: const EdgeInsets.only(bottom: 16), child: child);
   }
+}
+
+/// The field's own box: fill, outline and padding as `InputDecoration`,
+/// drawn by the native field, so the box IS the field. The keyboard reveals
+/// the whole box and the focused outline follows focus, the way a native
+/// outlined field behaves.
+InputDecoration _inputBox({required String hint, required double vertical}) {
+  return InputDecoration(
+    hintText: hint,
+    hintStyle: TextStyle(color: kTextSecondary),
+    filled: true,
+    fillColor: kRowBg,
+    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: vertical),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: const BorderSide(color: Color(0xFF38383A), width: 0.5),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: BorderSide(color: kSegTint, width: 1),
+    ),
+  );
 }

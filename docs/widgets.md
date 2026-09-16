@@ -72,7 +72,7 @@ This reference covers what is available, what isn't, and what to use instead whe
 |---|---|---|
 | `Text` | ✅ | `UILabel` |
 | `RichText` / `TextSpan` | ✅ | `NSMutableAttributedString` — per-span font, color, weight, italic, underline, strikethrough. `TextSpan.recognizer: TapGestureRecognizer` supported for tappable spans. `TextSpan` is not `const` — remove `const` from all `TextSpan(...)` calls |
-| `TextField` | ✅ | `UITextField` / `UITextView`. If `InputDecoration.contentPadding` is omitted, dartnative provides a default `EdgeInsets.symmetric(vertical: 14, horizontal: 14)` (override explicitly to customize). `inputFormatters` run on every edit before the keystroke is drawn, caret included: `FilteringTextInputFormatter` (`digitsOnly`, `allow`, `deny`), `LengthLimitingTextInputFormatter`, or your own `TextInputFormatter` over `TextEditingValue` / `TextSelection` `onSubmitted` fires when the user taps the keyboard's action key — the key itself is chosen by `textInputAction` (Done, Go, Search, Send, Next) — and receives the field's current text. As in Flutter, only single-line fields report a submission: in a multiline field that key inserts a newline. |
+| `TextField` | ✅ | `UITextField` / `UITextView`. If `InputDecoration.contentPadding` is omitted, dartnative provides a default `EdgeInsets.symmetric(vertical: 14, horizontal: 14)` (override explicitly to customize). `inputFormatters` run on every edit before the keystroke is drawn, caret included: `FilteringTextInputFormatter` (`digitsOnly`, `allow`, `deny`), `LengthLimitingTextInputFormatter`, or your own `TextInputFormatter` over `TextEditingValue` / `TextSelection` `onSubmitted` fires when the user taps the keyboard's action key — the key itself is chosen by `textInputAction` (Done, Go, Search, Send, Next) — and receives the field's current text. As in Flutter, only single-line fields report a submission: in a multiline field that key inserts a newline. **The field owns its box:** `InputDecoration.border` given as an `OutlineInputBorder` (its side's colour and width, one radius), `focusedBorder`, `enabledBorder` and `disabledBorder` by Flutter's precedence, and `filled` with a `fillColor`, are drawn by the native field itself, so a decorated field is one native view: the keyboard reveals the whole box, and the focused outline follows focus. `InputBorder.none`, an `UnderlineInputBorder` and no border leave the platform's own look. A box an app draws around a field is not the field, and the keyboard keeps only the field visible, as a native Android field does. `errorBorder`, `labelText` and `helperText` are not drawn yet. |
 | `TextEditingController` | ✅ | `text`, `value`, `selection`, `clear()`. Typing updates the controller before `onChanged`; setting `selection` or `value` moves the caret, setting `text` keeps it where the field has it |
 
 > **Font size units.** dartnative renders text using real native APIs, so `TextStyle.fontSize` follows each platform's conventional unit — **UIKit points** on iOS (fixed, does not scale with Dynamic Type) and **SP** on Android (scales with the user's font-size accessibility setting). This is identical to what you get writing native UIKit or Android code directly.
@@ -1159,11 +1159,14 @@ When the focused field is in the **body** (a form, not a chat), the body is lift
 
 **The gap above the keyboard differs by where the field lives, and this is
 the current, deliberate behaviour.** A field inside a bottom bar rides the
-keyboard directly, so the only visible space is the bar's own padding. A
-field in the body is lifted with a clearance the framework adds (24 points
-on iOS, 8dp on Android), so it floats a little higher. Native apps behave
-the same way: a chat input bar sits flush on the keyboard while a scrolled
-form field gets breathing room. If the two ever need to look the same on a
+keyboard directly: on iOS 26 the bar keeps a small distance above the
+floating keyboard (4 points, which the bar's own padding adds to, so a
+bar with 8 points of padding puts its field 12 above the keyboard as
+Messages does), and elsewhere the only visible space is the bar's own
+padding. A field in the body is lifted with a clearance the framework adds
+(16 points on iOS, 8dp on Android), so it floats a little higher. Native
+apps behave the same way: a chat input bar sits close to the keyboard
+while a scrolled form field gets breathing room. If the two ever need to look the same on a
 screen, the knob is that screen's bar padding, not the framework. Revisit
 only if a real screen makes the difference look wrong.
 
