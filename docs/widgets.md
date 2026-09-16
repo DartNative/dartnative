@@ -45,6 +45,7 @@ This reference covers what is available, what isn't, and what to use instead whe
 | `Directionality` | ✅ | `Directionality.of(context)` works everywhere: every screen starts from the direction the platform lays the app out in, which is right-to-left only when the app declares a right-to-left language (`CFBundleLocalizations` on iOS, `android:supportsRtl` on Android). Wrap a subtree to override it. `MediaQueryData.textDirection` carries the same value |
 | `EdgeInsetsDirectional` / `AlignmentDirectional` | ✅ | `start` and `end` follow the nearest `Directionality`; `AlignmentDirectional` is its own type, as in Flutter, and `AlignmentGeometry.resolve` gives the physical `Alignment` |
 | `TextAlign.start` / `TextAlign.end` | ✅ | Follow `Text.textDirection` when given, else the nearest `Directionality`. `Row`, `Column` and `Wrap` mirror on their own under right-to-left |
+| Right-to-left chrome | ✅ | The `AppBar` mirrors with the rest of the app: the back arrow, the title, a search field and the actions swap sides, the back chevron points the way back, and `actionsPadding`'s start and end follow the reading direction. The bar's own items are placed by the framework, so this holds on both hosts and on both platforms |
 | `Card` | ✅ | Material card — elevation, shape, margin |
 | `ListTile` | ✅ | Leading / title / subtitle / trailing row |
 | `Table` | ✅ | Column-sized grid layout |
