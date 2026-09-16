@@ -59,6 +59,7 @@ This reference covers what is available, what isn't, and what to use instead whe
 
 | API | Status | Notes |
 |---|---|---|
+| `context.mounted` | ✅ | False once the widget has left the tree and its `State` has been disposed. Check it after an `await` before using the context again, the same as in Flutter |
 | `GlobalKey.currentContext` | ✅ | Resolves to the mounted element for that key |
 | `findRenderObject()` | ✅ | Returns a `RenderBox` — but only for a widget that owns a native view (`Container`, `Icon`, `Text`, …). Wrappers such as `Opacity`, `Expanded`/`Flexible` and `Transform` return null, so key a real view when you need to measure |
 | `RenderBox.size` | ✅ | The native view's size, in logical pixels |
