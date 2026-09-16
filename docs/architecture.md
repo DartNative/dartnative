@@ -375,10 +375,13 @@ dartnative: [Dart]  3 changes queued
 flutter: [Swift] keyboard tracking attached
 ```
 
-Enable verbose logging in Dart:
+Enable verbose logging in Dart, by wrapping `runApp`:
 
 ```dart
-dnVerboseLog = true;   // before runApp()
+DartNativeLogger.run(() {
+  DartNativePluginRegistrant.registerAll();
+  runApp(const MyApp());
+}, verbose: true);
 ```
 
 | Capability | Flutter | React Native | DartNative |
@@ -392,7 +395,7 @@ dnVerboseLog = true;   // before runApp()
 
 | Tool | How to enable |
 |------|--------------|
-| Verbose Dart logs | `dnVerboseLog = true` before `runApp()` |
+| Verbose Dart logs | `DartNativeLogger.run(…, verbose: true)` around `runApp()` |
 | Hot restart | `R` (capital) in `dn run` — restarts Dart and replays navigation. Lowercase `r` is hot reload |
 
 ### Persisting logs to a file — `DartNativeLogger`
