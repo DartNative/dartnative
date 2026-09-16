@@ -122,7 +122,7 @@ dependencies:
   dartnative: ^1.0.0          # core
   dartnative_ios: ^1.0.0      # iOS bindings
   dartnative_android: ^1.0.0  # Android bindings
-  # dartnative_skia: ^1.0.0   # optional — only for Skia-backed canvas/pixel effects
+  # dartnative_skia: ^1.0.0   # GPU canvas, about 9 MB on iPhone; two steps, see skia.md
 ```
 
 Add plugins the same way — `dn pub add dartnative_video_player`, or edit
@@ -174,7 +174,8 @@ DartNative? Open the profile the installer edited (`~/.zshrc`, `~/.bashrc` or
 
 ## 5. What your app will weigh
 
-A new app built for an iPhone in release mode starts at 4.4 MB.
+A new app built for an iPhone in release mode starts at 4.4 MB as
+downloaded (10.6 MB on disk).
 
 ---
 

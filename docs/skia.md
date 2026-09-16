@@ -2,8 +2,8 @@
 
 **Skia** is the industry-standard 2D graphics engine — the same one that renders
 Chrome and Android. `dartnative_skia` compiles **Skia Graphite**
-(Skia's modern GPU backend — Metal on iOS, Vulkan on Android) directly into your
-app's binary and exposes it as a `CanvasSurface` widget you draw into from Dart.
+(Skia's modern GPU backend — Metal on iOS, Vulkan on Android) into your app and
+exposes it as a `CanvasSurface` widget you draw into from Dart.
 
 Skia is powerful but **not free**: every frame is GPU work outside the
 platform's own view compositing, so it adds binary size and costs more per
@@ -55,8 +55,9 @@ Reach for the canvas only when there's no native equivalent:
 
 ## Tiers
 
-`dartnative_skia` ships in two pre-built tiers. Choose the smallest tier
-that covers your use case. You can always upgrade later.
+`dartnative_skia` comes in two tiers; the package you install today carries
+**full**. Choose the smallest tier that covers your use case. You can always
+upgrade later.
 
 | Tier | iOS, added to the app | Android (`libdartnative_android.so` arm64-v8a) | What you get |
 |------|----------------------|-------------------------------------------------|--------------|
@@ -66,18 +67,30 @@ that covers your use case. You can always upgrade later.
 **Not sure which to pick?** Take **bare**. It covers canvas drawing, shaders
 and Latin text at less than half the size. Move to **full** only when text
 you draw *inside* a Skia canvas needs shaping, which shows as boxes instead
-of glyphs; changing tier is one word in `pubspec.yaml`.
+of glyphs.
+
+Two different things get called the default, so both in plain words:
+**full** is what an app gets when the key says nothing, and **bare** is the
+recommendation. The tier is one key in your pubspec:
+
+```yaml
+# pubspec.yaml, top level, beside dependencies
+dartnative_skia:
+  variant: bare    # or full; not yet honoured, see "What you get today"
+```
 
 **What you get today:** the published package carries the **full** tier and
 the `variant` key does not yet switch between them, so an iPhone app gets
 the 9.1 MB framework either way. Tier selection is coming; until it lands,
 budget for **full**. The iOS figure is the embedded framework in a release
 build for a device, measured; the bare estimate is from the source tree's
-own tier and is not yet purchasable.
+own tier and is not yet shipped.
 
 **Android carries Skia either way.** On Android the library is compiled into
 the platform binding, so an app pays for it whether or not it depends on
-`dartnative_skia`. Adding the dependency there buys you the `CanvasSurface`
+`dartnative_skia`; the shipped binding carries the **full** tier, so the
+Android column above is what each tier would cost, not a choice you make
+today. Adding the dependency there buys you the `CanvasSurface`
 widget, not extra bytes. Skipping it saves app size on iOS only.
 
 ---
@@ -125,24 +138,6 @@ Then run `dn pub get`. Nothing else: no Podfile and no Gradle changes.
 dependency, drop the import and the `registerSkiaFactories()` call, then run
 `dn pub get`, which rewrites `dartnative_plugin_registrant.dart` for you.
 That file is generated, so never edit it by hand.
-
-### 3. iOS — run pod install
-
-```bash
-cd ios && pod install
-```
-
-CocoaPods picks up the prebuilt Skia framework from the `dartnative_skia`
-package and embeds it in your app.
-
-### 4. Android — build details
-
-Gradle auto-detects the Skia package and links its prebuilt library into the
-CMake build. No extra `build.gradle` changes needed.
-
-**Verify Skia is linked:** check logcat for `[DN-Skia]` messages at app
-launch. If they are absent, check that your pubspec includes the
-`dartnative_skia` dependency (not just `dartnative_android`).
 
 ---
 
@@ -282,6 +277,44 @@ in `Visibility`.
 GPU work runs off the main thread, so even a heavy per-pixel shader won't
 block scrolling, touch, or layout.
 
+### When a canvas stops updating
+
+A canvas that stops painting is silent: the widget is still there, nothing
+throws, and nothing appears in the log. `CanvasDiagnostics.now()` says what
+the frame loop is doing and why each surface dropped its last frame.
+
+```dart
+print(CanvasDiagnostics.now());
+```
+
+```text
+CanvasDiagnostics(driver: vsync, surfaces: 1, ticks: 4217 (16ms ago),
+                  frames: 4213 (16ms ago), skipped: none)
+```
+
+Read it in this order:
+
+- **`driver: none, stopped`** with every surface static and already painted
+  is normal. The loop shuts down when nothing needs a frame and starts again
+  by itself when something does.
+- **`app backgrounded`** means the loop is stopped on purpose. It resumes
+  when the app returns.
+- **Ticks climbing but frames not** means the loop is healthy and the
+  surfaces are skipping. `skipped` says why: `routeCovered` (a screen is
+  open above this one, which is deliberate), `zeroSize` (the layout gives
+  the canvas no room), `measuring` (a frame spent on an automatic height),
+  `surfaceNotRegistered` or `surfaceNotReady` (the native view is not ready
+  yet, normal for the first frames after mount), `noPainter` (no painter was
+  given).
+- **Neither climbing, with a surface waiting**, is the loop failing to
+  deliver. Set `kCanvasDriverWatchdog = true` before the canvas mounts: the
+  framework then checks once a second and, if the loop is armed but silent,
+  logs a line beginning `[CanvasSurface] frame driver armed but silent` and
+  restarts it. It is off by default. If you see that line, send it with
+  this snapshot.
+
+Include this snapshot when reporting a canvas problem.
+
 ---
 
 ## API reference
@@ -289,6 +322,9 @@ block scrolling, touch, or layout.
 | Class / function | Description |
 |-----------------|-------------|
 | `CanvasSurface` | Widget that hosts a GPU canvas. Calls `painter.paint()` every display frame while animating (see Frame pump) |
+| `CanvasDiagnostics` | `CanvasDiagnostics.now()` — the frame loop's state and why each surface dropped its last frame (see Frame pump) |
+| `kCanvasDriverWatchdog` | Off by default. Set true to have the framework watch for a frame loop that is armed but delivering nothing, and restart it |
+| `CanvasSkipReason` | Why a surface skipped a frame: `none`, `routeCovered`, `noPainter`, `surfaceNotRegistered`, `zeroSize`, `measuring`, `surfaceNotReady` |
 | `CustomPainter` | Base class — implement `paint(Canvas, Size)` |
 | `Canvas` | Drawing surface. `drawRect`, `drawCircle`, `drawPath`, `drawImage`, `drawParagraph`, `drawPaint`, `save`/`restore`, `clipRect`, `scale`, `translate`, `rotate` |
 | `Paint` | Stroke/fill style. `color`, `strokeWidth`, `style`, `shader`, `blendMode`, `imageFilter` |
@@ -306,8 +342,8 @@ block scrolling, touch, or layout.
 
 ```
 Do you need shaped text *inside* the canvas (Arabic, CJK, RTL, HarfBuzz)?
-  ├── Yes  → full  ← default
-  └── No (shapes + shaders only)  → bare
+  ├── Yes  → full   ← what an app gets when the key says nothing
+  └── No (shapes + shaders only)  → bare   ← the recommendation
 ```
 
 ---
@@ -316,7 +352,6 @@ Do you need shaped text *inside* the canvas (Arabic, CJK, RTL, HarfBuzz)?
 
 **Canvas is blank / shows a black rectangle**
 - Confirm `dartnative_skia` is in `pubspec.yaml` dependencies.
-- Run `pod install` after adding the package (iOS).
 - Check `shouldRepaint()` — if it always returns `false`, the first frame
   will render but subsequent frames won't.
 - **Android**: check logcat for `[DN-Skia]` lines and look for `FAILED` to
@@ -327,16 +362,12 @@ Do you need shaped text *inside* the canvas (Arabic, CJK, RTL, HarfBuzz)?
 - A surface that is not yet attached to the window renders nothing and
   resolves itself once it appears in the view hierarchy.
 - For anything persistent, capture `adb logcat -s DN-Skia VV` and look for
-  `FAILED` lines to see where the GPU setup stopped. No `[DN-Skia]` lines at
-  all means the Skia library is not linked — check your dependencies.
+  `FAILED` lines to see where the GPU setup stopped. The lines appear once a
+  `CanvasSurface` is on screen; none at all before that is normal.
 
 **`RuntimeEffect.make()` returns null**
 - SkSL compilation failed. Print or log the error string from
   `RuntimeEffect.makeWithError(sksl)` to get the compiler message.
-
-**"Variant X not found" warning in Xcode build log**
-- That tier's binary isn't present in your installed package. Re-run
-  `dn pub get`; if the warning persists, report it to dev@dartnative.com.
 
 **Text looks incorrect / not shaped (Arabic/CJK displays as boxes)**
 - Switch to the `full` tier — the `bare` tier uses `SkFont` which

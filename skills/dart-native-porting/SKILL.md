@@ -30,7 +30,7 @@ dependencies:
   dartnative: ^1.0.0
   dartnative_ios: ^1.0.0
   dartnative_android: ^1.0.0
-  # dartnative_skia: ^1.0.0   # only if you use CanvasSurface / SkSL shaders
+  # dartnative_skia: ^1.0.0   # GPU canvas, about 9 MB on iPhone; two steps, see docs/skia.md
 ```
 
 - [ ] Remove `flutter:` sdk dependency and `flutter_test:` (and delete the
@@ -102,7 +102,7 @@ void main() {
       `Scaffold` handle chrome natively).
 - [ ] Add the OTHER registrations the app needs (after `registerAll()`;
       see the dart-native skill's startup anatomy): `registerSkiaFactories()`
-      if `dartnative_skia` is used (CustomPaint via Skia / CanvasSurface),
+      if `dartnative_skia` is used (`CanvasSurface`),
       `DartNativeFontRegistrant.registerAll()` if the app ships custom fonts
       (replaces Flutter's automatic font bundling), plugin initializers
       (`Firebase.initializeApp()`, `Sqlite.ensureInitialized()`, …), and an
@@ -180,7 +180,8 @@ when stuck.
       `platform :ios, '14.0'`.
 
 Icon fonts and the Skia option need no project changes: the framework
-registers its fonts at launch, and Skia follows the Dart dependency.
+registers its fonts at launch, and Skia needs the dependency and the
+`registerSkiaFactories()` call, no Xcode or Gradle changes.
 
 ## 7. Let the diffs be mechanical
 
