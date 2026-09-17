@@ -405,8 +405,22 @@ object DNMyPluginBridge : DNAndroidPluginProvider {
             else -> Log.w(TAG, "unknown eventTag=$eventTag")
         }
     }
+
+    /** Optional. The framework disposed a view this provider created (its
+     *  Dart element unmounted, or the app hot restarted). Free what the
+     *  garbage collector reclaims late: a surface, a decoder, an SDK object. */
+    override fun disposeView(viewId: Long, view: View) {
+        // release resources tied to `view`
+    }
 }
 ```
+
+`disposeView` is Android only, and the framework calls it once per view, on
+the main thread: when the view's Dart element unmounts, and on hot restart for
+every view still alive. Its default does nothing, so a plugin built before it
+existed keeps working. On iOS a view is released with its last reference when
+it leaves the hierarchy; a plugin that needs a signal there gives its view a
+`deinit`.
 
 > **⚠️ Hosting a real SDK view (webview, map, video)?** Two non-obvious gotchas
 > make a native view *load but render BLACK* on Android (while iOS looks fine):
@@ -1091,7 +1105,7 @@ Pod::Spec.new do |s|
   s.source_files     = 'Classes/**/*.swift'
   s.swift_version    = '5.9'
 
-  s.platform         = :ios, '14.0'
+  s.platform         = :ios, '15.0'
 
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
@@ -1100,8 +1114,10 @@ Pod::Spec.new do |s|
 end
 ```
 
-- `s.platform = :ios, '14.0'` — must match the app Podfile's `platform :ios`
-  version.
+- `s.platform = :ios, '15.0'` — the minimum the tool declares for every app.
+  A plugin asking for less is raised to the app's minimum when the pods are
+  installed, so it still builds but states the wrong version; a plugin asking
+  for more than the app is the one that fails.
 - `DEFINES_MODULE => 'YES'` — required for Swift module visibility.
 - Static libs (`.a` files) go in `ios/` root, declared via
   `s.vendored_libraries`; closed-source Swift can ship as a vendored

@@ -10,6 +10,8 @@ import 'package:dartnative_notifications/dartnative_notifications.dart';
 import 'dartnative_plugin_registrant.dart';
 import 'screens/chat_screen_demo.dart';
 import 'screens/media/chatgpt_picker_demo.dart';
+import 'screens/media/stickers_keyboard_demo.dart';
+import 'screens/media/video_feed_demo.dart';
 import 'screens/home/demo_ui.dart' show playgroundOverlayStyle;
 import 'screens/home/home_shell.dart';
 import 'screens/grid_demo.dart';
@@ -89,6 +91,8 @@ void main() {
       registerRoutes({
         '/chat': (_) => const ChatScreenDemo(),
         '/chatgpt-picker': (_) => const ChatGptPickerDemo(),
+        '/stickers-keyboard': (_) => const StickersKeyboardDemo(),
+        '/video-feed': (_) => const VideoFeedDemo(),
         '/music': (_) => const MusicDemo(),
         '/color-picker': (_) => const ColorPickerDemo(),
         '/carousel': (_) => const CarouselDemo(),

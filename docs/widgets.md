@@ -106,7 +106,7 @@ All of these are backed by `UIScrollView` with Yoga-managed content. Every child
 | `SliverFillRemaining` | ✅ | |
 | `SliverAppBar` | ✅ | With `FlexibleSpaceBar` |
 | `GridView` | ✅ | `.count` and `.builder`; Yoga flex-wrap rows |
-| `PageView` | ❌ | Not planned |
+| `PageView` | ✅ | `PageView`, `.builder`, `.custom` and `PageController`; each swipe settles on one page on the platform's own paging. A page is always the whole viewport (`viewportFraction` other than 1 is not supported) |
 | `NestedScrollView` | ❌ | Not planned |
 | `ReorderableListView` | ❌ | Not planned |
 
@@ -123,6 +123,8 @@ These are DartNative-specific widgets built directly on the platform's own list 
 | `FastList` | ✅ | `UITableView` with cell recycling | `RecyclerView` |
 | `FastGrid` | ✅ | `UICollectionView` with cell recycling | `RecyclerView` |
 | `MasonryFastGrid` | ✅ | Staggered Pinterest-style grid; heights from `itemHeightBuilder`. `UICollectionView` with a custom staggered layout | `RecyclerView` (`StaggeredGridLayoutManager`) |
+
+**Paging.** `FastList(pagingEnabled: true)` makes every swipe settle on exactly one item: a full-screen video feed, an onboarding carousel (`scrollDirection: Axis.horizontal`). The paging is the platform's own, so the feel is native and a fling moves one page. Each item is laid out at the list's own size, so a page is always one viewport. `PageView` is this with Flutter's names; use the `FastList` form when the feed also needs `keepAliveCount`, `onVisibleRange` or `stableItems`.
 
 **When to use `FastList` vs `ListView.builder`:**
 

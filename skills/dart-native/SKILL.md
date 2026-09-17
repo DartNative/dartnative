@@ -206,7 +206,11 @@ only for SkSL shaders (`RuntimeEffect`) and other GPU work.
 **DartNative additions worth adopting during a port**: `FastList` /
 `FastGrid` / `MasonryFastGrid` (native cell recycling; `itemCount` +
 `itemBuilder`, `keepAliveCount` windowing, `onScroll`,
-`FastListController.scrollToItem`) for long feeds; `GlassEffectContainer`
+`FastListController.scrollToItem`) for long feeds; `PageView` /
+`PageController` on the platform's own paging, or `FastList(pagingEnabled:
+true)` for a full-screen feed that also windows with `keepAliveCount`
+(`viewportFraction` other than 1 is not supported: a peeking carousel is a
+horizontal `FastList`); `GlassEffectContainer`
 (`borderRadius`, `tint`, `interactive`, `brightness`) for real iOS 26
 glass; `DynamicColor.colorScheme(brightness:)` for Material You;
 `VideoPlayer` via `dartnative_video_player`.
@@ -215,7 +219,6 @@ glass; `DynamicColor.colorScheme(brightness:)` for Material You;
 
 | Missing | Porting move |
 |---|---|
-| `PageView` (not planned) | Restructure: `SegmentedControl`/tabs + `IndexedStack`, or a horizontal `FastList` |
 | `NestedScrollView` (not planned) | `AppBar.largeTitle` covers the collapsing-header case natively; `CustomScrollView` + slivers for the rest |
 | `TabBar` (the swipeable material one) | `SegmentedControl` or `BottomNavigationBar` |
 | `Dismissible` | No swipe-to-dismiss rows yet |

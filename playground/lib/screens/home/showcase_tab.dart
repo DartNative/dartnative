@@ -11,6 +11,8 @@ import '../backdrop_filter_demo.dart';
 import '../canvas_demo.dart';
 import '../chat_screen_demo.dart';
 import '../media/chatgpt_picker_demo.dart';
+import '../media/stickers_keyboard_demo.dart';
+import '../media/video_feed_demo.dart';
 import '../music/music_demo.dart';
 import '../color_picker_demo.dart';
 import '../carousel_demo.dart';
@@ -60,6 +62,22 @@ class ShowcaseTab extends StatelessWidget {
             ),
           ),
           ShowcaseCard(
+            gradient: const [Color(0xFFFF6B00), Color(0xFF8E1B1B)],
+            icon: CupertinoIcons.play_rectangle_fill,
+            title: 'Infinite Video Scrolling',
+            pitch: 'A vertical feed of full-screen videos with no end. One '
+                'swipe, one page, on the platform\'s own paging, and the next '
+                'video is already showing its first frame when it arrives.',
+            tags: const ['PageView', 'pooled players', 'prefetch'],
+            onTap: (ctx) => Navigator.push(
+              ctx,
+              PageRoute(
+                builder: (_) => const VideoFeedDemo(),
+                settings: '/video-feed',
+              ),
+            ),
+          ),
+          ShowcaseCard(
             gradient: const [Color(0xFF30D158), Color(0xFF0A84FF)],
             icon: CupertinoIcons.photo_on_rectangle,
             title: 'ChatGPT Picker',
@@ -72,6 +90,22 @@ class ShowcaseTab extends StatelessWidget {
               PageRoute(
                 builder: (_) => const ChatGptPickerDemo(),
                 settings: '/chatgpt-picker',
+              ),
+            ),
+          ),
+          ShowcaseCard(
+            gradient: const [Color(0xFFFF375F), Color(0xFFBF5AF2)],
+            icon: CupertinoIcons.smiley,
+            title: 'Stickers Keyboard',
+            pitch: 'A sticker sheet takes the keyboard\'s place over the same '
+                'composer, and every sticker in it, in the field and in the '
+                'thread keeps animating.',
+            tags: const ['over the keyboard', 'live stickers'],
+            onTap: (ctx) => Navigator.push(
+              ctx,
+              PageRoute(
+                builder: (_) => const StickersKeyboardDemo(),
+                settings: '/stickers-keyboard',
               ),
             ),
           ),

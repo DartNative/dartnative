@@ -90,6 +90,18 @@ VideoDataSource.network(
 );
 ```
 
+**Start fast in a feed**
+
+```dart
+VideoDataSource.network(
+  url,
+  // Half a second of media to start instead of the player's 2.5 s
+  // default; the video appears as soon as it can. Defaults are the
+  // player's own; iOS starts on the first frames regardless.
+  bufferingConfig: VideoBufferingConfig.feed,
+)
+```
+
 > The player is a native view rendered through DartNative's view bridge
 > (ViewType **1000**), so it sits naturally inside your Dart layout.
 

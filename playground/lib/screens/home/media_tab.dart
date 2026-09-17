@@ -10,6 +10,7 @@ import '../media/camera_demo.dart';
 import '../media/custom_controls_demo.dart';
 import '../media/hls_demo.dart';
 import '../media/supertonic_demo.dart';
+import '../media/video_feed_demo.dart';
 import '../media/video_playback_demo.dart';
 import 'demo_ui.dart';
 
@@ -45,6 +46,19 @@ class MediaTab extends StatelessWidget {
               PageRoute(
                 builder: (_) => const VideoPlaybackDemo(),
                 settings: '/video-playback',
+              ),
+            ),
+          ),
+          DemoRow(
+            icon: CupertinoIcons.play_rectangle_fill,
+            tint: kAccentRed,
+            title: 'Infinite Video Feed',
+            tagline: 'PageView, pooled players, prefetch',
+            onTap: (ctx) => Navigator.push(
+              ctx,
+              PageRoute(
+                builder: (_) => const VideoFeedDemo(),
+                settings: '/video-feed',
               ),
             ),
           ),
