@@ -136,6 +136,17 @@ build is available, `dn` tells you, and `dn upgrade` installs it.
 
 ## 4. IDE setup
 
+### The DartNative IDE Extension
+
+The [**DartNative IDE Extension**](https://marketplace.visualstudio.com/items?itemName=Beatcode-studio.dartnative)
+works in VS Code, Cursor and Antigravity. It is built by Beatcode Studio and
+officially supported: hot reload and hot restart, breakpoints, code
+completion, and memory and network insights, all wired to DartNative. Install
+it from the marketplace, or search for DartNative in your editor's extensions
+panel.
+
+### Without the extension
+
 Install the **Dart** and **Flutter** extensions (VS Code) or the Flutter plugin
 (Android Studio). Hot reload, autocomplete and debugging all run through
 DartNative, which the editor finds on your PATH.

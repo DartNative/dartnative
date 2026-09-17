@@ -12,7 +12,7 @@ Your Dart code drives UIKit on iOS and the Android View system on Android direct
 
 ## See it in action
 
-https://github.com/user-attachments/assets/6e472fc2-25c6-4718-9e75-dd490569e4a5
+https://github.com/user-attachments/assets/89c639cf-c491-49e5-b847-0460ad8df47d
 
 All features available at [dartnative.com](https://dartnative.com/).
 
@@ -253,6 +253,12 @@ DartNativeLogger.run(
 One window, one workflow, every log — whether it originated in Dart or UIKit.
 
 Full reference: [docs/logging.md](docs/logging.md)
+
+---
+
+## Tools
+
+The **[DartNative IDE Extension](https://marketplace.visualstudio.com/items?itemName=Beatcode-studio.dartnative)** — for VS Code, Cursor and Antigravity, built by Beatcode Studio and officially supported: hot reload and hot restart, breakpoints, code completion, and memory and network insights, all wired to DartNative. Install it from the marketplace, or search for DartNative in your editor's extensions panel.
 
 ---
 
