@@ -3,6 +3,127 @@
 <!-- Generated file — edits here are overwritten on the next release.
      The changelog is maintained at https://dartnative.com/changelog -->
 
+## PageView, plus fixes to the keyboard, text fields and right-to-left bars — Preview (2026-09-17)
+
+This release has ten changes: one new widget, seven fixes in the
+framework, and two plugin updates. Several of them come from issues you
+reported on the public repo. We tested all of them on an iPhone and on an
+Android phone.
+
+To get the framework changes, run `dn upgrade`. If that prints an install
+command instead, your `dn` is too old to update itself: run the command it
+prints, then run `dn upgrade` again.
+
+Two plugins also have new versions, `dartnative_video_player` 1.0.1 and
+`dartnative_lottie` 1.2.1. Run `dn pub upgrade` in your app to get them.
+
+**iOS 13 and 14 are no longer supported.** Current versions of Xcode
+cannot build for anything below iOS 15, so if you build with a recent
+Xcode this was already true for you. The framework now states it.
+
+### New
+
+- **`PageView`.** You can now build a feed of full-screen videos, or an
+  onboarding carousel, without writing the paging yourself. `PageView`,
+  `PageView.builder`, `PageView.custom` and `PageController` all work,
+  with the same fields as in Flutter. Underneath, a `FastList` has a new
+  `pagingEnabled` flag you can use directly.
+
+  Each swipe lands on exactly one page, and the movement is the
+  platform's own, so it feels the way paging feels in other apps on the
+  phone. Every page fills the viewport, and the framework sizes it for
+  you: a feed inside a column, or under an app bar, still pages
+  correctly. If you leave the item count out of `PageView.builder`, the
+  feed has no end and grows as the reader scrolls.
+
+  One difference from Flutter: `viewportFraction` must be 1.0. Flutter
+  implements paging itself in Dart, so it can stop a swipe part way
+  through a page. Here the paging is the platform's own, and both
+  platforms page by the whole viewport, so there is nothing for a smaller
+  fraction to map onto. That is the trade: you get the real thing rather
+  than an imitation of it, and one field cannot follow. For a carousel
+  where the neighbouring pages peek in at the edges, use a horizontal
+  `FastList`, which scrolls freely and lets you size items as you like.
+
+### Fixed
+
+- **The keyboard no longer covers part of your input bar on Android.**
+  A button at the bottom of an input bar cleared the keyboard, but
+  anything below it, a label or the bar's own padding, was still hidden,
+  by exactly the height of the phone's navigation area. We were measuring the top of the keyboard
+  against one thing and the window against another. Both now come from
+  the same place, so the measurement is right on any phone and in either
+  navigation mode.
+- **Text fields draw their own box.** `InputDecoration.border`, `filled`
+  and `fillColor` were accepted but did nothing, so people wrapped fields
+  in a box of their own, and the keyboard then covered the bottom of that
+  box. Fields now draw the box themselves, on both platforms, and the
+  keyboard clears all of it.
+- **Fields sit closer to the iOS keyboard.** A field in the body of a
+  screen floated 24 points above the keyboard on iOS, while the same
+  field sat 8dp above it on Android. It is 16 points now, which is what
+  Apple's own apps use. An input bar in the scaffold sits where the one
+  in Messages sits, and moves with the keyboard's animation.
+- **No more red error bar after navigating away.** If a button moved the
+  app to another screen and then updated its own state, a red bar
+  appeared across the screen and stayed until you restarted the app. This
+  is what a login button does after it signs you in. A widget that is
+  removed during a frame is no longer built in that frame, which is what
+  Flutter does too, and `context.mounted` now tells the truth, so the
+  usual check after an `await` works.
+- **App bars mirror in right-to-left apps.** In an app set to Arabic, the
+  screen mirrored but the app bar did not, as soon as the bar had a
+  widget action in it: the back arrow stayed on the left and the actions
+  on the right. The bar is now laid out in reading order and mirrored as
+  a whole, on both platforms, and the back arrow points the way back
+  rather than always pointing left.
+- **Pasting into a formatted field leaves the cursor where it should
+  be.** If you pasted into a field whose formatter rewrites the text, a
+  phone number losing its country code for example, the text came out
+  right but the cursor jumped to the very start, so the next character
+  you typed went to the front. The cursor the formatter asked for is now
+  applied after the paste finishes.
+- **The framework's iOS pods ask for iOS 15.** On Xcode 27, a newly
+  created app failed to build because several pods asked for an older iOS
+  than that Xcode supports. The framework's two pods now ask for 15.0.
+  We have not been able to test on Xcode 27 ourselves yet.
+
+### Plugins
+
+- **Videos in a feed appear immediately** (`dartnative_video_player`
+  1.0.1). On Android, swiping quickly through a feed showed the poster
+  image, or a black screen, for a moment before the video appeared.
+  Players now draw their first frame before their page is on screen, so
+  the page arrives with the video already showing. Playback also reads
+  the disk cache, which it had been skipping, so a video you go back to
+  starts from the disk instead of the network. On the framework side,
+  Android plugins can now be told when one of their views is thrown away,
+  which is what made this possible.
+- **A renderer built for many animations at once** (`dartnative_lottie`
+  1.2.0 and 1.2.1). A sticker keyboard shows thirty animations on screen
+  and cycles through hundreds. The platform's animation engine, which is
+  still the default and still the right choice for a few animations or a
+  large one, builds a layer tree for each and pays for it on the main
+  thread every time a view appears.
+
+  Passing `renderCache: RenderCache.raster` uses a different renderer,
+  built on rlottie. Each animation is drawn once, off the main thread, at
+  the size the widget shows it, then kept compressed in memory and on
+  disk and played back as frames. A view costs nothing to build, an
+  animation you have shown before at that size is decoded rather than
+  drawn again, and playing it costs the main thread one frame per view.
+  The same renderer runs on iOS and Android, and the option has the same
+  name as in the Flutter Lottie package. `LottiePreWarm.warmAssets` can
+  prepare a screenful ahead of time, at the size they will appear.
+
+  Version 1.2.1 fixes the one problem we knew of in it: on a detailed
+  file it stopped drawing part of the animation once it reached an
+  internal limit, so a sticker could appear without its eyes. That limit
+  now applies only to the kind of content that can multiply, so
+  hand-drawn artwork draws in full however detailed it is.
+
+---
+
 ## Six fixes from community reports: text input, system appearance, rebuilds, preferences — Preview (2026-09-15)
 
 Six changes, all from reports and requests on the public repo,
