@@ -22,6 +22,7 @@ the finished result the article builds toward.
 | Charts on the native canvas | [`native_canvas/`](native_canvas/) | CustomPaint on Core Graphics / android.graphics.Canvas |
 | Native video playback | [`video_player/`](video_player/) | AVPlayer/ExoPlayer, controls, caching, controller-driven UI |
 | Storage, all four kinds | [`storage/`](storage/) | Preferences, secure storage, Hive, SQLite — over FFI |
+| Localization | [`localization/`](localization/) | ARB files, generated `S` class, a live language switch that survives a restart |
 | Sign in with Apple & Google | [`social_sign_in/`](social_sign_in/) | The real auth sheets, provider config, token handling |
 | Notifications, local & push | [`notifications/`](notifications/) | Permission, local alerts, chat-style banners, FCM tokens |
 | A camera screen | [`camera/`](camera/) | AVFoundation/CameraX preview, capture, flash, flip |

@@ -205,5 +205,6 @@ complete, runnable app.
 - [Widget reference](widgets.md) — full list of available widgets
 - [Canvas & shaders](skia.md) — GPU canvas, SkSL shaders, rich text via `dartnative_skia`
 - [Debugging & logging](logging.md) — native log bridge, `DartNativeLogger`, file persistence
+- [Localization](localization.md) — ARB files, the generated `S` class, switching language at runtime
 - [Playground](../playground/) — working demo app to build and explore
 - [Writing your own plugin](plugin_development.md) — plugins are ordinary Dart packages with FFI/JNI native sides; if your native code calls Dart back, see [async callbacks](plugin_async_callbacks.md)

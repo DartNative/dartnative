@@ -1,0 +1,34 @@
+{
+  "@@locale": "en",
+  "app_title": "Localization",
+  "greeting": "Hello, {name}!",
+  "@greeting": {
+    "placeholders": { "name": {} }
+  },
+  "language_section": "Language",
+  "language_current": "The app is in {language}.",
+  "@language_current": {
+    "placeholders": { "language": {} }
+  },
+  "counter_section": "Plurals and numbers",
+  "messages_count": "{count, plural, =0{No messages} =1{One message} other{{count} messages}}",
+  "@messages_count": {
+    "placeholders": { "count": {} }
+  },
+  "add_message": "Add one",
+  "clear_messages": "Clear",
+  "dates_section": "Dates",
+  "today_is": "Today is {date}.",
+  "@today_is": {
+    "placeholders": {
+      "date": { "type": "DateTime", "format": "yMMMMd" }
+    }
+  },
+  "price_is": "That costs {amount}.",
+  "@price_is": {
+    "placeholders": {
+      "amount": { "type": "double", "format": "currency" }
+    }
+  },
+  "restart_note": "Your choice is saved. Close and reopen the app: it comes back in the same language."
+}

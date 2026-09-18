@@ -1,0 +1,15 @@
+{
+  "@@locale": "ar",
+  "app_title": "الترجمة",
+  "greeting": "مرحبا، {name}!",
+  "language_section": "اللغة",
+  "language_current": "التطبيق باللغة {language}.",
+  "counter_section": "الجمع والأرقام",
+  "messages_count": "{count, plural, =0{لا رسائل} =1{رسالة واحدة} other{{count} رسائل}}",
+  "add_message": "أضف واحدة",
+  "clear_messages": "مسح",
+  "dates_section": "التواريخ",
+  "today_is": "اليوم هو {date}.",
+  "price_is": "سعرها {amount}.",
+  "restart_note": "تم حفظ اختيارك. أغلق التطبيق وافتحه مرة أخرى: سيعود بنفس اللغة."
+}

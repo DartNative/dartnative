@@ -1,0 +1,15 @@
+{
+  "@@locale": "it",
+  "app_title": "Localizzazione",
+  "greeting": "Ciao, {name}!",
+  "language_section": "Lingua",
+  "language_current": "L'app è in {language}.",
+  "counter_section": "Plurali e numeri",
+  "messages_count": "{count, plural, =0{Nessun messaggio} =1{Un messaggio} other{{count} messaggi}}",
+  "add_message": "Aggiungine uno",
+  "clear_messages": "Svuota",
+  "dates_section": "Date",
+  "today_is": "Oggi è {date}.",
+  "price_is": "Costa {amount}.",
+  "restart_note": "La tua scelta è salvata. Chiudi e riapri l'app: torna nella stessa lingua."
+}

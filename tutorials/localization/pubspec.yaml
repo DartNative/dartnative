@@ -1,0 +1,31 @@
+name: localization
+description: DartNative tutorial — app localization with ARB files and dartnative_intl.
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: ^3.5.0
+
+# Consumer-shaped dependencies: `dn pub get` fetches the prebuilt dartnative
+# packages from dartpub.dev (no pub registry, no token needed to build).
+dependencies:
+  dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  # Remembers the chosen language across launches.
+  dartnative_shared_preferences: ^1.0.0
+  # Date and number formatting, and the message catalogue the generator writes.
+  intl: ^0.20.2
+
+dev_dependencies:
+  lints: ^6.0.0
+  # Reads the ARB files and generates lib/generated/l10n.dart.
+  dartnative_intl: ^1.0.0
+
+# Same keys as intl_utils. `dart run dartnative_intl:generate` reads this.
+flutter_intl:
+  enabled: true
+  arb_dir: l10n
+  output_dir: lib/generated
+  class_name: S
+  main_locale: en

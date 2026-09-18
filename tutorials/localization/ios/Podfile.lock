@@ -1,0 +1,33 @@
+PODS:
+  - dartnative_ios (1.0.0):
+    - FlexLayout (= 2.0.10)
+  - dartnative_shared_preferences (1.0.1)
+  - DartNativeCore (1.0.0)
+  - FlexLayout (2.0.10)
+
+DEPENDENCIES:
+  - dartnative_ios (from `.symlinks/plugins/dartnative_ios/ios`)
+  - dartnative_shared_preferences (from `.symlinks/plugins/dartnative_shared_preferences/ios`)
+  - DartNativeCore (from `DartNative`)
+
+SPEC REPOS:
+  trunk:
+    - FlexLayout
+
+EXTERNAL SOURCES:
+  dartnative_ios:
+    :path: ".symlinks/plugins/dartnative_ios/ios"
+  dartnative_shared_preferences:
+    :path: ".symlinks/plugins/dartnative_shared_preferences/ios"
+  DartNativeCore:
+    :path: DartNative
+
+SPEC CHECKSUMS:
+  dartnative_ios: 88d434758a21de28291d1ca70f9a144bd28548c7
+  dartnative_shared_preferences: ec7c5f6b4fe20033acade3aab5c763a2348f4067
+  DartNativeCore: 225e49d9e35e234bcadc6b81586fc4275a1006ee
+  FlexLayout: ea94491c923485f7f28891cb5b10245d22df380b
+
+PODFILE CHECKSUM: 7ebfe451e66b5eadb0cc21fd30abfd19d621dd60
+
+COCOAPODS: 1.16.2
