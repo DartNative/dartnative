@@ -1,12 +1,14 @@
 # Localization
 
-Translating a DartNative app works the way it does in Flutter: your strings live in ARB files, a generator turns them into a Dart class, and widgets read their text from that class. The generator is the `dartnative_intl` plugin, a drop-in replacement for `intl_utils` whose output imports `dartnative` instead of Flutter.
+Localizing an app means showing its text in the user's own language. In DartNative you do it the same way as in Flutter. You keep your strings in one file per language, run a generator that turns those files into a Dart class, and call that class from your widgets instead of writing text directly.
+
+The files are ARB files, which are JSON. The generator is the `dartnative_intl` plugin, a drop-in replacement for `intl_utils` whose output imports `dartnative` instead of Flutter. The class it writes is called `S` by default, so a heading becomes `S().app_title` and the right translation comes out.
 
 ```
 l10n/intl_en.arb  ──► dn run-tool  ──► lib/generated/l10n.dart  ──► S().greeting('Ada')
 ```
 
-Every snippet on this page is taken from a working app, [`tutorials/localization`](../tutorials/localization), which you can run with `dn pub get && dn run`. When something here is ambiguous, that app is the answer: its `l10n/` holds four translated ARB files, `lib/state/language_provider.dart` the provider shown below, `lib/main.dart` the startup order, and `lib/screens/localization_demo.dart` a screen that reads strings, plurals and dates. The step-by-step article is at [dartnative.com/tutorials/localization](https://dartnative.com/tutorials/localization).
+Every snippet here comes from a working app, [`tutorials/localization`](../tutorials/localization), which runs with `dn pub get && dn run`. If anything on this page is unclear, read that app instead. Its `l10n/` folder has four translated ARB files, `lib/state/language_provider.dart` has the provider shown below, `lib/main.dart` has the startup order, and `lib/screens/localization_demo.dart` has a screen that reads strings, plurals and dates. The step-by-step version is at [dartnative.com/tutorials/localization](https://dartnative.com/tutorials/localization).
 
 ---
 
@@ -66,7 +68,7 @@ Translations are the same file with the values replaced. Only the main locale ca
 | A plural | `String messages_count(num count)` | `S().messages_count(5)` |
 | A typed placeholder | `String today_is(DateTime date)` | `S().today_is(DateTime.now())` |
 
-Each language declares the plural cases it needs — English two, Arabic six — and the generator reads whatever each file provides.
+Each language declares the plural cases it needs. English has two, Arabic has six, and the generator reads whatever each file provides.
 
 Four complete ARB files, including a right-to-left one, are in [`tutorials/localization/l10n/`](../tutorials/localization/l10n).
 
@@ -80,7 +82,7 @@ dn run-tool dartnative_intl:generate
 
 This writes `lib/generated/l10n.dart` and one message file per locale. They are rewritten on every run, so never edit them by hand, and re-run after every change to an ARB file.
 
-`dart run dartnative_intl:generate` does not work here, and the reason is worth knowing: plain pub resolves packages against pub.dev, where the DartNative packages do not exist, and the generator ships as a compiled tool inside the plugin's artifact rather than as source. `dn run-tool` is the only form that works. It needs `dartnative_intl` 1.0.1 or newer; an older version reports that the plugin provides no commands to run.
+Use `dn run-tool`, not `dart run`. Plain pub looks for packages on pub.dev and the DartNative packages are not there, and the generator ships as a compiled tool inside the plugin rather than as source. You need `dartnative_intl` 1.0.1 or newer. An older version reports that the plugin provides no commands to run.
 
 ---
 
@@ -107,7 +109,7 @@ Future<void> main() async {
 
 `Localizations.setResolver` is what `S()` calls to find the loaded messages, so without it the first screen has nothing to read.
 
-Do not call `S.load` again after this. An unconditional `S.load(Locale('en'))` later in startup overrides whatever was restored, on every launch, and the symptom is easy to misread: the app always opens in English while switching languages inside the app works perfectly.
+Do not call `S.load` again after this. A second call overrides the language you just restored, on every launch. The symptom is misleading: the app always opens in English, but switching languages inside the app works fine.
 
 The working version is [`tutorials/localization/lib/main.dart`](../tutorials/localization/lib/main.dart).
 
@@ -115,7 +117,7 @@ The working version is [`tutorials/localization/lib/main.dart`](../tutorials/loc
 
 ## Holding the current language
 
-A small provider owns which language is current, saves it, and loads it. Three details in it are worth explaining, because each one is a failure that is hard to diagnose from the outside.
+A small provider holds the current language, saves it, and loads it. Three things in it need explaining, because each one fails in a way that is hard to trace back.
 
 These are the imports it needs. `Locale` comes from the plugin rather than from Flutter, and the two `intl` imports are separate because one carries the formatting API and the other the symbol data:
 
@@ -184,7 +186,7 @@ class LanguageProvider {
 }
 ```
 
-**Resolving the language on launch** goes in three steps: the saved language if you still ship it, otherwise the device's language if you translated it, otherwise your fallback. Checking the saved value against the list you ship matters more than it looks — drop a language later and anyone who had chosen it would otherwise be stuck on a code that no longer exists.
+**Resolving the language on launch** takes three steps: use the saved language if you still ship it, otherwise the device's language if you translated it, otherwise your fallback. Check the saved value against the list you ship. If you drop a language later, anyone who had chosen it would otherwise be stuck on a code that no longer exists.
 
 The device's own language comes from `Intl.systemLocale`, which reports it as the platform does (`en_US`, `ar`). Take the language part alone so a device set to Brazilian Portuguese still finds your `pt` file. `dart:ui` is not available in a DartNative app, so this is the portable read:
 
@@ -208,18 +210,18 @@ Locale get locale =>
     Locale(_language.value.languageCode, _language.value.countryCode);
 ```
 
-**Loading before notifying watchers** is why `changeLanguage` awaits `_load` before setting the signal. Setting the signal first rebuilds every watching screen while the old messages are still current, so that rebuild renders the previous language and only a later, unrelated rebuild corrects it. It looks like a caching problem and is really an ordering one.
+**Loading before notifying watchers** is why `changeLanguage` awaits `_load` before it sets the signal. If you set the signal first, every watching screen rebuilds while the old messages are still loaded, so they show the previous language until something else triggers another rebuild. It looks like a caching problem, but it is just the wrong order.
 
 The whole provider, with the parts omitted here, is [`tutorials/localization/lib/state/language_provider.dart`](../tutorials/localization/lib/state/language_provider.dart).
 
-**Loading the date symbols with the messages** is what `_load` exists for. `S().today_is(...)` builds a `DateFormat` underneath, and that throws unless the locale's symbol data has been loaded first:
+**Loading the date symbols with the messages** is why `_load` does two things. `S().today_is(...)` builds a `DateFormat` underneath, and that throws unless the locale's symbol data is loaded first:
 
 ```
 LocaleDataException: Locale data has not been initialized,
 call initializeDateFormatting(<locale>).
 ```
 
-`initializeDateFormatting` comes from `package:intl/date_symbol_data_local.dart` and is safe to call more than once. Keeping it beside `S.load` means the messages and the formatting data can never disagree about which language is current.
+`initializeDateFormatting` comes from `package:intl/date_symbol_data_local.dart` and is safe to call more than once. Keep it next to `S.load` so the messages and the formatting data always agree on the current language.
 
 ---
 
@@ -264,7 +266,7 @@ for (final language in supportedAppLanguages)
 
 DartNative reads the layout direction from the platform once, at startup: the app's interface layout direction on iOS, the configuration's on Android. Both stay left-to-right unless the app itself declares a right-to-left language.
 
-This means a right-to-left language chosen inside your app translates its text but does not mirror the layout. Mirroring needs the operating system to consider the app right-to-left, which is a per-app language change on Android or a device language change on iOS — the same constraint a native app has. `Directionality.of(context)` reports the resolved direction, and wrapping a subtree in `Directionality` overrides it locally.
+So picking a right-to-left language inside your app translates the text without mirroring the layout. For the layout to mirror, the operating system has to consider the app right-to-left: a per-app language change on Android, a device language change on iOS. Native apps work the same way. `Directionality.of(context)` reports the resolved direction, and wrapping a subtree in `Directionality` overrides it locally.
 
 ---
 
