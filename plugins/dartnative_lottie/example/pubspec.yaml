@@ -11,7 +11,7 @@ dependencies:
   dartnative_ios: ^1.0.0
   dartnative_android: ^1.0.0
   dartnative_skia: ^1.0.0
-  dartnative_lottie: ^1.2.0
+  dartnative_lottie: ^1.3.0
   archive: ^3.4.0
   dartnative_splash: ^1.0.0
 

@@ -161,9 +161,9 @@ FastList mirrors the `ListView.builder` API with the following configuration opt
 |---|---|---|---|
 | `itemCount` | `int` | (required) | Total number of items in the list |
 | `itemBuilder` | `Widget Function(BuildContext, int)` | (required) | Called for each visible index; returns a native widget |
-| `scrollDirection` | `Axis` | `Axis.vertical` | Scroll axis; only `vertical` is supported |
+| `scrollDirection` | `Axis` | `Axis.vertical` | Scroll axis; `horizontal` lays the children out in a row |
 | `reverse` | `bool` | `false` | If `true`, list starts from the bottom |
-| `showScrollBar` | `bool` | `false` | Show/hide the vertical scroll indicator (`UIScrollView.showsVerticalScrollIndicator`) |
+| `showScrollBar` | `bool` | `false` | Show/hide the scroll indicator along the scroll axis |
 | `padding` | `EdgeInsets?` | `null` | Content inset around the list |
 | `physics` | `ScrollPhysics?` | `null` | `NeverScrollableScrollPhysics` to disable scrolling; `BouncingScrollPhysics` / `ClampingScrollPhysics` for scroll behaviour |
 | `keepAliveCount` | `int?` | `null` | Content windowing: keep built content only for visible rows + this many on each side (memory becomes independent of `itemCount`). `null` keeps everything built |

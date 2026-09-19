@@ -29,8 +29,11 @@
 /// keeps the frames compressed in memory and on disk, and plays them as
 /// bitmaps: a cell costs nothing to build, a pack seen before decodes
 /// instead of drawing, and the main thread's share of playback is one
-/// bitmap per sticker per frame. The first visit to a pack draws its
-/// frames as it plays; the second is instant.
+/// bitmap per sticker per frame. On a pack's first visit every cell shows
+/// its first frame at once and each sticker plays what has been drawn
+/// while the renderer completes it, top row first; a sticker left half
+/// done keeps rendering behind the next pack, so the second visit is
+/// whole, and so is the first visit after a relaunch.
 ///
 /// Where the rest of the cost is put: the sheet's entrance is kept clear
 /// of everything else, the surface sliding in as a native transform on a
@@ -125,14 +128,14 @@ const double _kRecentGlyph = 22;
 const int _kGridColumns = 4;
 const double _kGridGap = 8;
 
+/// How many stickers Recents remembers.
+const int _kRecentLimit = 24;
+
 /// How many stickers stay alive each side of the window, counted in items:
 /// one row. Each live cell holds a decoded frame and a place in the
 /// playback tick, so this is what bounds the sheet's memory and the work
 /// per tick.
 const int _kKeepAlive = 4;
-
-/// How many stickers Recents remembers.
-const int _kRecentLimit = 24;
 
 /// How many messages the thread keeps built each side of its window,
 /// counted in items. A bubble past that is released and its sticker
@@ -264,12 +267,22 @@ const Duration _kWarmDelay = Duration(milliseconds: 700);
 /// close, so this lives outside it.
 final _recent = <String>[];
 
+/// How long after a grid is built its measurement is taken: long enough
+/// for every cell that is going to reach the screen quickly to have done
+/// so, short enough to still be the opening. A cell still missing at this
+/// point is what the measurement is for.
+const Duration _kCensusSettle = Duration(milliseconds: 1500);
+
 /// When the sticker button was last tapped, and when the warm finished.
 /// The sheet logs its first frame against the tap, and whether the warm
 /// had finished by then: a slow first frame with the warm still pending
 /// is the warm's cost, one with the warm done is the sheet's own.
 DateTime? _sheetTapAt;
 DateTime? _warmDoneAt;
+
+/// When the row entry last changed, which the settled measurement is
+/// timed from.
+DateTime? _selectedAt;
 
 /// What the other side of the thread answers, in the order of the
 /// messages sent to it: a reply to the first, a reply to the second,
@@ -375,6 +388,10 @@ class _StickersKeyboardDemoState extends State<StickersKeyboardDemo>
     _warmDoneAt = DateTime.now();
     dnLog('stickers: warm done in '
         '${_warmDoneAt!.difference(started).inMilliseconds}ms');
+    // What the warm cost the renderer, against what it covers: the warm
+    // reaches the thumbnails and the opening entry's first rows only, so
+    // this is the baseline every other pack is measured against.
+    LottieCensus.report('after warm');
   }
 
   @override
@@ -416,6 +433,8 @@ class _StickersKeyboardDemoState extends State<StickersKeyboardDemo>
   /// why the sheet is sized to the keyboard rather than to its grid.
   Future<void> _openSheet() async {
     _sheetTapAt = DateTime.now();
+    // The sheet's own cells count from one.
+    LottieCensus.resetSlots();
     final picked = await showStickerSheet(context);
     if (!mounted || picked == null) return;
     setState(() {
@@ -910,11 +929,36 @@ class _StickerSheetState extends State<_StickerSheet>
     dnLog('stickers: sheet first frame ${ms}ms after tap, $_entryName, '
         '${_stickers.length} stickers, '
         '${_warmDoneAt == null ? 'warm pending' : 'warm done'}');
+    // After the opening entry's cells have had time to reach the screen:
+    // how long each waited, and in what order they filled.
+    Future.delayed(_kCensusSettle, () {
+      if (!mounted) return;
+      LottieCensus.report('sheet open on $_entryName');
+    });
   }
 
   void _select(int i) {
+    // The entry being left, then the numbering restarted, so the next
+    // entry's cells are counted from one and its fill order reads against
+    // the order the grid builds them in.
+    LottieCensus.report('leaving $_entryName');
+    LottieCensus.resetSlots();
+    _selectedAt = DateTime.now();
     setState(() => _selected = i);
     dnLog('stickers: $_entryName, ${_stickers.length} stickers');
+    // After the frame that builds the new entry's cells: what the switch
+    // cost, and whether the entry was still resident from a previous
+    // visit or had to be rendered again.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(_kCensusSettle, () {
+        if (!mounted) return;
+        final at = _selectedAt;
+        dnLog('stickers: $_entryName settled '
+            '${at == null ? -1 : DateTime.now().difference(at).inMilliseconds}ms '
+            'after the tap');
+        LottieCensus.report('entered $_entryName');
+      });
+    });
   }
 
   /// Closes the sheet, handing [picked] back to the composer. The sheet

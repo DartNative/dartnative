@@ -9,7 +9,9 @@ URL — driven by Airbnb's Lottie engine. iOS and Android.
   Core Animation / the Android view system (smooth, hardware-friendly).
 - **A frames renderer for the many** — a sticker keyboard or a chat thread shows dozens of
   animations at once; `renderCache: RenderCache.raster` draws each once, off the main thread,
-  and plays bitmaps, so a grid fills at once and a pack seen before costs nothing.
+  and plays bitmaps. Every cell shows at once, a sticker plays what has been drawn while the
+  rest is drawn behind it, and an animation seen before is read back rather than drawn,
+  across launches.
 - **Three sources** — bundled asset, runtime JSON string, or a remote URL (with caching).
 - **Play it your way** — autoplay + loop, or drive it imperatively with a `LottieController`.
 
@@ -17,17 +19,17 @@ URL — driven by Airbnb's Lottie engine. iOS and Android.
 
 - **`Lottie(asset: …)` / `Lottie(json: …)` / `Lottie(url: …)`** — the animation widget.
 - **`loop`, `autoplay`, `speed`, `fit`** (`LottieFit`), and **`cachePolicy`** (`LottieCachePolicy.disk` / `.none`) inline.
-- **`renderCache`** (`RenderCache.none` / `.raster`) — how the animation is drawn. `none`, the default, is the platform's animation engine: on iOS a layer tree built once per view and played by the render server with no per-frame work, right for a few animations on a screen and for large ones. `raster` is for many small animations at once: every frame is rendered once, off the main thread, at the size the widget shows it, kept compressed in memory and on disk, and played as bitmaps. A view costs nothing to build, an animation seen before at that size decodes instead of drawing, and the main thread's share of playback is one bitmap per view per frame. Playback follows the file's frame rate up to the display's; scrubbing lands on the nearest frame. Same name and choice as the Flutter Lottie package. The same renderer on iOS and Android.
+- **`renderCache`** (`RenderCache.none` / `.raster`) — how the animation is drawn. `none`, the default, is the platform's animation engine: on iOS a layer tree built once per view and played by the render server with no per-frame work, right for a few animations on a screen and for large ones. `raster` is for many small animations at once: every frame is rendered once, off the main thread, at the size the widget shows it, kept compressed in memory and on disk, and played as bitmaps. A view costs nothing to build, and the main thread's share of playback is one bitmap per view per frame. An animation is rendered in order from its first frame, a few animations at a time: the ones on screen first, the highest on screen before the lower, so a grid completes the way it is read. A widget on an animation still being rendered shows its first frame at once, then plays the frames that exist and loops over them until the rest arrive, when it follows the clock; an animation that leaves the screen keeps rendering behind the ones that replaced it, so anything shown once ends up whole. Frames are kept compressed on disk for every animation, keyed by the file's contents so a reinstall finds them again, and in memory for the ones nobody is showing, up to 128 MB. Playback follows the file's frame rate up to the display's; scrubbing lands on the nearest frame. Same name and choice as the Flutter Lottie package. The same renderer on iOS and Android.
 - **`LottieController`** — `play()` / `pause()` / `stop()` / `setProgress(0..1)` / `setLoopMode(LottieLoopMode…)`, plus a `progress` `ValueNotifier`.
 - **`LottieCache.preload([urls])`** — warm `.json` / `.zip` / `.lottie` URLs ahead of time; watch `LottieCache.progressStream`.
-- **`LottiePreWarm.warmAssets([paths], size: …, renderCache: …)`** — get bundled animations ready at the size they will show at, ahead of their first use. For `RenderCache.raster` it renders their frames ahead on both platforms, below the priority of anything on screen, so the first widget decodes instead of drawing. For the animation engine, iOS only, it builds each off-screen and keeps the built view for the first widget that shows it, on the same budgeted queue grid cells use, so warming a screen of stickers never stalls a frame.
+- **`LottiePreWarm.warmAssets([paths], size: …, renderCache: …)`** — get bundled animations ready at the size they will show at, ahead of their first use. For `RenderCache.raster` it renders their frames ahead on both platforms, after anything on screen, so the first widget decodes instead of drawing. For the animation engine, iOS only, it builds each off-screen and keeps the built view for the first widget that shows it, on the same budgeted queue grid cells use, so warming a screen of stickers never stalls a frame.
 - **One warning per file that the engine approximates** — iOS renders through Core Animation, which simplifies a few features (a trim on a filled shape, an animated dash pattern). A file with such layers is named once in the log, whether or not logging is verbose, with the count of layers concerned. It still plays at full speed; the line tells you which asset to check. The frames renderer draws every feature as written.
 
 ## Install
 
 ```yaml
 dependencies:
-  dartnative_lottie: ^1.2.0   # from dartpub.dev
+  dartnative_lottie: ^1.3.0   # from dartpub.dev
 ```
 
 ```bash
