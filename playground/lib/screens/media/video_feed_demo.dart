@@ -62,14 +62,16 @@ class _FeedVideo {
 /// Free clips from Pexels; the feed loops over them.
 const List<_FeedVideo> _kVideos = [
   _FeedVideo(5329239, '5329239-hd_1080_2048_25fps.mp4', 'preview-0.jpeg', 1080, 2048, 64),
-  _FeedVideo(5386411, '5386411-hd_1080_2048_25fps.mp4', 'preview-0.jpeg', 1080, 2048, 15),
+  _FeedVideo(7197863, '7197863-hd_720_1280_25fps.mp4', 'preview-0.jpeg', 720, 1280, 14),
+  _FeedVideo(7150170, '7150170-sd_540_960_25fps.mp4', 'preview-0.jpeg', 540, 960, 9),
+  _FeedVideo(6864993, '6864993-hd_720_1366_25fps.mp4', 'preview-0.jpeg', 720, 1366, 25),
+  _FeedVideo(12109326, '12109326-hd_720_1280_25fps.mp4', 'preview-0.jpeg', 720, 1280, 10),
+  _FeedVideo(2169880, '2169880-hd_1280_720_30fps.mp4', 'preview-0.jpg', 1280, 720, 86),
+  _FeedVideo(1093662, '1093662-hd_1280_720_30fps.mp4', 'preview-0.jpg', 1280, 720, 30),
+  _FeedVideo(1093667, '1093667-hd_1280_720_30fps.mp4', 'preview-0.jpg', 1280, 720, 13),
   _FeedVideo(1409899, '1409899-hd_1280_720_25fps.mp4', 'preview-0.jpg', 1280, 720, 21),
   _FeedVideo(7438482, '7438482-hd_1080_1872_30fps.mp4', 'preview-0.jpeg', 1080, 1872, 9),
   _FeedVideo(856973, '856973-hd_1280_720_25fps.mp4', 'preview-0.jpg', 1280, 720, 14),
-  _FeedVideo(2169880, '2169880-hd_1280_720_30fps.mp4', 'preview-0.jpg', 1280, 720, 86),
-  _FeedVideo(3163534, '3163534-hd_1280_720_30fps.mp4', 'preview-0.jpg', 1280, 720, 30),
-  _FeedVideo(1093662, '1093662-hd_1280_720_30fps.mp4', 'preview-0.jpg', 1280, 720, 30),
-  _FeedVideo(1093667, '1093667-hd_1280_720_30fps.mp4', 'preview-0.jpg', 1280, 720, 13),
 ];
 
 class VideoFeedDemo extends StatefulWidget {
