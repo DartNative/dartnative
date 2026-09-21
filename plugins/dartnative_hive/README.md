@@ -48,6 +48,17 @@ No native setup required.
 
 No native setup required.
 
+## Write performance
+
+Every `put` appends one record to the box file and waits for that append. A thousand
+single `put` calls are a thousand appends, and each one is a trip through Dart's IO
+thread. If you have many values to save at once, use `putAll`. It writes them all in
+one append and is many times quicker. Reads are a map lookup either way.
+
+We are working on a memory mapped write path for a future release. A single `put` will
+then be a copy into the mapped file, with no system call, and will cost about what one
+entry of a `putAll` costs today. The API and the file format do not change.
+
 ## Example
 
 The [`example/`](./example) app opens a box and round-trips a value — borrow from it freely.
