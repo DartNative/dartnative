@@ -321,22 +321,33 @@ generated registrant calls automatically — so we use it instead of
 
 Three steps:
 
-**Step 1.** Add the dependency in your plugin's `android/build.gradle.kts`:
+**Step 1.** A view plugin compiles against the framework's Android classes
+(`DNPluginRegistry`, `DNViewRegistry`, `DNAppContext`). Add the dependency in
+your plugin's `android/build.gradle`:
 
-```kotlin
+```groovy
 dependencies {
-    compileOnly("com.dartnative:dartnative_android")
+    compileOnly project(':dartnative_android')
     // …your SDK deps (e.g. ExoPlayer)…
 }
 ```
 
+The app provides that module: every DartNative app depends on
+`dartnative_android`, and its build includes it under that name. `dn plugin
+build` finds it only inside the DartNative source tree for now, so a plugin
+with this dependency builds and runs inside an app but cannot yet produce its
+own Android archive for publishing. A plugin without a view does not need it:
+see [§10, A2](#a2-ship-a-kotlin-flutterplugin-class-that-loads-your-so) for
+taking the `Context` from the plugin binding instead.
+
 **Step 2.** Create two Kotlin files in `android/src/main/kotlin/<pkg>/` —
 the Bridge and the FlutterPlugin entry point (templates below).
 
-**Step 3.** Declare the plugin class in your `pubspec.yaml`:
+**Step 3.** Declare the plugin class in your `pubspec.yaml`, under the
+`dartnative:` section:
 
 ```yaml
-flutter:
+dartnative:
   plugin:
     platforms:
       android:
@@ -497,10 +508,30 @@ we can `import com.dartnative.*` directly from a `compileOnly` dependency.
 |:--------------------------------------------------------------|:-----------------------------------------------------------|
 | `DNPluginRegistry.register(…)` from `MainActivity` / `Application` | From `FlutterPlugin.onAttachedToEngine`              |
 | `ffiPlugin: true` for plugins that have JNI / FlutterPlugin   | `package: …` + `pluginClass: …`                            |
-| `implementation("com.dartnative:dartnative_android")`         | `compileOnly("com.dartnative:dartnative_android")` (app provides it) |
+| `implementation project(':dartnative_android')`               | `compileOnly project(':dartnative_android')` (app provides it) |
 | Loading `libdartnative_android.so` via `System.loadLibrary` from the plugin | The framework loads its own `.so`; you only load yours |
 
 ---
+
+### 4f. Activity moments a plugin can subscribe to
+
+Two moments of the app's activity reach plugins through `DNActivityHooks`
+(`com.dartnative.runtime`): the "user is leaving" hint (the home gesture,
+the app switcher) and the change in and out of Picture in Picture mode.
+`DartNativeActivity` forwards both; a hand-rolled activity calls
+`DNActivityHooks.dispatchUserLeaveHint()` from its `onUserLeaveHint` and
+`DNActivityHooks.dispatchPictureInPictureModeChanged(inPip)` from its
+`onPictureInPictureModeChanged`.
+
+```kotlin
+DNActivityHooks.addUserLeaveListener(Runnable { enterPictureInPicture() })
+DNActivityHooks.addPictureInPictureModeListener { inPip -> onPipChanged(inPip) }
+```
+
+Wrap the registration in a `try` against `Throwable`: an app on a framework
+built before the hooks throws at the call, and the plugin falls back (the
+video player reads the mode off the activity on a configuration change and
+leaves automatic entry to Android 12 and later, where the system does it).
 
 ## 5. Calling Dart from native — callback safety
 
@@ -649,7 +680,7 @@ Swift functions — and skip the mutation pipeline entirely. The official
 ```yaml
 # pubspec.yaml — ALWAYS use pluginClass on Android, even for "pure FFI"
 # plugins. See §10 for rationale.
-flutter:
+dartnative:
   plugin:
     platforms:
       ios:
@@ -824,7 +855,7 @@ missing on iOS, the first FFI call throws `LateInitializationError`.
 #### A1. `pubspec.yaml` — declare both platforms correctly
 
 ```yaml
-flutter:
+dartnative:
   plugin:
     platforms:
       ios:
@@ -859,6 +890,8 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin
  */
 class DartNativeMyPluginPlugin : FlutterPlugin {
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        // The application Context, for plugins that need one.
+        DNMyPluginBridge.appContext = binding.applicationContext
         try {
             System.loadLibrary("dartnative_my_plugin")
         } catch (e: UnsatisfiedLinkError) {
@@ -866,13 +899,17 @@ class DartNativeMyPluginPlugin : FlutterPlugin {
                 "Failed to load libdartnative_my_plugin.so: ${e.message}")
         }
     }
-    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {}
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        DNMyPluginBridge.appContext = null
+    }
 }
 ```
 
-This class must do **only** `System.loadLibrary` — do not register
-`MethodChannel`s, do not start services. dartnative plugins communicate
-exclusively over FFI.
+This class does **only** two things: load the library and, if the plugin
+needs one, keep the application `Context` where the bridge can read it
+(`DNMyPluginBridge` is your own object, with a `var appContext: Context?`).
+Do not register `MethodChannel`s, do not start services. dartnative plugins
+communicate exclusively over FFI.
 
 #### A3. Dart `loadSymbols()` — guard the platform, branch the loader
 
@@ -905,8 +942,7 @@ find_library(android-lib android)
 target_link_libraries(my_plugin ${log-lib} ${android-lib})
 ```
 
-`android/build.gradle` — depend on `dartnative_android` for `DNAppContext`
-and friends, and include the CMake config:
+`android/build.gradle` — include the CMake config:
 
 ```groovy
 android {
@@ -915,11 +951,12 @@ android {
         cmake { path "CMakeLists.txt" }
     }
 }
-
-dependencies {
-    compileOnly project(':dartnative_android')
-}
 ```
+
+No dependency on the framework is needed: the `io.flutter` plugin API comes
+from the app build and from `dn plugin build`, and the `Context` comes from
+the plugin binding (A2). Only a view plugin, which uses the framework's own
+classes, adds `compileOnly project(':dartnative_android')` (§4, Step 1).
 
 If your plugin requires Android system services (e.g. network state), document
 the permissions the **app** must declare in its `AndroidManifest.xml`:
@@ -1141,6 +1178,11 @@ save hours:
   `ios/Podfile.lock`, re-run `dn pub get`, then `pod install`. Never add
   manual `pod 'dartnative_…'` lines — pods are auto-discovered; manual
   entries cause "multiple dependencies with different sources".
+
+### Read the registry from your own tools
+
+To read plugin metadata and READMEs from your own tools, use the registry
+API: [dartpub.dev/registry-api](https://dartpub.dev/registry-api).
 
 ---
 

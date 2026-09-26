@@ -6,6 +6,9 @@
     <!-- AudioRecorder demo: microphone capture is a runtime permission too. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- The TikTok-style feed keeps playing with the app hidden: the video
+         plugin's playback service posts the media notification. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
         <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
 
@@ -34,6 +37,14 @@
         android:label="DartNative Playground"
         android:name=".Application"
         android:icon="@mipmap/ic_launcher">
+        <service
+            android:name="com.dartnative.video_player.DNVideoPlaybackService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="androidx.media3.session.MediaSessionService"/>
+            </intent-filter>
+        </service>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -42,6 +53,7 @@
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
             android:windowSoftInputMode="adjustNothing">
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"

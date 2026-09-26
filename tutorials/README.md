@@ -30,6 +30,7 @@ the finished result the article builds toward.
 | On-device text-to-speech | [`text_to_speech/`](text_to_speech/) | SuperTonic-3 over ONNX — 31 languages, streamed PCM playback |
 | A native map | [`google_maps/`](google_maps/) | The real Google Maps SDK view, markers, camera moves |
 | Build a plugin | [`build_a_plugin/`](build_a_plugin/) | The full plugin anatomy via the open-source share plugin — FFI bindings, Swift/Kotlin bridges, hot-restart-safe callbacks |
+| Code push | [`code_push/`](code_push/) | Send a fix directly to phones, without a release to App Store and Google Play. Every plan has it. `dn release` and `dn patch`, four kinds of fix (a number, a label, a style, an icon), the restart rule, what a fix cannot change. Its README is the full walkthrough |
 
 ## Running a tutorial
 

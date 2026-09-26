@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="pick_items">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+    </string-array>
+</resources>

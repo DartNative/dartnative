@@ -404,6 +404,9 @@ class _ChatScreenDemoState extends State<ChatScreenDemo> {
     return FastList(
       controller: _fastListController,
       reverse: true,
+      // Rows are built as they near the viewport, so itemCount is the real
+      // message count, never a cap or a padding; memory follows the rows
+      // scrolled past, not the count.
       itemCount: _messages.length,
       // FastList has no ScrollController; drive the FAB from onScroll instead.
       onScroll: (offset, maxExtent, viewport, dragging) =>

@@ -1,0 +1,19 @@
+name: dartnative_parity
+description: The parity screen — every widget at its default, to compare with the platform's own toolkit.
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.9.0-0
+
+dependencies:
+  dartnative: ^1.0.0
+  # Platform bindings. iOS uses dartnative_ios, Android uses dartnative_android.
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+
+dev_dependencies:
+  lints: ^6.0.0
+
+dartnative:
+  uses-material-design: false

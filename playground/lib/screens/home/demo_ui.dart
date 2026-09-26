@@ -35,7 +35,6 @@ class PlaygroundPalette {
     required this.textTertiary,
     required this.chevron,
     required this.codeGreen,
-    required this.segBg,
     required this.segTint,
   });
 
@@ -60,9 +59,8 @@ class PlaygroundPalette {
   /// stays readable on the pale code boxes.
   final Color codeGreen;
 
-  /// Segmented-control container / selected-segment colors — explicit so the
-  /// control never depends on the platform's appearance resolution.
-  final Color segBg;
+  /// The grey of an outline drawn by hand (the text field demo's custom
+  /// border).
   final Color segTint;
 }
 
@@ -81,7 +79,6 @@ const kDarkPalette = PlaygroundPalette(
   textTertiary: Color(0xFF636366),
   chevron: Color(0xFF48484A),
   codeGreen: Color(0xFF30D158),
-  segBg: Color(0xFF2C2C2E),
   segTint: Color(0xFF636366),
 );
 
@@ -100,7 +97,6 @@ const kLightPalette = PlaygroundPalette(
   textTertiary: Color(0xFF8E8E93),
   chevron: Color(0xFFC7C7CC),
   codeGreen: Color(0xFF1E8E3E),
-  segBg: Color(0xFFEEEEEF),
   segTint: Color(0xFFFFFFFF),
 );
 
@@ -148,7 +144,6 @@ class PlaygroundTheme extends InheritedWidget {
 // the current theme whenever it (re)builds.
 
 Color get kHomeBg => playgroundPalette.homeBg;
-Color get kSegBg => playgroundPalette.segBg;
 Color get kSegTint => playgroundPalette.segTint;
 Color get kBarBg => playgroundPalette.barBg;
 Color get kBarBgGlass => playgroundPalette.barBgGlass;

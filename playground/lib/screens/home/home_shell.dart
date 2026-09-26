@@ -15,6 +15,8 @@
 ///     dark ↔ light (see demo_ui.dart for the pattern);
 ///   • a [Scaffold.drawer] (hamburger in the AppBar) whose items mirror the
 ///     tabs — tapping one switches the tab programmatically.
+import 'dart:io' show Platform;
+
 import 'package:dartnative/dartnative.dart';
 import 'package:dartnative_shared_preferences/dartnative_shared_preferences.dart';
 
@@ -73,11 +75,14 @@ class _PlaygroundHomeState extends State<PlaygroundHome> {
     _applySystemChrome();
   }
 
-  /// System strip (status + nav bar) follows the theme. The nav strip is a
-  /// WINDOW property painted over everything — while the slideOver drawer
-  /// is open the bar-colored strip would cover the sliding card's shadow
-  /// (and the drawer) in the bottom band, so it goes transparent for the
-  /// open state and restores on close.
+  /// System strip (status + nav bar) follows the theme. On Android the
+  /// navigation strip stays transparent: the Scaffold paints the bottom
+  /// bar's colour under it inside the screen, so it moves with the screen
+  /// through the drawer and every push and pop, where a colour set on the
+  /// window stayed put over both screens. On iOS before 26 the strip is a
+  /// colour behind the home indicator, so while the slideOver drawer is open
+  /// it goes transparent (it would cover the sliding card's shadow and the
+  /// drawer in the bottom band) and restores on close.
   void _applySystemChrome({bool drawerOpen = false}) {
     // Keep the Navigator's push-default in sync with the theme.
     SystemChrome.defaultStyle = playgroundOverlayStyle();
@@ -88,8 +93,10 @@ class _PlaygroundHomeState extends State<PlaygroundHome> {
       statusBarIconBrightness: _dark ? Brightness.light : Brightness.dark,
       systemNavigationBarIconBrightness:
           _dark ? Brightness.light : Brightness.dark,
-      systemNavigationBarColor: isIOS26 ? Colors.transparent : barColor,
-      systemNavigationBarDividerColor: isIOS26 ? Colors.transparent : barColor,
+      systemNavigationBarColor:
+          isIOS26 || Platform.isAndroid ? Colors.transparent : barColor,
+      systemNavigationBarDividerColor:
+          isIOS26 || Platform.isAndroid ? Colors.transparent : barColor,
     ));
   }
 

@@ -45,6 +45,7 @@ import 'screens/material3/m3_search_demo.dart';
 import 'screens/material3/m3_search_appbar_demo.dart';
 import 'screens/material3/m3_menus_demo.dart';
 import 'screens/music/music_demo.dart';
+import 'screens/tiktok/tiktok_demo.dart';
 import 'screens/color_picker_demo.dart';
 import 'screens/carousel_demo.dart';
 import 'screens/text_typewriter_demo.dart';
@@ -94,6 +95,7 @@ void main() {
         '/stickers-keyboard': (_) => const StickersKeyboardDemo(),
         '/video-feed': (_) => const VideoFeedDemo(),
         '/music': (_) => const MusicDemo(),
+        '/tiktok': (_) => const TikTokDemo(),
         '/color-picker': (_) => const ColorPickerDemo(),
         '/carousel': (_) => const CarouselDemo(),
         '/live-text': (_) => const TextTypewriterDemo(),

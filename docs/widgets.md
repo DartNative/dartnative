@@ -25,7 +25,7 @@ This reference covers what is available, what isn't, and what to use instead whe
 | `DecoratedBox` | ✅ | |
 | `Align` / `Center` | ✅ | |
 | `SafeArea` | ✅ | |
-| `Divider` / `VerticalDivider` | ✅ | |
+| `Divider` / `VerticalDivider` | ✅ | On iPhone the table separator: one pixel in the separator grey. |
 | `AspectRatio` | ✅ | |
 | `Opacity` | ✅ | |
 | `Visibility` | ✅ | Default flags match Flutter (hidden child is replaced and its state disposed). The full `maintain*` set is supported: with `maintainState: true` the child stays mounted and is hidden natively — pair with `maintainSize` to keep its layout slot |
@@ -46,8 +46,8 @@ This reference covers what is available, what isn't, and what to use instead whe
 | `EdgeInsetsDirectional` / `AlignmentDirectional` | ✅ | `start` and `end` follow the nearest `Directionality`; `AlignmentDirectional` is its own type, as in Flutter, and `AlignmentGeometry.resolve` gives the physical `Alignment` |
 | `TextAlign.start` / `TextAlign.end` | ✅ | Follow `Text.textDirection` when given, else the nearest `Directionality`. `Row`, `Column` and `Wrap` mirror on their own under right-to-left |
 | Right-to-left chrome | ✅ | The `AppBar` mirrors with the rest of the app: the back arrow, the title, a search field and the actions swap sides, the back chevron points the way back, and `actionsPadding`'s start and end follow the reading direction. The bar's own items are placed by the framework, so this holds on both hosts and on both platforms |
-| `Card` | ✅ | Material card — elevation, shape, margin |
-| `ListTile` | ✅ | Leading / title / subtitle / trailing row |
+| `Card` | ✅ | Without a `color`, the platform's card: Material's outlined card on Android (the surface colour with a thin edge, no shadow), white with a shadow on iOS. `elevation` left out is that default; a `color` of your own drops the edge. |
+| `ListTile` | ✅ | Leading / title / subtitle / trailing row. On Android the title and subtitle wear Material's list item type and colours unless you style them. On iPhone the subtitle is 15 pt in the secondary style, the text colour at half opacity, and the row is the 70 pt row of a plain list, 15 pt above and below the two lines. |
 | `Table` | ✅ | Column-sized grid layout |
 | `BackdropFilter` | ✅ | Native backdrop blur (Gaussian) — `UIVisualEffectView` (iOS) / `RenderEffect` (Android) |
 | `ImageFiltered` | ✅ | Blurs the child's own content (Gaussian) |
@@ -72,9 +72,9 @@ This reference covers what is available, what isn't, and what to use instead whe
 
 | Widget | Status | Notes |
 |---|---|---|
-| `Text` | ✅ | `UILabel` |
+| `Text` | ✅ | `UILabel`. A `Text` with no colour takes the platform's default text colour: the label colour on iOS; on Android the colour a `TextView` with no style has, the theme's secondary text colour. A `ListTile` title and the bar title use the primary text colour, as Material's styles do. Under a screen with a forced `Scaffold.brightness`, or in a sheet or dialog opened over it, it is the primary colour of that brightness. |
 | `RichText` / `TextSpan` | ✅ | `NSMutableAttributedString` — per-span font, color, weight, italic, underline, strikethrough. `TextSpan.recognizer: TapGestureRecognizer` supported for tappable spans. `TextSpan` is not `const` — remove `const` from all `TextSpan(...)` calls |
-| `TextField` | ✅ | `UITextField` / `UITextView`. If `InputDecoration.contentPadding` is omitted, dartnative provides a default `EdgeInsets.symmetric(vertical: 14, horizontal: 14)` (override explicitly to customize). `inputFormatters` run on every edit before the keystroke is drawn, caret included: `FilteringTextInputFormatter` (`digitsOnly`, `allow`, `deny`), `LengthLimitingTextInputFormatter`, or your own `TextInputFormatter` over `TextEditingValue` / `TextSelection` `onSubmitted` fires when the user taps the keyboard's action key — the key itself is chosen by `textInputAction` (Done, Go, Search, Send, Next) — and receives the field's current text. As in Flutter, only single-line fields report a submission: in a multiline field that key inserts a newline. **The field owns its box:** `InputDecoration.border` given as an `OutlineInputBorder` (its side's colour and width, one radius), `focusedBorder`, `enabledBorder` and `disabledBorder` by Flutter's precedence, and `filled` with a `fillColor`, are drawn by the native field itself, so a decorated field is one native view: the keyboard reveals the whole box, and the focused outline follows focus. `InputBorder.none`, an `UnderlineInputBorder` and no border leave the platform's own look. A box an app draws around a field is not the field, and the keyboard keeps only the field visible, as a native Android field does. `errorBorder`, `labelText` and `helperText` are not drawn yet. |
+| `TextField` | ✅ | `UITextField` / `UITextView`. `style.letterSpacing` spaces the field's text the way it spaces a `Text`, on both platforms. `autofillHints` (the `AutofillHints` strings), `AutofillGroup` and `TextInput.finishAutofillContext()` work as in Flutter: the one-time code from Messages above the keyboard, the password manager's entries and its offer to save. On Android, `labelText` is Material's floating label: it sits in the field and moves up onto the box's edge when the field is focused. `labelText`, `helperText`, an `OutlineInputBorder` or `filled` give the field Material's box; a field with only `hintText` is Android's plain field, whose hint stays in place and clears as the user types, the kind a chat screen uses. If `InputDecoration.contentPadding` is omitted, the field uses the platform's own inset: 14 all round on iOS, and on Android the plain field's 4dp beside and 10dp above and below the text, or Material's 16dp for a Material field (override explicitly to customize). `inputFormatters` run on every edit before the keystroke is drawn, caret included: `FilteringTextInputFormatter` (`digitsOnly`, `allow`, `deny`), `LengthLimitingTextInputFormatter`, or your own `TextInputFormatter` over `TextEditingValue` / `TextSelection` `onSubmitted` fires when the user taps the keyboard's action key — the key itself is chosen by `textInputAction` (Done, Go, Search, Send, Next) — and receives the field's current text. As in Flutter, only single-line fields report a submission: in a multiline field that key inserts a newline. **The field owns its box:** `InputDecoration.border` given as an `OutlineInputBorder` (its side's colour and width, one radius), `focusedBorder`, `enabledBorder` and `disabledBorder` by Flutter's precedence, and `filled` with a `fillColor`, are drawn by the native field itself, so a decorated field is one native view: the keyboard reveals the whole box, and the focused outline follows focus. `InputBorder.none`, an `UnderlineInputBorder` and no border leave the platform's own look. A box an app draws around a field is not the field, and the keyboard keeps only the field visible, as a native Android field does. On Android, a decoration with `labelText`, `helperText`, an `OutlineInputBorder` or `filled` is drawn by Material's own text field: the label floats onto the edge when the field takes focus, the helper line sits below, and the outlined or filled box has Material's colours and its 56dp height; an explicit border side, corner radius or `fillColor` still applies, and `hintText` is the placeholder. A field with none of those is Android's plain field with its underline; `InputBorder.none` removes it. On iOS the field stays bare and `labelText`/`helperText` are not drawn. `errorBorder` is not drawn. On iPhone a field whose `OutlineInputBorder` keeps its default side is the platform's own rounded field, 34 pt with its grey bezel; `labelText` stands in for a missing `hintText` there; a bare field is the text line alone, with no inset. |
 | `TextEditingController` | ✅ | `text`, `value`, `selection`, `clear()`. Typing updates the controller before `onChanged`; setting `selection` or `value` moves the caret, setting `text` keeps it where the field has it |
 
 > **Font size units.** dartnative renders text using real native APIs, so `TextStyle.fontSize` follows each platform's conventional unit — **UIKit points** on iOS (fixed, does not scale with Dynamic Type) and **SP** on Android (scales with the user's font-size accessibility setting). This is identical to what you get writing native UIKit or Android code directly.
@@ -83,7 +83,7 @@ This reference covers what is available, what isn't, and what to use instead whe
 | `SelectableText` | ✅ | Covered by `Text(selectable: true)` — long-press to select/copy on BOTH platforms. Plain `Text` stays `UILabel` / `TextView`; the flag swaps in a read-only `UITextView` (iOS) / read-only `EditText` (Android), so use plain `Text` when selection isn't needed. A dedicated `SelectableText` class is not exported; pass the flag. |
 | `ValueListenableBuilder<T>` | ✅ | Full `StatefulWidget` — subscribes via `addListener`, passes typed `value` to builder, cleans up on `dispose`. Drop-in from Flutter. |
 | `StreamBuilder<T>` | ✅ | Full `StatefulWidget` — manages `StreamSubscription`, full `ConnectionState` lifecycle (none → waiting → active → done). Drop-in from Flutter. |
-| `FutureBuilder<T>` | ✅ | Full `StatefulWidget` — stale-future guard on `didUpdateWidget`. Drop-in from Flutter. |
+| `FutureBuilder<T>` | ✅ | Full `StatefulWidget` — a completion after the builder left the tree, or after its future was replaced, is ignored. Drop-in from Flutter. |
 
 ---
 
@@ -98,6 +98,7 @@ All of these are backed by `UIScrollView` with Yoga-managed content. Every child
 | `ListView` | ✅ | |
 | `ListView.builder` | ✅ | All items built eagerly — use `FastList` for large datasets |
 | `SingleChildScrollView` | ✅ | |
+| `RefreshIndicator` | ✅ | Pull to refresh on the vertical scrollable inside it: `onRefresh`, `color`, `backgroundColor`; start a refresh from code with `GlobalKey<RefreshIndicatorState>` and `show()`. `style: RefreshStyle.pullDown` (default): the content follows the finger and a spinner shows in the band the pull opens above it (`UIRefreshControl` on iOS, a Material spinner on Android), turning once the pull passes the threshold; `color` is the spinner's colour and `backgroundColor` the band's, and left out the spinner is drawn for the screen's brightness. For content that runs under a header (a feed's tabs, the status bar), `edgeOffset` keeps the spinner in the band below it, never over the content, `displacement` is how far below that edge the content rests while the refresh runs, and `triggerDistance` how far the band opens before letting go refreshes. In this style the spinner is the platform's own, recoloured with `color`; an indicator of your own that follows the pull, a logo or an animated icon, takes `RefreshStyle.pullOver` and its `builder` (a `builder` given to `pullDown` sees only the idle and refreshing phases); `RefreshStyle.pullOver` holds the content still and draws the indicator over it: by default a video feed's: a gradient darkens the top of the screen while the pull lasts, and the line, `label` ("Pull down to refresh"), fades in under the top safe area and slides down a little with the pull, playing back when you let go, with a spinner in its place while the refresh runs, or none with `showSpinner: false`; or give a `builder(context, child, state)` and draw your own from the state's phase, distance and progress, placing a `PullOverIndicator` where you like. `triggerDistance` is the release threshold. Works on `ListView`, `SingleChildScrollView`, `FastList`, a vertical `PageView`, the grids and `CustomScrollView`; the control sits at the top, so a horizontal or reversed scrollable has none |
 | `CustomScrollView` | ✅ | |
 | `SliverList` / `SliverList.builder` | ✅ | |
 | `SliverGrid` | ✅ | `.count` and `.extent` constructors |
@@ -116,6 +117,7 @@ These are DartNative-specific widgets built directly on the platform's own list 
 
 - **Native scrolling feel** — the platform draws only on-screen cells (cell-container recycling), so scrolling stays smooth at any list length, even with heavy cells.
 - **Exact index jumps** — `jumpToItem(5000)` lands precisely on item 5000 via the platform's own index APIs (`scrollToRow` / `scrollToPosition`), instantly, no pixel-offset guessing. This is notoriously hard to achieve with offset-based scroll controllers.
+- **Rows are built as they near the viewport** — the mount builds the rows that fill the first screen and a margin beyond it, and each further row is built as the scroll approaches it, so `itemCount` is a number, not a cost: a list of ten thousand rows launches like one of thirty. Give `itemExtent` when every row has the same height and the list's geometry is exact from the start; otherwise an unbuilt row takes the average of the rows measured so far, as Flutter's estimated extents do.
 - **Bounded memory (content windowing)** — set `keepAliveCount` and the list only keeps built content for the visible rows plus `keepAliveCount` on each side: **built content is O(visible + 2·keepAliveCount), independent of `itemCount`**. Rows leaving the window release everything they built (images, animations, native views) while keeping their exact height — scroll position never moves; rows re-entering rebuild *before* they reach the screen, so there's no visible seam. Give rows an `Image.placeholder` (e.g. `Shimmer`) to cover deep scroll-back reloads.
 
 | Widget | Status | iOS | Android |
@@ -128,7 +130,7 @@ These are DartNative-specific widgets built directly on the platform's own list 
 
 **When to use `FastList` vs `ListView.builder`:**
 
-`ListView.builder` keeps every item as a live `UIView`. `FastList` delegates to `UITableView`, which **recycles cell containers** so only on-screen cells are *drawn* — smooth scrolling at any length, and instant index-based jumps. Without `keepAliveCount`, `FastList` builds and holds all `itemCount` items (O(N) memory); **with `keepAliveCount` set, content memory is bounded by the window instead — use it for any long or image-heavy list.** For very large counts also **paginate** — start small and grow `itemCount` from the `onScroll` callback as the user nears the end (this bounds the one-time build cost).
+`ListView.builder` keeps every item as a live `UIView`. `FastList` delegates to `UITableView`, which **recycles cell containers** so only on-screen cells are *drawn* — smooth scrolling at any length, and instant index-based jumps. Rows are built as they near the viewport, so the mount costs the same at any `itemCount`. Without `keepAliveCount`, a row once built stays built, so memory grows with the rows the user has scrolled past; **with `keepAliveCount` set, content memory is bounded by the window instead — use it for any long or image-heavy list.** Paginate when the data comes from a server — grow `itemCount` from the `onScroll` callback as the user nears the end — for the data's sake, not the list's.
 
 **The recipe for a long image list:**
 
@@ -166,7 +168,8 @@ FastList mirrors the `ListView.builder` API with the following configuration opt
 | `showScrollBar` | `bool` | `false` | Show/hide the scroll indicator along the scroll axis |
 | `padding` | `EdgeInsets?` | `null` | Content inset around the list |
 | `physics` | `ScrollPhysics?` | `null` | `NeverScrollableScrollPhysics` to disable scrolling; `BouncingScrollPhysics` / `ClampingScrollPhysics` for scroll behaviour |
-| `keepAliveCount` | `int?` | `null` | Content windowing: keep built content only for visible rows + this many on each side (memory becomes independent of `itemCount`). `null` keeps everything built |
+| `keepAliveCount` | `int?` | `null` | Content windowing: keep built content only for visible rows + this many on each side (memory becomes independent of `itemCount`). `null` keeps a row built once it has been built |
+| `itemExtent` | `double?` | `null` | The main-axis size of every row when all rows are the same size, as Flutter's `ListView.itemExtent`: rows not built yet then take exactly that size, so the scroll bar and a jump to a far index are exact. Without it an unbuilt row takes the average of the rows measured so far |
 | `onScroll` | `FastScrollCallback?` | `null` | Fires `(offset, maxExtent, viewport, dragging)` on scroll — load-more, hide-on-scroll, progress |
 
 > **Off-screen item retention is managed by the native platform** (`UITableView` /
@@ -195,7 +198,7 @@ FastList(
 ### FastGrid properties
 
 FastGrid is the grid counterpart, backed by `UICollectionView` (iOS) /
-`RecyclerView` (Android). Same render-recycle-but-O(N)-memory model as `FastList`,
+`RecyclerView` (Android). Same build-on-approach and recycle model as `FastList`,
 with its own index-based `FastGridController` (`jumpToItem` / `scrollToItem`) and
 the same `onScroll` callback. (`MasonryFastGrid` shares the `FastGridController`.)
 
@@ -207,12 +210,14 @@ the same `onScroll` callback. (`MasonryFastGrid` shares the `FastGridController`
 | `mainAxisSpacing` / `crossAxisSpacing` | `double` | `0.0` | Spacing between items |
 | `padding` | `EdgeInsets?` | `null` | Content inset |
 
-Like `FastList`, the native view recycles cell containers for smooth scrolling —
-and both grids support **`keepAliveCount` content windowing** (same semantics as
-`FastList`): content memory is O(visible + 2·keepAliveCount), independent of
-`itemCount`. Note the value counts **items, not rows** — multiply by your column
-count (a 3-column grid wants ~3× a list's value). Combine with
-`Image.cacheWidth`/`cacheHeight` and pagination for the full recipe.
+Like `FastList`, the native view recycles cell containers for smooth scrolling,
+cells are built as they near the viewport (a cell's size comes from the grid's
+own configuration, so an unbuilt cell needs nothing and `itemCount` is not a
+cost), and both grids support **`keepAliveCount` content windowing** (same
+semantics as `FastList`): content memory is O(visible + 2·keepAliveCount),
+independent of `itemCount`. Note the value counts **items, not rows** — multiply
+by your column count (a 3-column grid wants ~3× a list's value). Combine with
+`Image.cacheWidth`/`cacheHeight` for the full recipe.
 
 ```dart
 FastGrid(
@@ -230,8 +235,8 @@ FastGrid(
 
 | Widget | Status | Notes |
 |---|---|---|
-| `Scaffold` | ✅ | `backgroundColor` is the route's colour: on iOS 26 a push draws both screens as rounded cards over a backdrop painted with it, so a page colour painted deeper in the body than its root flashes the white default at the corners (a plain colour box at the body's root is read as the page) — see [The screen's background belongs on the Scaffold](#the-screens-background-belongs-on-the-scaffold). `brightness` declares the screen's light/dark trait (inherited by the body, bottom bars and keyboards; applies from the first build). Declare it on dark-styled screens: system effects like the iOS 26 scroll-edge fades render in the trait, so a dark-by-colors screen on a light-mode device gets white flashes without it. `bottomAccessory` — any-widget strip above the bottom bar (iOS 26 tabbed pattern → native `UITabAccessory`, slides inline on minimize; composed elsewhere) — see [Bottom accessory](#bottom-accessory-scaffoldbottomaccessory-ios-26) |
-| `AppBar` | ✅ | `automaticallyImplyLeading` (default `true`) auto-shows back button when screen can pop. `leading`, `title`, and `actions` all accept **arbitrary widgets** (`actions` takes several — each its own glass capsule on iOS 26) — see [Custom widgets in AppBar.title and AppBar.actions](#custom-widgets-in-appbartitle-and-appbaractions). Title placement and spacing: [`centerTitle`](#appbarcentertitle) and [`titleSpacing`](#appbartitlespacing); trailing-group padding: [`actionsPadding`](#appbaractionspadding) — each has its own section below. `subtitle` renders a secondary line under the title. `largeTitle` renders a large title under the bar that **collapses natively on scroll** into the bar title (`largeTitleSize` picks the Android M3 variant: medium/large flexible) — see [Large title & the see-through bar](#large-title--the-see-through-bar-ios-26). iOS 26 bar surfaces: a **translucent `backgroundColor`** (alpha < 1) = frosted glass (content faintly visible behind); **no `backgroundColor`** = a fully clear bar where content stays visible scrolling beneath, kept legible by the system scroll-edge blur ramp. On Android, **no `backgroundColor`** = the bar takes the screen's colour (`Scaffold.backgroundColor`) and a title and back arrow with no colour of their own turn white or black to stay readable against it. `searchBar` makes the bar region the search pill itself (the `SearchBar` row below); `title` is skipped when set — the pill owns the region. `actionsGlassBackground: false` (iOS 26) removes the glass capsule behind a self-designed action widget (an avatar circle keeps just its circle). On iOS 26, a bar using only plain native features is hosted on the **system navigation bar** and its buttons **morph between screens** — see [Morphing bar buttons](#morphing-bar-buttons-ios-26-appbarios) (`ios: AppBarIOSConfig(systemBar:)` selects the host explicitly) |
+| `Scaffold` | ✅ | `backgroundColor` is the route's colour: on iOS 26 a push draws both screens as rounded cards over a backdrop painted with it, so a page colour painted deeper in the body than its root flashes the white default at the corners (a plain colour box at the body's root is read as the page) — see [The screen's background belongs on the Scaffold](#the-screens-background-belongs-on-the-scaffold). `brightness` declares the screen's light/dark trait (inherited by the body, bottom bars and keyboards, by the bar's title and items over the screen, by the defaults computed in Dart such as a card's surface or a list item's subtitle, and by a sheet or dialog opened from the screen; `MediaQuery.of(context).platformBrightness` reports it under the scaffold; applies from the first build). Declare it on dark-styled screens: system effects like the iOS 26 scroll-edge fades render in the trait, so a dark-by-colors screen on a light-mode device gets white flashes without it. `bottomAccessory` — any-widget strip above the bottom bar (iOS 26 tabbed pattern → native `UITabAccessory`, slides inline on minimize; composed elsewhere) — see [Bottom accessory](#bottom-accessory-scaffoldbottomaccessory-ios-26) Without a colour the screen is the platform's own page: the system background on iPhone, white in light and black in dark, and the theme's surface on Android. |
+| `AppBar` | ✅ | `automaticallyImplyLeading` (default `true`) auto-shows back button when screen can pop. `leading`, `title`, and `actions` all accept **arbitrary widgets** (`actions` takes several — each its own glass capsule on iOS 26) — see [Custom widgets in AppBar.title and AppBar.actions](#custom-widgets-in-appbartitle-and-appbaractions). Title placement and spacing: [`centerTitle`](#appbarcentertitle) and [`titleSpacing`](#appbartitlespacing); trailing-group padding: [`actionsPadding`](#appbaractionspadding) — each has its own section below. `subtitle` renders a secondary line under the title. `largeTitle` renders a large title under the bar that **collapses natively on scroll** into the bar title (`largeTitleSize` picks the Android M3 variant: medium/large flexible) — see [Large title & the see-through bar](#large-title--the-see-through-bar-ios-26). iOS 26 bar surfaces: a **translucent `backgroundColor`** (alpha < 1) = frosted glass (content faintly visible behind); **no `backgroundColor`** = a fully clear bar where content stays visible scrolling beneath, kept legible by the system scroll-edge blur ramp. On Android, **no `backgroundColor`** = the bar takes the screen's colour (`Scaffold.backgroundColor`) and a title and back arrow with no colour of their own turn white or black to stay readable against it. `searchBar` makes the bar region the search pill itself (the `SearchBar` row below); `title` is skipped when set — the pill owns the region. `actionsGlassBackground: false` (iOS 26) removes the glass capsule behind a self-designed action widget (an avatar circle keeps just its circle). On iOS 26, a bar using only plain native features is hosted on the **system navigation bar** and its buttons **morph between screens** — see [Morphing bar buttons](#morphing-bar-buttons-ios-26-appbarios) (`ios: AppBarIOSConfig(systemBar:)` selects the host explicitly) On Android the bar is Material's 64dp top app bar with a 22sp regular title; `toolbarHeight` still sets your own. |
 | `BackButton` | ✅ | **Semantic back preset** for `AppBar.leading` — see details below. `leading` also accepts any other widget (e.g. a `Button`), which replaces the auto back button |
 | `BarButtonItem` | ✅ | Convenience trailing action for `AppBar.actions` — text (`title`), SF Symbol (`icon`, iOS) or font glyph (`fontIcon`, both platforms); iOS 26 Liquid Glass capsule via default `actionsGlassBackground`. With `menu: [MenuAction(...)]` the tap shows a **native anchored menu** (capsule→UIMenu morph on iOS 26; M3 popup on Android) — see [Native menus on a bar action](#native-menus-on-a-bar-action-barbuttonitemmenu) |
 | `App` | ✅ | Deprecated aliases: `MaterialApp`, `CupertinoApp` |
@@ -239,7 +244,7 @@ FastGrid(
 | `PageRoute` | ✅ | Accepts `transition` and `duration` parameters. Deprecated alias: `MaterialPageRoute` |
 | `BottomNavigationBar` | ✅ | `UITabBar` — font glyph rendered directly on both platforms; no SF Symbol mapping needed. iOS 26: renders as the floating Liquid Glass pill — `backgroundColor` is ignored there and the bar manages its own home-indicator offset; pair with `Scaffold(extendBody: ...)` so content scrolls behind it — the system fade under the pill is applied automatically (declare `Scaffold.brightness` on dark screens; the fade renders in the trait). `scrollBehavior: TabBarScrollBehavior.minimizeOnScrollDown` minimizes the pill on scroll (real `UITabBarController` lowering — see [Minimize on scroll](#minimize-on-scroll-scrollbehavior-ios-26)); `BottomNavigationBarItem.search()` = the system search pill; item `subtitle`/`enabled`/`activeIcon` supported |
 | `TabBar` / `TabBarView` | ❌ | Not available |
-| `SegmentedControl` | ✅ | `UISegmentedControl` (iOS) |
+| `SegmentedControl` | ✅ | `UISegmentedControl` (iOS); Material's segmented buttons on Android, sized to their labels unless the control is given a width. |
 | `Drawer` / `DrawerHeader` | ✅ | `Scaffold.drawer` — an opinionated slide drawer, no scrim. `drawerStyle` picks the reveal:<br>• **`DrawerStyle.push`** (default) — drawer and screen move **together** as one flat plane: the screen slides aside while the panel slides in from behind it, no shadow, no depth (Gmail / Spotify).<br>• **`DrawerStyle.slideOver`** — the drawer is a **static layer underneath, it never moves**; the screen lifts and slides over it as a floating card with an edge shadow and corners that round in as it travels (X / Twitter). Tune via `Scaffold.slideOverStyle` — `SlideOverStyle(shadow:, corner: straight/rounded, radius:)` — ignored under `push`.<br>Swipe to open (`drawerEnableOpenDragGesture`) or `Scaffold.of(context).openDrawer()`; tap the moved content or swipe back to close. `onDrawerChanged` fires on open/close; `Drawer.width` sets the panel width. Android tip: if the screen colors the system navigation-bar strip (bottom-bar screens), set it transparent while the drawer is open via `onDrawerChanged` — otherwise it draws over the sliding card's shadow. A manual AppBar hamburger wraps the button in a `Builder` so `Scaffold.of(context)` resolves below the drawer. `GlobalKey<ScaffoldState>` is not supported — drive the drawer via `Scaffold.of(context)`, or use `SliderMenuContainer` directly for key-driven control. **Release feel is native per platform:** iOS follows Apple's projection rule, Android the Material flick rule; `SliderMenuContainer.settleCurve` shapes the settle, and a new drag catches a still-moving panel. |
 
 ### The screen's background belongs on the Scaffold
@@ -543,29 +548,30 @@ the body and the bottom bar.
 
 ### Button sizing
 
-A bare `Button` renders **identically on iOS and Android**: the label
-plus 14×7 default content insets (14×10 when no `variant` is set),
-with a 34 pt/dp minimum height. Sizing props change the design — on
-both platforms equally:
+A bare `Button` is the platform's own button. On iOS: the label with
+12 pt beside it and 7 pt above and below, the 34 pt pill of a SwiftUI
+bordered button; a `plain` button is its label alone, the height of one
+line, as a borderless button. On Android: Material's button, the label with
+24 dp beside it, a 40 dp pill inside a 48 dp touch target (4 dp of
+transparent inset above and below it, so stacked buttons sit 8 dp
+apart with no spacing of your own), and at least 88 dp wide when it
+carries a label (an icon-only button is as wide as its icon). Sizing
+props change the design on both platforms:
 
 | Prop | Effect |
 |---|---|
-| `width:` / `height:` | Exact size — overrides insets and the minimum. |
-| `padding:` | Replaces the default insets and waives the 34 minimum. |
+| `width:` / `height:` | Exact size — overrides insets and the minimum; on Android the pill is drawn to `height` with no inset. |
+| `padding:` | Replaces the default insets. |
 | `fontSize:` | Label size — drives the intrinsic size together with the insets. |
 
 ```dart
-Button(title: 'Add')                              // defaults — same size on both platforms
+Button(title: 'Add')                              // the platform's own size
 Button(title: 'Add', height: 40)                  // exact height (e.g. match a text field)
 Button(title: 'Add', padding: EdgeInsets.all(6))  // content-driven compact
 ```
 
-Platform minimum-size styles (such as Material's button floors) are
-neutralized by the framework — what you specify is what renders, on
-both platforms. Sensible touch targets come from the defaults instead:
 `IconButton` always keeps a 48 pt hit area even when its glyph is
-smaller, and the 34 pt Button minimum applies whenever you don't pass
-a size of your own.
+smaller.
 
 ### SegmentedControl
 
@@ -573,7 +579,8 @@ A native segmented control (`UISegmentedControl` on iOS, `MaterialButton` toggle
 
 ```dart
 // Colors unset → PLATFORM defaults: Apple's trait-adaptive white-thumb-on-
-// grey-track appearance on iOS, the theme's colorPrimary chips on Android.
+// grey-track appearance on iOS, Material's outlined segmented buttons on
+// Android (the selected segment on the theme's secondary container).
 SegmentedControl(
   segments: ['Grid', 'Masonry'],
   selectedIndex: _tabIndex,
@@ -601,7 +608,7 @@ SegmentedControl(
 | `segments` | `List<String>` | (required) | Segment titles |
 | `selectedIndex` | `int` | `0` | Selected segment index |
 | `onValueChanged` | `ValueChanged<int>?` | `null` | Segment change callback |
-| `indicatorColor` | `Color?` | `null` = platform default | Selected segment tint (iOS: `selectedSegmentTintColor`; unset keeps Apple's white/grey thumb — Android falls back to the theme's `colorPrimary`) |
+| `indicatorColor` | `Color?` | `null` = platform default | Selected segment tint (iOS: `selectedSegmentTintColor`; unset keeps Apple's white/grey thumb — Android keeps Material's secondary container) |
 | `backgroundColor` | `Color?` | `null` | Control background |
 | `labelFontStyle` | `TextStyle?` | `null` | Base label style: `color` → unselected text, `fontSize`/`fontWeight` → all segments |
 | `selectedLabelFontStyle` | `TextStyle?` | `null` | Selected label style: `color` → selected text, `fontSize`/`fontWeight` override |
@@ -611,8 +618,8 @@ SegmentedControl(
 | Widget / API | Status | Notes |
 |---|---|---|
 | `FloatingActionButton` | ✅ | Circular `UIButton` (iOS) — `child` font glyph rendered directly on both platforms |
-| `BottomSheet` / `showModalBottomSheet` | ✅ | Content-sized bottom overlay hosting a native widget tree — dim scrim, tap-outside + drag dismiss (iOS: VC containment; Android: `BottomSheetDialog`). Rides the keyboard natively: the card stays glued above it through open/close and rotation, and its height caps to the available space (content clips rather than pushing off-screen) |
-| `showModalSheet` / `SheetDetent` / `SheetHeader` | ✅ | Native detent sheet — `UISheetPresentationController` (iOS 15+): `medium`/`large`/`adaptive`/`fitContent`, native spring physics, grabber, swipe-to-dismiss. `fitContent` sizes to the measured content height; on iOS 26 it presents as a bottom overlay (partial-height sheets there are floating Liquid Glass cards with no opt-out). On Android every detent is Material's modal bottom sheet: `fitContent` sized to its content, `medium`/`adaptive` resting at half height (adaptive drags to full), `large` at full height below the status bar, the content laid out at the sheet's height. A `SheetHeader` lowers by default to real bar items on the sheet's own navigation bar (`systemBar: false` composes glass buttons instead): centred title, system close, up to two trailing actions. Adjacent actions share one Liquid Glass capsule; a `SizedBox(width:)` between them splits them, as in `AppBar.actions`. `SheetHeaderController.update` re-declares a live header as sheet state changes. It works the same whether the header sits on the sheet's own bar or is drawn by the framework, which is what Android and `fitContent` sheets on iOS 26 get. Content is padded below the bar automatically. Without `systemBar` the header renders as composed glass buttons. |
+| `BottomSheet` / `showModalBottomSheet` | ✅ | Content-sized bottom sheet hosting a native widget tree: the system sheet on iOS 16 and later, floating in from the edges on iOS 26, and Material's `BottomSheetDialog` on Android, with the dim, tap-outside and drag dismiss of each. Rides the keyboard natively: the card stays glued above it through open/close and rotation, and its height caps to the available space (content clips rather than pushing off-screen) A `PopScope` inside works as it does on a screen: `canPop: false` keeps it up against the swipe, the scrim tap and the system back, and `onPopInvokedWithResult` hears every attempt and every close, with the result passed to `Navigator.pop`, before the Future completes. |
+| `showModalSheet` / `SheetDetent` / `SheetHeader` | ✅ | Native detent sheet — `UISheetPresentationController` (iOS 15+): `medium`/`large`/`adaptive`/`fitContent`, native spring physics, swipe-to-dismiss, the grabber on `showDragHandle: true`. `fitContent` sizes to the measured content height, floating in from the edges on iOS 26 as the platform's partial sheets do (iOS 15 presents it as a bottom overlay). On Android every detent is Material's modal bottom sheet: `fitContent` sized to its content, `medium`/`adaptive` resting at half height (adaptive drags to full), `large` at full height below the status bar, the content laid out at the sheet's height. A `SheetHeader` lowers by default to real bar items on the sheet's own navigation bar (`systemBar: false` composes glass buttons instead): centred title, system close, up to two trailing actions. Adjacent actions share one Liquid Glass capsule; a `SizedBox(width:)` between them splits them, as in `AppBar.actions`. `SheetHeaderController.update` re-declares a live header as sheet state changes. It works the same whether the header sits on the sheet's own bar or is drawn by the framework, which is what Android and `fitContent` sheets on iOS 15 get. Content is padded below the bar automatically. Without `systemBar` the header renders as composed glass buttons. A `PopScope` inside works as it does on a screen: `canPop: false` keeps it up against the swipe, the scrim tap and the system back, and `onPopInvokedWithResult` hears every attempt and every close, with the result passed to `Navigator.pop`, before the Future completes. |
 | `Dialog` / `AlertDialog` | ✅ | Imperative `showAlert()` → `UIAlertController` |
 | `showKeyboardOverlay` | ✅ | A full-screen transparent surface that draws over the keyboard, where a normal overlay stops at its top edge. What you put inside is ordinary layout: position, corners, animation, tap-outside-to-dismiss. Touches that miss your views pass through to the keyboard. `Navigator.pop` closes it. Measure any geometry in the screen that opens the overlay, not inside it: the overlay's tree is in another window and does not know the app's keyboard inset. iOS puts the surface in the keyboard's own window; Android adds it to the `WindowManager`, above the app's windows. |
 
@@ -647,7 +654,7 @@ back-chevron button in the `AppBar` automatically. The logic is:
 | Condition | Behaviour |
 |---|---|
 | `BackButton(...)` passed as `AppBar.leading` | The custom `BackButton` is shown with your icon, size, weight, colour, padding, and `onTap`. |
-| **Any other widget** passed as `AppBar.leading` (e.g. a `Button`) | The widget is hosted in the native **left** bar slot and **replaces** the auto-implied back button. A leading `Button` renders as the same Liquid Glass control as a top-bar action/home capsule. |
+| **Any other widget** passed as `AppBar.leading` (e.g. a `Button`) | The widget is hosted in the native **left** bar slot and **replaces** the auto-implied back button. A leading `Button` renders as the same Liquid Glass control as a top-bar action/home capsule. On iOS a screen whose bar has such a leading has no back button, and iOS then refuses the edge swipe back on that screen; this is how any iOS app behaves with a custom left bar item, and on iOS 26.2 and 26.3 the refusal holds even though the screen can still pop from your widget. Keep the back button (a `BackButton`, or no `leading`) on screens that should swipe back. |
 | `automaticallyImplyLeading: true` (default) **and** the screen can pop **and** no `leading` supplied | The default chevron-left back button appears with no extra code. |
 | `automaticallyImplyLeading: false` **or** the screen cannot pop | No back button is shown (unless an explicit `leading` is provided). |
 
@@ -673,7 +680,9 @@ turn the glass *off*, but you choose its **style** with `glassVariant`
 (`glass` / `clearGlass` / `prominentGlass` / `prominentClearGlass`) and tint it
 with `tint`. The title and actions ARE
 controllable: `AppBar.titleGlassBackground` (default `false`) and
-`AppBar.actionsGlassBackground` (default `true`). The capsules only
+`AppBar.actionsGlassBackground` (default `true`); the title capsule is
+available on the system bar as well (see "A title in a capsule" under
+[Morphing bar buttons](#morphing-bar-buttons-ios-26-appbarios)). The capsules only
 render as real glass when the bar uses the iOS 26 glass material — opt in with a
 **translucent** `AppBar.backgroundColor` (e.g. `myColor.withOpacity(0.5)`); an
 opaque (especially light) colour makes them a flat white fill. Colour the page
@@ -810,10 +819,18 @@ On iOS 26 this renders the full native behavior: the large title slides up
 under the bar and fades as you scroll (tracking the finger, flings, and the
 pull-down stretch), the bar title fades in, and rows passing beneath the
 clear bar get the system blur/fade ramp. On Android the same code drives
-the M3 collapsing band (use an opaque bar color matching your screen
-background there — with no color the Android bar defaults to white). On
-iOS < 26 the `largeTitle` renders as a plain header above your body and
-the bar title stays always visible — same API, graceful fallback.
+the M3 collapsing band; with no color the Android bar takes the screen's
+color, and a title with no color of its own turns white or black to stay
+readable. On iOS < 26 the `largeTitle` renders as a plain header above
+your body and the bar title stays always visible — same API, graceful
+fallback.
+
+The two numbers in the padding: on iOS, `MediaQuery.paddingOf(context).top`
+is the status bar's inset (62 points on an iPhone with the Dynamic Island),
+and 108 is the bar plus the large-title band. Together they put the first
+row where a SwiftUI large-title screen puts it. Text on iOS keeps its point
+size under Dynamic Type, the large title included, so the same clearance
+holds at every text size.
 
 ### The frosted (opaque glass) bar vs the see-through bar
 
@@ -856,12 +873,16 @@ fully hides what passes beneath.
 ### Right bar buttons (`AppBar.actions`)
 
 `AppBar.actions` accepts **any widget** — each is inflated and installed as a
-custom native bar item. For a text action, use **`BarButtonItem`**: on
+custom native bar item. A widget's text renders in the bar button's default
+(`barButtonTextStyle`: the size, weight and colour the platform gives its own
+bar buttons) unless
+the widget styles it, so a plain `Text` reads as a bar button; the same holds
+for `leading`. For a text action, use **`BarButtonItem`**: on
 **iOS 26** it renders inside the system Liquid Glass capsule (via the default
 `actionsGlassBackground`) with the native interactive press response, like a
 native `UIBarButtonItem`; on iOS < 26 / Android it's a plain text action.
-`titleStyle` is merged over a 17pt system-blue default, so passing only a
-color keeps the native size:
+`titleStyle` is merged over `barButtonTextStyle`, so passing only a color
+keeps the native size:
 
 ```dart
 AppBar(
@@ -992,7 +1013,7 @@ AppBar(
 
 #### `AppBar.centerTitle`
 
-Where a **custom-widget title** sits in the bar (Flutter's field name).
+Where the title sits in the bar (Flutter's field name).
 `bool?`. `null` (default) → each platform's own convention, matching
 Flutter's fallback: **iOS centers** the title while there are fewer than two
 `actions`; **Android** places it flush after the nav icon. Explicit
@@ -1005,8 +1026,11 @@ AppBar(
 )
 ```
 
-Plain `Text` titles always use the native title rendering, which each
-platform places by its own rules.
+On Android the rule covers a plain `Text` title too: with no
+`centerTitle` it starts where Material's top app bar puts it, 16dp from the
+edge or 4dp after the navigation icon, and `centerTitle: true` centers it.
+On iOS a plain `Text` title uses the system's title rendering, which UIKit
+places itself.
 
 #### `AppBar.titleSpacing`
 
@@ -1035,37 +1059,69 @@ Plain `Text` titles always use the native title rendering and ignore it.
 
 #### Morphing bar buttons (iOS 26, `AppBar.ios`)
 
-On iOS 26, a bar that uses only plain native features (a text
-title/subtitle, icon actions, the default background) is hosted on the
-**system navigation bar** — its actions are real system bar buttons —
-and bar buttons **morph between screens** on push/pop: buttons that
-persist glide to their new place, related ones blur-merge into a single
-capsule, and the rest dissolve. The transition is the system's own and
-matches buttons automatically; popping plays it in reverse. A bar that
-uses anything more (a background color, custom title/leading widgets,
-badges, search, large titles, menus) is hosted on the standard
-per-screen bar instead.
+On iOS 26, a bar built from native features (a title and subtitle, text
+or widget, actions, a bar colour or none) is hosted on the **system
+navigation bar** — its actions are real system bar buttons — and bar
+buttons **morph between screens** on push/pop: buttons that persist
+glide to their new place, related ones blur-merge into a single capsule,
+and the rest dissolve. The transition is the system's own and matches
+buttons automatically; popping plays it in reverse. A bar that uses
+something the system bar has no place for (a badge on an action, a menu
+button, search, a large title, `brightness`, `titleSpacing`,
+`actionsPadding`, `toolbarHeight`) is hosted on the standard per-screen
+bar instead, and so is a screen whose `Scaffold` has a `drawer` or sets
+`extendBodyBehindAppBar`: the system bar stays put while a drawer slides
+the screen aside, and it does not let the body run underneath it.
 
-The two hosts serve different intents: the standard bar carries the full
-`AppBar` feature set and is the one to use when the bar itself is part of
-your design — a branded color or frosted surface, an avatar+name title, a
-badge on an action; the system bar is for bars that should look and
-behave exactly like the platform's own, morphing included.
+The two hosts serve different intents: the system bar is the one to use,
+morphing included, and the standard bar carries the few features above
+for the screen that needs one of them.
 
 `AppBar(ios: AppBarIOSConfig(systemBar: true/false))` selects the host
-explicitly. A bar's host is fixed for the screen's lifetime, so a bar
+explicitly. Asking for the system bar with a feature it cannot express
+keeps the screen on the standard bar, and the console says which feature,
+once per screen. A bar's host is fixed for the screen's lifetime, so a bar
 whose feature set changes across rebuilds should pin it (`false` keeps
-the screen on the standard bar).
+the screen on the standard bar); a rebuild that would change the host is
+reported on the console and the host stays.
 
 On a system-hosted bar:
 
-- every action is an icon `BarButtonItem` or a `SizedBox(width:)`;
+- every action becomes a bar item: a `BarButtonItem` with an SF-symbol
+  `icon` or a `title` is the platform's own bar button (a text one is
+  styled by `titleStyle` when you set one and by the system otherwise),
+  a `SizedBox(width:)` splits capsules, and any other widget rides in its
+  own capsule as a custom view, resizing with its content; a widget in
+  `leading` does the same on the left and takes the place of the back
+  button; `actionsGlassBackground: false` removes the capsules;
 - **adjacent actions share one glass capsule** (the system default) — a
   `SizedBox(width: 8)` between actions splits them into separate capsules;
 - `BarButtonItem(prominent: true)` renders the **filled, tinted capsule**
   (the bar's primary action; tint from `titleStyle.color`);
-- the system bar owns its look — bar styling fields don't apply there
-  (screens using them stay on the standard bar automatically).
+- any title: a plain `Text` is the bar's own title, with its own colour,
+  size and weight if you style it, and a widget title
+  (an avatar beside a name and a status line, say) rides in the bar's
+  title slot, centred, or at its start with `centerTitle: false`, the
+  chat screen shape;
+- `backgroundColor` works as on any bar: none is the clear bar, a
+  translucent colour the frosted bar, a solid colour the opaque bar, and
+  the buttons keep their capsules and morph on each; the other bar
+  styling fields (`brightness`, `titleSpacing`, `actionsPadding`,
+  `toolbarHeight`) keep a screen on the standard bar.
+
+**A title in a capsule.** The system draws a bare title. Set
+`titleGlassBackground: true` and the title, with its subtitle, sits in a
+glass capsule of its own, in the same fonts the bar gives a bare title;
+the buttons keep morphing.
+
+```dart
+AppBar(
+  title: const Text('Today'),
+  subtitle: const Text('15:10'),
+  titleGlassBackground: true,
+  actions: [BarButtonItem(icon: 'ellipsis', onPressed: _more)],
+)
+```
 
 ```dart
 // Screen A — camera and a green ⊕ in separate capsules.
@@ -1271,11 +1327,12 @@ setting in the same shape, named after the feature rather than the iOS version.
 | `Listener` | ✅ | Raw pointer events |
 | `InkWell` | ✅ | `UIButton`-style press highlight |
 | `Checkbox` | ✅ | `UIButton` + SF Symbols; tristate supported |
+| `DropdownButton` | ✅ | The platform's own picker for one of a few values, in place: on iPhone a button showing the current item that opens the system menu anchored to it, the current item checked; on Android Material's exposed dropdown menu. `value`, `items` (`DropdownMenuItem(value:, child: Text(...))`), `onChanged`, `hint`, `isExpanded`, `style`. It keeps showing `value` until a rebuild changes it, as in Flutter. |
 | `Radio<T>` | ✅ | `UIButton` + SF Symbols on iPhone, Material 3's radio button on Android — matching the checkbox beside it |
 | `Switch` / `CupertinoSwitch` | ✅ | `UISwitch` on iPhone, Google's Material 3 switch on Android — nothing to turn on. The four colour parameters work on both. `android: AndroidSwitchStyle(checkIcon: true)` adds the tick mark inside the knob |
 | `Slider` / `CupertinoSlider` | ✅ | `UISlider` on iPhone, Google's Material 3 slider on Android — a slim upright handle with a gap either side and a dot at the end. Size it with `android: AndroidSliderStyle(...)`: `trackHeight`, `thumbWidth`, `thumbHeight`, `thumbTrackGap`, `stopIndicatorSize`, `trackCornerSize` (all in dp; set the last three to 0 for a plain bar). Colors resolve Flutter's way: the widget's `activeColor`/`inactiveColor`/`thumbColor` win, else the ambient `SliderTheme(data: SliderThemeData(...))` supplies `activeTrackColor`/`inactiveTrackColor`/`thumbColor` (reactive — sliders restyle when the theme changes). Slider geometry stays native: `SliderThemeData`'s shape classes compile for source compatibility but the track and thumb shapes are the platform's own (`android:` is the geometry knob) |
-| `CircularProgressIndicator` | ✅ | `UIActivityIndicatorView` on iPhone. On Android, `android: AndroidProgressIndicatorStyle(wavy: true)` gives Google's wavy spinner |
-| `LinearProgressIndicator` | ✅ | `UIProgressView` on iPhone, Google's Material 3 bar on Android (rounded ends, a gap before the dot at the end). `value` 0.0–1.0, or `null` while you don't know how long it takes; `android: AndroidProgressIndicatorStyle(wavy: true)` for the wave |
+| `CircularProgressIndicator` | ✅ | `UIActivityIndicatorView` on iPhone. On Android, `android: AndroidProgressIndicatorStyle(wavy: true)` gives Google's wavy spinner Without a colour it is the system's grey spinner. |
+| `LinearProgressIndicator` | ✅ | `UIProgressView` on iPhone, Google's Material 3 bar on Android (rounded ends, a gap before the dot at the end). `value` 0.0–1.0, or `null` while you don't know how long it takes; `android: AndroidProgressIndicatorStyle(wavy: true)` for the wave Without colours it is the system's blue bar on the system's grey track. |
 | `Dismissible` | ❌ | Not available |
 
 ---
@@ -1303,11 +1360,11 @@ setting in the same shape, named after the feature rather than the iOS version.
 
 | Widget / API | Status | Notes |
 |---|---|---|
-| `showAlert()` | ✅ | `UIAlertController` |
+| `showAlert()` | ✅ | `UIAlertController`; on a screen with a forced `brightness` the alert takes it too |
 | `showActionSheet()` | ✅ | iOS: `UIAlertController` action sheet. Android: `ModalBottomSheet` — opens a `showModalBottomSheet` panel with rounded corners and dim background. |
-| `showModalSheet()` | ✅ | Native detent sheet (`UISheetPresentationController`, iOS 15+): `SheetDetent.medium`/`large`/`adaptive`/`fitContent`, native spring physics, grabber, swipe-to-dismiss. `fitContent` sizes to the measured content height; on iOS 26 it presents as a bottom overlay (partial-height sheets there are floating Liquid Glass cards with no opt-out). Returns `Future<T?>` resolved by `Navigator.pop(context, value)`. On Android, `fitContent` lowers to the modal bottom sheet; the other detents no-op (use `showModalBottomSheet` for those). An optional `SheetHeader` declares the header; by default it lowers to real bar items on the sheet's own navigation bar, and adjacent trailing actions share one Liquid Glass capsule. |
-| `showModalBottomSheet()` | ✅ | Content-sized bottom panel with drag handle, dim background, and dismiss-on-tap outside. The parent screen stays visible behind the dim on both platforms. |
-| `showDialog()` | ✅ | **Centered** modal dialog hosting a full dartnative widget tree (the centered sibling of `showModalBottomSheet`). For **custom** dialogs — styled inputs, forms, branded layout. `showAlert()` is for plain title/message/buttons only. |
+| `showModalSheet()` | ✅ | Native detent sheet (`UISheetPresentationController`, iOS 15+): `SheetDetent.medium`/`large`/`adaptive`/`fitContent`, native spring physics, swipe-to-dismiss, the grabber on `showDragHandle: true`. `fitContent` sizes to the measured content height, floating in from the edges on iOS 26 as the platform's partial sheets do (iOS 15 presents it as a bottom overlay). Returns `Future<T?>` resolved by `Navigator.pop(context, value)`. On Android, `fitContent` lowers to the modal bottom sheet; the other detents no-op (use `showModalBottomSheet` for those). An optional `SheetHeader` declares the header; by default it lowers to real bar items on the sheet's own navigation bar, and adjacent trailing actions share one Liquid Glass capsule. A `PopScope` inside works as it does on a screen: `canPop: false` keeps it up against the swipe, the scrim tap and the system back, and `onPopInvokedWithResult` hears every attempt and every close, with the result passed to `Navigator.pop`, before the Future completes. |
+| `showModalBottomSheet()` | ✅ | Content-sized bottom sheet with a dim background and dismiss-on-tap outside: the system sheet on iOS 16 and later, floating in from the edges on iOS 26, and Material's bottom sheet on Android; `showDragHandle: true` adds the drag handle (off by default, as the platform's own sheet). Without a colour it wears the system's sheet material on iOS and Material's sheet surface on Android; the dim is the platform's own, and `dimOpacity` changes it where the framework draws it, on Android and iOS 15. The parent screen stays visible behind the dim on both platforms. A `PopScope` inside works as it does on a screen: `canPop: false` keeps it up against the swipe, the scrim tap and the system back, and `onPopInvokedWithResult` hears every attempt and every close, with the result passed to `Navigator.pop`, before the Future completes. |
+| `showDialog()` | ✅ | **Centered** modal dialog hosting a full dartnative widget tree (the centered sibling of `showModalBottomSheet`). For **custom** dialogs — styled inputs, forms, branded layout. `showAlert()` is for plain title/message/buttons only. On iOS the card is the alert's own look when no colour is set: Liquid Glass on iOS 26, the system material before, 320pt wide with the alert's rounded corners; `ios: DialogIOSConfig(glass: false)` gives a solid card in the platform's dialog colour, and `backgroundColor` a solid card in yours. On Android it is Material's dialog surface. A `PopScope` inside works as it does on a screen: `canPop: false` keeps it up against the swipe, the scrim tap and the system back, and `onPopInvokedWithResult` hears every attempt and every close, with the result passed to `Navigator.pop`, before the Future completes. |
 | `showDatePicker()` | ✅ | `UIDatePicker` in a sheet sized to the picker; date, time, dateAndTime, countDown. `confirmText` labels the confirm control; unset, each platform shows its own (the checkmark capsule on iOS 26, "Done" on earlier iOS, "OK" on Android) |
 | `showMediaPicker()` | ✅ | Replaces `image_picker` plugin. `PHPickerViewController` (iOS 14+) / `UIImagePickerController` fallback; images, videos, multi-select. Returns `Future<List<MediaFile>>`. No extra package. |
 
@@ -1357,7 +1414,7 @@ final files = await showMediaPicker(
 
 ### `showModalBottomSheet` — bottom sheet with native widget tree
 
-Presents a draggable bottom panel that hosts a full dartnative widget tree. The panel has a drag handle, dim background, and can contain any combination of native widgets — including `TextField` inputs with keyboard interaction.
+Presents a draggable bottom sheet that hosts a full dartnative widget tree: the system sheet sized to its content on iOS 16 and later, floating in from the edges on iOS 26, and Material's bottom sheet on Android. The sheet has a dim background, an optional drag handle (`showDragHandle: true`), and can contain any combination of native widgets — including `TextField` inputs with keyboard interaction.
 
 ```dart
 import 'package:dartnative/dartnative.dart';
@@ -1366,7 +1423,7 @@ final result = await showModalBottomSheet<String>(
   context: context,
   backgroundColor: const Color(0xFF1C1C1E),
   cornerRadius: 12.0,
-  dimOpacity: 0.4,
+  dimOpacity: 0.2,                   // Android and iOS 15; the system sheet keeps its own
   builder: (context) => Column(
     children: [
       Text("Title"),
@@ -1393,7 +1450,12 @@ final result = await showModalBottomSheet<String>(
 Presents a **centered** modal that hosts a full dartnative widget tree, with a dim
 backdrop and dismiss-on-tap-outside. It is the centered sibling of
 `showModalBottomSheet` — same "host any widget tree" capability, but anchored in
-the middle of the screen like a classic dialog/alert.
+the middle of the screen like a classic dialog/alert. On iOS the card is the
+alert's own look when no colour is set: Liquid Glass on iOS 26 and the system
+material before, 320pt wide with the alert's rounded corners, in either
+brightness. `ios: DialogIOSConfig(glass: false)` makes it a solid card in the
+platform's dialog colour, `backgroundColor` a solid card in yours. On Android
+it is Material's dialog surface.
 
 ```dart
 import 'package:dartnative/dartnative.dart';
@@ -1402,7 +1464,7 @@ final result = await showDialog<String>(
   context: context,
   backgroundColor: Colors.white,
   cornerRadius: 16,
-  dimOpacity: 0.4,
+  dimOpacity: 0.2,                   // the platform's own unless set
   builder: (context) => Padding(
     padding: const EdgeInsets.all(24),
     child: Column(
@@ -1434,7 +1496,7 @@ Future<T?> showDialog<T>({
   required WidgetBuilder builder,   // the widget tree hosted in the card
   Color? backgroundColor,           // card fill (defaults to system background)
   double cornerRadius = 15,         // card corner radius
-  double dimOpacity = 0.4,          // backdrop dim alpha
+  double dimOpacity = -1,           // backdrop dim alpha; -1 = the platform's own
 });
 ```
 

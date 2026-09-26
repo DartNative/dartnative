@@ -46,6 +46,13 @@ DerivedData/
 **/.cxx/
 local.properties
 
+# Written on the reader's machine by dn: pod install writes the lock, and
+# the Gradle wrapper scripts are copied in when missing
+plugins/*/example/ios/Podfile.lock
+plugins/*/example/android/gradlew
+plugins/*/example/android/gradlew.bat
+plugins/*/example/android/gradle/wrapper/gradle-wrapper.jar
+
 # Local-only dependency overrides (maintainers map to the private monorepo)
 pubspec_overrides.yaml
 

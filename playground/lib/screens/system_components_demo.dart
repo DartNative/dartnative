@@ -505,8 +505,8 @@ class _SystemComponentsDemoState extends State<SystemComponentsDemo> {
                         final result = await showModalSheet<String>(
                           context: context,
                           // fitContent: the sheet hugs its content height.
+                          // No colour: the platform's own sheet surface.
                           detent: SheetDetent.fitContent,
-                          backgroundColor: kBarBg,
                           builder: (_) => const _DemoSheetContent(),
                         );
                         setState(() {
@@ -526,10 +526,6 @@ class _SystemComponentsDemoState extends State<SystemComponentsDemo> {
                         final result = await showModalSheet<String>(
                           context: context,
                           detent: SheetDetent.medium,
-                          backgroundColor: playgroundPalette.brightness ==
-                                  Brightness.dark
-                              ? kBarBg
-                              : const Color(0xFFF2F2F7),
                           showDragHandle: false,
                           header: SheetHeader(
                             title: 'Editor',
@@ -588,9 +584,6 @@ class _SystemComponentsDemoState extends State<SystemComponentsDemo> {
                     onPressed: () async {
                       final result = await showModalBottomSheet<String>(
                         context: context,
-                        // The sheet demo's surface: the field's grey fill
-                        // (kTileBg) has to read against the card.
-                        backgroundColor: kBarBg,
                         builder: (_) => const _DemoOverlayContent(),
                       );
                       setState(() {
@@ -668,13 +661,8 @@ class _SystemComponentsDemoState extends State<SystemComponentsDemo> {
               ),
               child: Column(
                 children: [
-                  // Full palette set: pass label styles alongside a custom
-                  // indicatorColor so both themes render intentionally.
+                  // The platform's own segmented control, at its defaults.
                   SegmentedControl(
-                    backgroundColor: kSegBg,
-                    indicatorColor: kSegTint,
-                    labelFontStyle: TextStyle(color: kTextSecondary),
-                    selectedLabelFontStyle: TextStyle(color: kTextPrimary),
                     segments: const ['Grid', 'Masonry', 'Infinite Grid'],
                     selectedIndex: _segmentIndex,
                     onValueChanged: (i) => setState(() => _segmentIndex = i),

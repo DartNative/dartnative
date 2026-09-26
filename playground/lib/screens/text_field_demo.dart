@@ -12,12 +12,21 @@ class TextFieldDemo extends StatefulWidget {
   State<TextFieldDemo> createState() => _TextFieldDemoState();
 }
 
+// Reopening the keyboard from a different field, most often a number pad
+// after an email field, can print "Unable to simultaneously satisfy
+// constraints" for 'TUIKeyplane.right'.width == -1.5 in the run console on
+// iOS 26. It comes from the system keyboard building its key layout: a plain
+// UIKit app with three text fields prints the same lines on the same taps.
+// Not a DartNative issue; nothing on screen is affected.
 class _TextFieldDemoState extends State<TextFieldDemo> {
   final _singleController = TextEditingController();
   final _multiController = TextEditingController();
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
   final _numberController = TextEditingController();
+  final _signInEmailController = TextEditingController();
+  final _signInPasswordController = TextEditingController();
+  final _codeController = TextEditingController();
 
   String _lastChanged = '';
 
@@ -28,6 +37,9 @@ class _TextFieldDemoState extends State<TextFieldDemo> {
     _passwordController.dispose();
     _emailController.dispose();
     _numberController.dispose();
+    _signInEmailController.dispose();
+    _signInPasswordController.dispose();
+    _codeController.dispose();
     super.dispose();
   }
 
@@ -128,6 +140,55 @@ class _TextFieldDemoState extends State<TextFieldDemo> {
                 style: TextStyle(color: kTextPrimary, fontSize: 16),
                 onChanged: (v) => setState(() => _lastChanged = v),
               ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // ── Autofill ────────────────────────────────────────────────────
+            _SectionHeader('Autofill · autofillHints'),
+            _FieldLabel('Sign-in group · email + password'),
+            AutofillGroup(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _FieldShell(
+                    child: TextField(
+                      controller: _signInEmailController,
+                      decoration: _inputBox(hint: 'Email', vertical: 18),
+                      keyboardType: TextInputType.emailAddress,
+                      autocorrect: false,
+                      autofillHints: const [
+                        AutofillHints.email,
+                        AutofillHints.username,
+                      ],
+                      style: TextStyle(color: kTextPrimary, fontSize: 16),
+                    ),
+                  ),
+                  _FieldShell(
+                    child: TextField(
+                      controller: _signInPasswordController,
+                      decoration: _inputBox(hint: 'Password', vertical: 18),
+                      obscureText: true,
+                      autofillHints: const [AutofillHints.password],
+                      style: TextStyle(color: kTextPrimary, fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            _FieldLabel('One-time code · the SMS code above the keyboard'),
+            _FieldShell(
+              child: TextField(
+                controller: _codeController,
+                decoration: _inputBox(hint: '123456', vertical: 18),
+                keyboardType: TextInputType.number,
+                autofillHints: const [AutofillHints.oneTimeCode],
+                style: TextStyle(color: kTextPrimary, fontSize: 16),
+              ),
+            ),
+            Button(
+              title: 'Sign in · finishAutofillContext()',
+              onPressed: () => TextInput.finishAutofillContext(),
             ),
 
             const SizedBox(height: 24),

@@ -14,6 +14,7 @@ import '../media/chatgpt_picker_demo.dart';
 import '../media/stickers_keyboard_demo.dart';
 import '../media/video_feed_demo.dart';
 import '../music/music_demo.dart';
+import '../tiktok/tiktok_demo.dart';
 import '../color_picker_demo.dart';
 import '../carousel_demo.dart';
 import '../text_typewriter_demo.dart';
@@ -43,6 +44,22 @@ class ShowcaseTab extends StatelessWidget {
               PageRoute(
                 builder: (_) => const MusicDemo(),
                 settings: '/music',
+              ),
+            ),
+          ),
+          ShowcaseCard(
+            gradient: const [Color(0xFF25F4EE), Color(0xFFFE2C55)],
+            icon: CupertinoIcons.tv_music_note_fill,
+            title: 'TikTok-style feed and profile',
+            pitch: 'Enjoy a TikTok feed with instant infinite scrolling, pull '
+                'to refresh, Picture in Picture, AirPlay and background '
+                'controls. Swipe left to show the profile screen.',
+            tags: const ['PageView', 'video player', 'pull to refresh'],
+            onTap: (ctx) => Navigator.push(
+              ctx,
+              PageRoute(
+                builder: (_) => const TikTokDemo(),
+                settings: '/tiktok',
               ),
             ),
           ),

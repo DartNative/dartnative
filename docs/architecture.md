@@ -73,7 +73,7 @@ DartNative provides Flutter-compatible scroll widgets plus a native **Fast famil
 
 ### FastList — real recycling
 
-`FastList` is a real `UITableView` / `RecyclerView`: cells recycle as they scroll off-screen, scrolling stays smooth at any length, and index jumps are exact. The item builder runs for every item on mount, so paginate via `onScroll` when N is huge. By default every built cell is held for the widget's lifetime; set **`keepAliveCount`** and only a sliding window around the viewport holds content, independent of `itemCount`. Pair it with `Image.cacheWidth`/`cacheHeight` (decode at cell size) for image lists.
+`FastList` is a real `UITableView` / `RecyclerView`: cells recycle as they scroll off-screen, scrolling stays smooth at any length, and index jumps are exact. The item builder runs for the rows that fill the first screen and a margin beyond it, then for each row as the scroll brings it near, so the mount costs the same at any `itemCount`. By default every built cell is held for the widget's lifetime; set **`keepAliveCount`** and only a sliding window around the viewport holds content, independent of `itemCount`. Pair it with `Image.cacheWidth`/`cacheHeight` (decode at cell size) for image lists.
 
 **Programmatic scrolling:**
 

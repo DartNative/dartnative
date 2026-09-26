@@ -1,0 +1,3 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/theme" android:title="Theme" android:icon="@drawable/ic_dark_mode" app:showAsAction="always"/>
+</menu>

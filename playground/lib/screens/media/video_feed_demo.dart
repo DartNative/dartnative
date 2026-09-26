@@ -248,6 +248,14 @@ class _VideoFeedDemoState extends State<VideoFeedDemo> {
       ),
       body: PageView.builder(
         scrollDirection: Axis.vertical,
+        // A null count is a feed with no end: pages are added as the user
+        // approaches the last one, and built only as they near the
+        // viewport, as Flutter's are, so a count is a number, not a cost.
+        // Pass the count you have, or null; a big round number as a stand
+        // in for "infinite" buys nothing, and a page that leaves the kept
+        // window releases what it built, so page state (the players here)
+        // lives in the parent.
+        itemCount: null,
         // One extra page built on each side, which is the pool window.
         allowImplicitScrolling: true,
         onPageChanged: _onPageChanged,

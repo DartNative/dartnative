@@ -266,6 +266,8 @@ The **[DartNative IDE Extension](https://marketplace.visualstudio.com/items?item
 
 The [`playground/`](playground/) folder is a runnable demo app — the fastest way to feel the difference. Load it on a **device, not a simulator**, and go through the screens; the gap from Flutter and React Native is not subtle.
 
+The [`parity/`](parity/) folder holds the same screen twice, once in DartNative and once in the platform's own toolkit, every widget at its default: run both and compare.
+
 The screens are grouped into five tabs:
 
 - **Showcase** — complete example screens that combine many widgets end to end.

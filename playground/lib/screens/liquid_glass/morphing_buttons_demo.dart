@@ -114,7 +114,8 @@ class _MorphChatScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Text(
               'The camera became the call button; the ⊕ dissolved into '
-              'it. Go back and watch them separate again.',
+              'it, and Select — a text bar button — arrived beside them. '
+              'Go back and watch them separate again.',
               textAlign: TextAlign.center,
               style:
                   TextStyle(color: kTextSecondary, fontSize: 14, height: 1.4),

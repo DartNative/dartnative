@@ -99,6 +99,17 @@ dn config --license-key dnk_...
 dn run -d <device-id>
 ```
 
+### "This build did not carry a DartNative license key"
+
+This one means the build that made the app had no license key in it, even
+though your subscription may be fine. Check three things: that
+`dn config --list` shows a `license-key`; that `main()` calls
+`DartNativePluginRegistrant.registerAll()` before `runApp`; and that your
+command line or IDE does not pass an empty `--dart-define=DN_LICENSE_KEY=`
+(a `$KEY` variable that is not set, for example). `dn run -v` prints the
+build's defines: a build that carries the key shows `DN_LICENSE_KEY=dnk_…`
+among them.
+
 Or pass the key per build without storing it:
 
 ```bash
@@ -585,6 +596,52 @@ own dependencies, so a DartNative package it uses belongs in
 `dn create` already names them. And the SDK's packages are resolved by the
 `dn` commands: `dart test` and `dart pub get` cannot find them, so use
 `dn test` and `dn pub get`.
+
+## Keyboard warning about `TUIKeyplane.right` in the console (iOS 26)
+
+### Symptom
+
+While an app runs from `dn run` on an iOS 26 device, the console prints
+"Unable to simultaneously satisfy constraints" with a constraint named
+`TUIKeyplane.right` and a width of -1.5, three times. It appears when the
+keyboard was closed and you tap another field to reopen it, most often a
+number pad such as a one-time code field after an email field. Closing the
+app from the app switcher with the keyboard open can print a similar one
+about `TUIKeyplane.height`.
+
+### Root cause
+
+This comes from the system keyboard, not from your app or from DartNative.
+A plain UIKit app with three text fields and no DartNative code prints the
+same lines on the same taps. The keyboard builds its new key layout, finds
+one of its own guides too narrow and fixes it by itself.
+
+### Fix
+
+Nothing to change. The keyboard recovers on its own and the screen is
+correct. The line shows in the `dn run` console because the tool forwards
+the app's error-level log lines; a release build does not print it.
+
+## The swipe back does nothing on one screen (iOS)
+
+### Symptom
+
+Swiping from the left edge does nothing on one screen, while other screens
+go back. That screen's `AppBar` has a `leading` widget that is not a
+`BackButton`.
+
+### Root cause
+
+iOS enables the swipe back only for a screen that shows a back button. A
+`leading` widget takes the back button's place, so iOS refuses the swipe
+on that screen. A plain iOS app with a custom left bar item behaves the
+same way.
+
+### Fix
+
+Keep the back button on screens that should swipe back: leave `leading`
+out, or pass a `BackButton`. A screen with its own leading widget still
+pops from that widget's tap.
 
 ## A run misbehaves and nothing explains it
 

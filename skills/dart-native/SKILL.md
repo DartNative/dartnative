@@ -110,10 +110,13 @@ consult it for any param-level question).
   `Visibility`, `IgnorePointer`/`AbsorbPointer`, `RepaintBoundary`,
   `ClipRRect`, `ClipOval`.
 - **Text**: `Text`, `RichText`/`TextSpan`, `TextStyle`, `TextPainter`.
-- **Scrolling**: `ListView` (+`.builder`), `SingleChildScrollView`,
-  `GridView`, `CustomScrollView` with `SliverList`(+`.builder`),
-  `SliverGrid`, `SliverToBoxAdapter`, `SliverPadding`,
-  `SliverFillRemaining`, `SliverAppBar`.
+- **Scrolling**: `ListView`, `SingleChildScrollView`, `GridView`,
+  `CustomScrollView` with `SliverList`(+`.builder`), `SliverGrid`,
+  `SliverToBoxAdapter`, `SliverPadding`, `SliverFillRemaining`,
+  `SliverAppBar`. **`ListView.builder` has Flutter's API but not its
+  laziness: all items are built eagerly.** For a long or data-driven list
+  use `FastList` (native cell recycling, rows built as they near the
+  viewport), and `FastGrid` for a grid; see below.
 - **Images**: `Image.network` (cached), `Image.asset`, `CircleAvatar`.
 - **Animation — the full suite**: `AnimationController` (+ both ticker
   mixins), `CurvedAnimation`, `AnimatedBuilder`/`AnimatedWidget`,
@@ -154,7 +157,10 @@ inputs go HERE, never in `bottomNavigationBar`), `bottomAccessory` (strip
 above the bottom bar; iOS 26 lowers it to the native tab accessory),
 `floatingActionButton`,
 `extendBody`, `extendBodyBehindAppBar`, `resizeToAvoidBottomInset`
-(default true; the body resizes on the system keyboard curve), and
+(default true; the body is **lifted, not resized**: when the focused
+field is in the body, the body moves up by exactly the amount the field
+is obscured, on the keyboard's own animation, and the `AppBar` stays put;
+`false` keeps the body still), and
 `brightness` — **declare it `Brightness.dark` on any dark-by-colors
 screen** or system materials (keyboard, glass, scroll-edge fades) render
 light on light-mode devices.

@@ -24,6 +24,7 @@
 //   • dartnative_onnxruntime
 //   • dartnative_permissions
 //   • dartnative_secure_storage
+//   • dartnative_share
 //   • dartnative_shared_preferences
 //   • dartnative_social_sign_in
 //   • dartnative_system
@@ -46,6 +47,7 @@ import 'package:dartnative_notifications/dartnative_notifications.dart';
 import 'package:dartnative_onnxruntime/dartnative_onnxruntime.dart';
 import 'package:dartnative_permissions/dartnative_permissions.dart';
 import 'package:dartnative_secure_storage/dartnative_secure_storage.dart';
+import 'package:dartnative_share/dartnative_share.dart';
 import 'package:dartnative_shared_preferences/dartnative_shared_preferences.dart';
 import 'package:dartnative_social_sign_in/social_sign_in.dart';
 import 'package:dartnative_system/dartnative_system.dart';
@@ -82,8 +84,8 @@ abstract final class DartNativePluginRegistrant {
       'dartnative_path_provider',
       'dartnative_permissions',
       'dartnative_secure_storage',
+      'dartnative_share',
       'dartnative_shared_preferences',
-      'dartnative_skia',
       'dartnative_social_sign_in',
       'dartnative_splash',
       'dartnative_sqlite',
@@ -129,6 +131,9 @@ abstract final class DartNativePluginRegistrant {
     });
     _load('dartnative_secure_storage', () {
       SecureBindings.loadSymbols();
+    });
+    _load('dartnative_share', () {
+      ShareFFIBindings.loadSymbols();
     });
     _load('dartnative_shared_preferences', () {
       PrefsBindings.loadSymbols();

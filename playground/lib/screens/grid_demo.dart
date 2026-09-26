@@ -239,8 +239,6 @@ class _GridDemoState extends State<GridDemo> {
   }
 
   Widget _buildTabSelector() => SegmentedControl(
-      backgroundColor: kSegBg,
-      indicatorColor: kSegTint,
         segments: const [
           'Grid',
           'Masonry',
@@ -290,6 +288,10 @@ class _GridDemoState extends State<GridDemo> {
   /// Masonry tab — fully virtualized, O(visible) via MasonryFastGrid.
   Widget _buildMasonryFastGridContent() {
     return MasonryFastGrid(
+      // Cells are built as they near the viewport, as in Flutter's lazy
+      // grids, so itemCount is a number, not a cost: it is the real count,
+      // grown from onScroll as more arrives, and keepAliveCount bounds
+      // memory however far the user goes.
       itemCount: _masonryCount,
       crossAxisCount: 2,
       mainAxisSpacing: 8,
@@ -338,6 +340,9 @@ class _GridDemoState extends State<GridDemo> {
   /// cell recycling instead of the O(total) Yoga-based GridView.
   Widget _buildFastGridContent() {
     return FastGrid(
+      // Cells are built as they near the viewport, as in Flutter's lazy
+      // grids, so itemCount is a number, not a cost; what it must be is
+      // true, grown from onScroll as pages arrive.
       // Honest count — no phantom placeholder cells: mounting placeholders
       // and shrinking the count on the first fetch is misleading UI and a
       // needless recycling stress.
@@ -424,6 +429,9 @@ class _GridDemoState extends State<GridDemo> {
           ),
         ),
         const SizedBox(height: 12),
+        // GridView lays out every cell it is given, with no recycling:
+        // right for a short fixed grid like this one. A long or growing
+        // grid is FastGrid, which builds cells as they near the viewport.
         GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4,

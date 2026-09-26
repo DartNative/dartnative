@@ -86,6 +86,11 @@ public final class GeneratedPluginRegistrant {
       Log.e(TAG, "Error registering plugin dartnative_secure_storage, com.dartnative.securestorage.DartNativeSecureStoragePlugin", e);
     }
     try {
+      flutterEngine.getPlugins().add(new com.dartnative.share.DartNativeSharePlugin());
+    } catch (Exception e) {
+      Log.e(TAG, "Error registering plugin dartnative_share, com.dartnative.share.DartNativeSharePlugin", e);
+    }
+    try {
       flutterEngine.getPlugins().add(new com.dartnative.sharedpreferences.DartNativeSharedPreferencesPlugin());
     } catch (Exception e) {
       Log.e(TAG, "Error registering plugin dartnative_shared_preferences, com.dartnative.sharedpreferences.DartNativeSharedPreferencesPlugin", e);

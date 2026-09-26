@@ -221,14 +221,11 @@ class _FastListDemoState extends State<FastListDemo> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // The platform's own segmented control, at its defaults.
                 SegmentedControl(
                   segments: const ['Text', 'Images'],
-                  backgroundColor: kSegBg,
-                  indicatorColor: kSegTint,
                   selectedIndex: _type == 'Images' ? 1 : 0,
                   onValueChanged: (i) => _run(i == 0 ? 'Text' : 'Images'),
-                  labelFontStyle: TextStyle(color: kTextSecondary),
-                  selectedLabelFontStyle: TextStyle(color: kTextPrimary),
                 ),
                 const SizedBox(height: 10),
                 Text(
@@ -265,6 +262,12 @@ class _FastListDemoState extends State<FastListDemo> {
             ),
           ),
           Expanded(
+            // Rows are built as they near the viewport, as in Flutter's
+            // lazy lists, so itemCount is a number, not a cost: pass the
+            // real count of the data and grow it from onScroll as pages
+            // arrive. keepAliveCount bounds memory for heavy rows, and
+            // itemExtent, when rows share a height, makes the scroll bar
+            // and far jumps exact from the start.
             child: _type == 'Images'
                 // The full long-image-list recipe: pagination (onScroll) +
                 // content windowing (keepAliveCount): visible + 30 rows each

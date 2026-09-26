@@ -1,0 +1,24 @@
+# Regenerate the Xcode project with `xcodegen generate` (brew install xcodegen).
+name: Parity
+options:
+  bundleIdPrefix: com.dartnative
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+targets:
+  Parity:
+    type: application
+    platform: iOS
+    sources: [Parity]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dartnative.parity.swiftui
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Parity (SwiftUI)
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+        SWIFT_VERSION: "5.9"
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_ENTITLEMENTS: ""
