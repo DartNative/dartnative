@@ -3,6 +3,268 @@
 <!-- Generated file — edits here are overwritten on the next release.
      The changelog is maintained at https://dartnative.com/changelog -->
 
+## Code push, platform parity, new widgets and demos, and fixes for reported issues — Preview (2026-09-26)
+
+This is a large release:
+- **Code push** arrives as a preview: send a fix straight to phones,
+  without a new release to the App Store and Google Play.
+- **Platform parity:** your widgets now look the way the platform's own
+  widgets look, on iPhone and on Android, with nothing set on them.
+- **New widgets:** pull to refresh in two styles and a native dropdown
+  picker, plus autofill in text fields. Lists and feeds of any length open
+  as fast as short ones.
+- **iOS 26 app bars:** many more bars now use the system's own bar.
+- **New demos** in the playground and the public repo.
+
+It also fixes the issues you reported on the public repo: #32, #37, #38,
+#40, #41, #42, #43 and #46. It adds what you asked for in #36, #39, #44
+and #45.
+
+**This release comes with a new `dn`.** Run `dn upgrade`: it prints the
+install command for the new version. Run that command, then run
+`dn upgrade` again.
+
+Two plugins have new versions that need this release:
+`dartnative_video_player` 1.3.0 and `dartnative_lottie` 1.3.0. Run
+`dn pub upgrade` in your app to get them.
+
+### Code push, as a preview
+
+Send a fix directly to phones, without a release to the App Store and
+Google Play. Every plan has it.
+1. `dn release` builds the app you ship, and registers it with the update
+   service under your account.
+2. When you find a mistake, fix it in your Dart code and run `dn patch`.
+3. The phones running that release download the fix on their own, and the
+   app is correct the next time it starts: no app store, no reinstall.
+
+Code push is experimental for now. `dn release` and `dn patch` run only
+after you opt in with `export DN_CODE_PUSH_EXPERIMENTAL=1`. The code push
+tutorial in the public repo, `tutorials/code_push`, is an app with four
+deliberate mistakes that you release, fix and watch change on a phone,
+in about 20 minutes.
+
+### New
+
+- **Pull to refresh.** `RefreshIndicator(onRefresh:, child:)` works around
+  a `ListView`, a `SingleChildScrollView`, a `FastList`, a vertical
+  `PageView`, the grids or a `CustomScrollView`, and comes in two styles.
+
+  The default, pull down, moves the content with your finger and fills a
+  spinner in the space that opens above it. The spinner starts turning
+  once the pull passes the threshold and keeps turning until the future
+  `onRefresh` returns completes. It is the platform's own spinner: the
+  system's on iPhone, Material's on Android. Without a `color`, it takes
+  the brightness of the screen, so it stays visible on a dark feed. When
+  your content runs under a header or the status bar:
+  - `edgeOffset` keeps the spinner below it;
+  - `displacement` sets how far the content rests while it refreshes;
+  - `triggerDistance` sets how far the pull has to go.
+
+  The second style, `RefreshStyle.pullOver`, is the one video feeds use.
+  The content holds still under your finger, and a label fades in over
+  the top of the screen while the video keeps playing. Its `builder` lets
+  you draw your own indicator from the pull's phase and distance.
+
+  `GlobalKey<RefreshIndicatorState>` and `show()` start a refresh from
+  code, for the "tap Home again" pattern. (#44)
+- **A native dropdown picker.** `DropdownButton` shows the current value
+  in place and opens the platform's own menu: the system pop-up menu on
+  iPhone, Material's exposed dropdown menu on Android. It takes `value`,
+  `items`, `onChanged` and `hint`, as in Flutter. (#36)
+- **Autofill in text fields.** `TextField(autofillHints:)` with
+  `AutofillHints`, `AutofillGroup` and `TextInput.finishAutofillContext()`
+  works as it does in Flutter:
+  - iOS offers the one-time code from Messages and the password manager's
+    entries above the keyboard;
+  - Android's autofill service fills the fields it recognises;
+  - finishing the context after a sign-in lets the password manager offer
+    to save.
+
+  A Flutter sign-in form compiles as it is. (#39)
+- **Compare DartNative with a native app yourself.** The new `parity/`
+  folder in the public repo has the same screen three times, with the
+  same widgets at their default values:
+  - in DartNative, one screen on both platforms;
+  - in Kotlin with Material 3;
+  - in SwiftUI.
+
+  Run them side by side on a phone. A button in each bar switches between
+  light and dark in place.
+- **`MediaQuery` works as in Flutter.** `MediaQuery(data:, child:)`
+  overrides the data for a part of the tree, and `MediaQueryData.copyWith`
+  exists. A screen with a forced `Scaffold.brightness` now passes that
+  brightness to everything under it, including sheets and dialogs opened
+  from it, so cards, subtitles and dividers left at their defaults take
+  the screen's colours instead of the phone's.
+- **Plugins hear two more Android moments.** The "user is leaving" hint
+  and the change in and out of Picture in Picture reach plugins, which is
+  what lets a video float as the user leaves the app. (#45)
+
+### Your widgets look native at their defaults
+
+We put the same widgets, with nothing set on them, on a DartNative screen
+and on a screen written in the platform's own toolkit, then measured them
+against each other: colours, sizes, weights and spacing.
+
+- **On Android**, widgets are Material 3's:
+  - `Button`: a 40dp pill in a 48dp touch target, so stacked buttons sit
+    8dp apart on their own;
+  - `SegmentedControl`: Material's segmented buttons, sized to their
+    labels;
+  - `Card` without a colour: the outlined card;
+  - `ListTile` and `Divider`: Material's list type and the theme's divider;
+  - `Badge` and `Slider`: the theme's colours;
+  - `AppBar`: the 64dp top app bar, its title at the start and no shadow
+    at rest;
+  - `showDialog`: as wide as Android's own dialogs.
+
+  A `TextField` with `labelText`, `helperText`, an `OutlineInputBorder` or
+  `filled: true` is Material's text field, with the floating label and the
+  helper line, which were not drawn before. A `Text` without a colour
+  takes the colour a plain Android `TextView` has.
+- **On iPhone**, widgets are the system's, measured against SwiftUI:
+  - a screen without a colour is the system background, so dark mode no
+    longer shows white text on a white page;
+  - `Button`: the pill of a bordered button;
+  - `TextField` with an `OutlineInputBorder`: the rounded field;
+  - `ListTile`: the row of a plain list;
+  - `Divider`: the one-pixel separator;
+  - the progress indicators, `Slider` and `Switch`: their system sizes and
+    tracks.
+
+  `showModalBottomSheet` is the system's own sheet, sized to its content.
+  A `showDialog` without a colour is the alert's own card, Liquid Glass
+  on iOS 26. `ios: DialogIOSConfig(glass: false)` gives you a solid card.
+- **Sheets**: sheets show no drag handle unless you ask for one, as in
+  Flutter. `showModalBottomSheet` takes `showDragHandle` too. The dim
+  under a sheet or a dialog is the platform's own.
+- **Switching between light and dark on Android** re-themes the whole
+  screen while the app runs, whether the phone's theme changes or the app
+  calls `setAppBrightness`. `DynamicColor.colorScheme` is the theme's own
+  scheme, exactly the colours the phone's apps show.
+
+Colours, sizes and styles you set yourself are unchanged.
+
+### App bars on iOS 26
+
+More bars now use the system's own bar, with the buttons that move
+between screens when you push and pop:
+- **Text bar buttons:** `BarButtonItem(title: 'Edit')` is the system's
+  own text button, in the same glass capsule as an icon button.
+  `titleStyle` and `prominent: true` work with it.
+- **Any widget as an action:** a tappable `Text`, or an icon of your own,
+  sits on the system bar in its own capsule. A widget in `leading` takes
+  the place of the back button.
+- **Widget titles:** an avatar beside a name, for example, sit in the
+  bar's title slot, centred or at the start with `centerTitle: false`.
+- **Titles in a glass capsule:** `titleGlassBackground: true` draws the
+  capsule in the system bar and answers a touch as Photos does. A plain
+  title in a capsule, or a title with a subtitle, now shows at all.
+- **Coloured bars:** a solid colour, a translucent one or none all stay
+  on the system bar. A dark colour turns the bar's text and buttons light.
+- **Styled titles:** a title or subtitle with its own colour, size or
+  weight keeps it.
+
+Some bars keep the standard bar:
+- **A screen with a drawer:** the system bar cannot slide aside with the
+  screen.
+- **A screen whose bar has what the system bar cannot show**, such as a
+  `Badge` action. A bar like that used to stop the screen from appearing
+  at all; the screen now appears with the standard bar, and the console
+  says why, once. (#37)
+- **Swipe back:** on those screens the swipe from the edge did not go
+  back on iOS 26.2 and 26.3. It does now. (#41)
+
+### Lists and feeds
+
+- **A list or feed of ten thousand items opens like one of thirty.**
+  `FastList`, `FastGrid`, `MasonryFastGrid` and `PageView` build their
+  items as the scroll brings them near, as Flutter does, so `itemCount`
+  is only a number. A `PageView.builder` with 10,000 pages used to never
+  appear. `FastList` takes `itemExtent`, as Flutter's `ListView` does,
+  for rows of one size. A feed opens with the pages it needs, and a
+  change inside one page lays out that page only, so a swipe no longer
+  stutters.
+- **A page prepared off screen shows its video on iPhone.** In a feed that
+  readies the next page ahead, that page played its clip under its poster
+  until you swiped again. (#46)
+- **`PageController.animateToPage` moves a horizontal `PageView`.**
+- **A list or pager as the first child of a `Stack` fills it on Android.**
+  It had no width, so the pages were blank.
+- **A scrolling form centres on the screen.** A `SingleChildScrollView`
+  inside `Center`, the usual sign-in screen, drew a blank screen. It now
+  takes its content's size, as in Flutter. (#38)
+
+### Fixed
+
+- **Closing a sheet by hand reaches your code.** Dragging a
+  `showModalSheet` away left its Future waiting forever. Every way of
+  closing now completes it. A `PopScope` inside a sheet, a bottom sheet
+  or a dialog works as it does on a screen: `canPop: false` keeps it up
+  against the swipe, the tap outside and the back button. (#32)
+- **Text fields take the style's letter spacing**, on both platforms.
+  (#40)
+- **A `FutureBuilder` removed before its future completes stays quiet**
+  instead of reporting `setState() called after dispose()`. (#42)
+- **Android canvases no longer crash** when one appears while others
+  animate, on phones with Adreno graphics. (#43)
+- **A picture on a silent connection loads.** `Image.network` stopped
+  waiting for a connection that sends nothing. After fifteen seconds it
+  now tries once more on a fresh connection. A picture that fails prints
+  one line with the reason.
+- **A round picture shows in a sized box.** `ClipOval(child:
+  Image.network(url))` drew an empty circle on Android.
+- **A glass circle around a tappable icon stays a circle**, even with a
+  `GestureDetector` or a `Padding` between them.
+- **A `Stack` child no longer keeps an old width** after a rebuild moves
+  another widget into its place.
+- **The slide-over drawer's corners are round as soon as you drag**, and
+  the default radius is 48.
+- **The strip under a coloured bottom bar keeps the bar's colour on
+  Android**, while a drawer slides and on Android 15 and later.
+- **A debug build is quiet unless you turn on verbose logging.** Plugins
+  can now check that setting too, so the video player no longer fills the
+  console.
+
+### Plugins
+
+- **`dartnative_video_player` 1.3.0:**
+  - **Picture in Picture:** `enterPictureInPicture()`, and
+    `autoPictureInPicture` to float the video when the user leaves the
+    app.
+  - **Background playback and the lock screen:** `allowBackgroundPlayback`
+    and `setNowPlaying(…)`, with play, pause, the scrubber, next and
+    previous on the lock screen.
+  - **AirPlay on iPhone:** `AirPlayButton` or `showAirPlayPicker()`.
+  - **Nothing black before the video:** the player stays clear until its
+    first frame, so a poster underneath shows until then.
+  - **Faster starts:** clips start in under a second, even when a file
+    keeps its index at the end. The download follows what the player
+    needs, so the clips beside the one on screen leave it the bandwidth.
+  - **A feed refreshed on Android plays its first page** again.
+
+  Picture in Picture and background playback each need a few lines of
+  platform setup, which the plugin's page shows.
+- **`dartnative_lottie` 1.3.0:** with `RenderCache.raster`, every sticker
+  in a keyboard shows at once. Each one plays what has been drawn while
+  the rest is drawn behind it, and a pack you have seen before opens whole.
+  `LottieCensus` reports what the renderer cost, under verbose logging.
+
+### In the playground
+
+A new Showcase card, "TikTok-style feed and profile", opens a
+full-screen video feed with no end:
+- players are pooled around the page under your finger;
+- a pull refreshes while the video holds still;
+- a swipe left opens the creator's profile;
+- Picture in Picture, background playback and AirPlay are all there.
+
+The playground's screens also use the platform defaults above, so what
+you see there is what your app gets.
+
+---
+
 ## PageView, plus fixes to the keyboard, text fields and right-to-left bars — Preview (2026-09-17)
 
 This release has ten changes: one new widget, seven fixes in the
