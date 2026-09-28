@@ -310,19 +310,12 @@ class FeedTabs extends StatelessWidget {
     required this.onSelect,
     required this.pipActive,
     required this.onTogglePip,
-    required this.pullDown,
-    required this.onToggleStyle,
   });
 
   final bool forYou;
   final ValueChanged<bool> onSelect;
   final bool pipActive;
   final VoidCallback onTogglePip;
-
-  /// The pull's style: the content following the finger (pull down) or
-  /// holding still under the line (pull over, the feed's default).
-  final bool pullDown;
-  final VoidCallback onToggleStyle;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -339,15 +332,6 @@ class FeedTabs extends StatelessWidget {
             if (Platform.isIOS)
               // The plugin's one shared system picker behind a plain glyph.
               const _TopGlyph(icon: CupertinoIcons.tv, onTap: _showAirPlay),
-            const SizedBox(width: 2),
-            // The pull's style: the arrow to a line for pull down (the
-            // content moves), the arrow in a circle for pull over.
-            _TopGlyph(
-              icon: pullDown
-                  ? CupertinoIcons.arrow_down_to_line
-                  : CupertinoIcons.arrow_down_circle,
-              onTap: onToggleStyle,
-            ),
             const SizedBox(width: 2),
             _TopGlyph(
               icon: pipActive

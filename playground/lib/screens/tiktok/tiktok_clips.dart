@@ -42,6 +42,14 @@ abstract final class FeedTuning {
   static const int maxDiskCacheBytes = 100 * 1024 * 1024;
   static const Duration disposeSettle = Duration(milliseconds: 250);
 
+  /// How long the screen settles after the open before the players around
+  /// the first page, the refresh clip on the side and the lock-screen entry
+  /// are set up: the push transition's length with a margin. Each set-up
+  /// runs on the main thread (an item, its layer, the lock-screen
+  /// connection), so the transition shares the thread with the first
+  /// page's player alone.
+  static const Duration openSettle = Duration(milliseconds: 450);
+
   /// The feed arrives the way a real one comes from a server: [batch]
   /// clips per request, and the next request goes out when the user is
   /// [fetchAhead] pages from the end of what has arrived.

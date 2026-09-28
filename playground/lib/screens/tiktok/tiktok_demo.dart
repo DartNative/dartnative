@@ -35,6 +35,14 @@ import 'tiktok_clips.dart';
 import 'tiktok_page.dart';
 import 'tiktok_profile.dart';
 
+/// The feed's pull-to-refresh style; change it here to see the other one.
+///
+/// `RefreshStyle.pullOver`, the feed's own: the video holds still under the
+/// finger while the line and the two dots show over it. `RefreshStyle.pullDown`:
+/// the content moves with the finger and the label rides with the dots in
+/// the band that opens below the tabs.
+const RefreshStyle feedRefreshStyle = RefreshStyle.pullOver;
+
 class TikTokDemo extends StatefulWidget {
   const TikTokDemo({super.key});
 
@@ -89,10 +97,9 @@ class _TikTokDemoState extends State<TikTokDemo> with WidgetsBindingObserver {
   /// Pages the user paused by tapping; they stay paused when revisited.
   final Set<int> _userPaused = {};
   bool _pipActive = false;
-  /// The pull's style, switched from the tab row: pull over by default,
-  /// the content holding still under the line; pull down moves the content
-  /// with the finger and the label rides with it.
-  bool _pullDown = false;
+  /// True once the screen has settled after the open (see
+  /// [FeedTuning.openSettle]); the lock-screen entry waits for it.
+  bool _settled = false;
   bool _airPlayActive = false;
   bool _inBackground = false;
 
@@ -108,11 +115,6 @@ class _TikTokDemoState extends State<TikTokDemo> with WidgetsBindingObserver {
       systemNavigationBarColor: Colors.transparent,
       systemNavigationBarDividerColor: Colors.transparent,
     ));
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      setState(() => _profileBuilt = true);
-      _prepareNextRefresh();
-    });
     _outer.addListener(() {
       final near = (_outer.page ?? 0) > 0.02;
       if (near != _profileNear && mounted) setState(() => _profileNear = near);
@@ -121,8 +123,20 @@ class _TikTokDemoState extends State<TikTokDemo> with WidgetsBindingObserver {
     // Every visit opens on the Infinite Video Scrolling demo's clips;
     // everything after them is random.
     _newSequence(leading: kClips.take(kOpeningCount).toList());
-    _ensureWindow(_activeRow);
+    // The page under the finger has its player at once, so the video shows
+    // as soon as it is ready. The pages around it, the refresh clip on the
+    // side, the lock-screen entry and the profile page come once the screen
+    // has settled, not while it slides in: each set-up runs on the main
+    // thread.
+    _ensureWindow(_activeRow, upTo: 1);
     _prepareOtherFeed();
+    Future.delayed(FeedTuning.openSettle, () {
+      if (!mounted) return;
+      _settled = true;
+      _ensureWindow(_activeRow);
+      _attachMedia();
+      setState(() => _profileBuilt = true);
+    });
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -467,7 +481,11 @@ class _TikTokDemoState extends State<TikTokDemo> with WidgetsBindingObserver {
     return ordered.take(_budgetAt(center)).toList();
   }
 
-  void _ensureWindow(int center) {
+  /// Fills the window around [center]. With [upTo], players are created
+  /// only until that many exist (the open: the page under the finger
+  /// alone), and the refresh clip and the pre-caching wait for the full
+  /// call.
+  void _ensureWindow(int center, {int? upTo}) {
     final window = _windowFor(center);
     for (final i in window) {
       // The poster of every page in the window, so a page shows its picture
@@ -475,8 +493,10 @@ class _TikTokDemoState extends State<TikTokDemo> with WidgetsBindingObserver {
       precacheImage(NetworkImage(_clipAt(i).posterUrl));
       if (_controllers.containsKey(i) || _disposeScheduled.contains(i)) continue;
       if (_controllers.length >= _budgetAt(center)) break;
+      if (upTo != null && _controllers.length >= upTo) break;
       _create(i);
     }
+    if (upTo != null) return;
     // Back on the first page with its window settled, the refresh clip
     // takes the decoder kept for it.
     if (center == 0 && _controllers.length <= _budgetAt(0) && _disposeScheduled.isEmpty) {
@@ -654,6 +674,7 @@ class _TikTokDemoState extends State<TikTokDemo> with WidgetsBindingObserver {
   /// nothing here: every player routes its video to the screen the user
   /// picks, and the page follows the plugin's event.
   void _attachMedia() {
+    if (!_settled) return;
     final row = _activeRow;
     final c = _controllers[row];
     if (c == null || !c.isInitialized) return;
@@ -688,8 +709,6 @@ class _TikTokDemoState extends State<TikTokDemo> with WidgetsBindingObserver {
   /// Android's Picture in Picture window shows the screen itself, shrunk,
   /// so while it is open the screen is the playing clip alone.
   bool get _pipWindow => Platform.isAndroid && _pipActive;
-
-  void _toggleStyle() => setState(() => _pullDown = !_pullDown);
 
   /// The feed's loading mark, two animated dots (a Lottie animation).
   static const Widget _dots = SizedBox(
@@ -781,8 +800,6 @@ class _TikTokDemoState extends State<TikTokDemo> with WidgetsBindingObserver {
               onSelect: _selectFeed,
               pipActive: _pipActive,
               onTogglePip: _togglePip,
-              pullDown: _pullDown,
-              onToggleStyle: _toggleStyle,
             ),
           ),
           _backButton(context, insets),
@@ -797,18 +814,27 @@ class _TikTokDemoState extends State<TikTokDemo> with WidgetsBindingObserver {
       // feed's two animated dots.
       RefreshIndicator(
         key: _refreshKey,
-        style: _pullDown ? RefreshStyle.pullDown : RefreshStyle.pullOver,
+        style: feedRefreshStyle,
         onRefresh: _refresh,
         // Pull down: the band opens below the tab row, and a trigger close
         // to the rest keeps the content from bumping up at the release.
-        edgeOffset: _pullDown ? insets.top + 44 : 0,
-        triggerDistance: _pullDown ? 40 : 80,
-        displacement: _pullDown ? 44 : 40,
+        edgeOffset: switch (feedRefreshStyle) {
+          RefreshStyle.pullDown => insets.top + 44,
+          RefreshStyle.pullOver => 0,
+        },
+        triggerDistance: switch (feedRefreshStyle) {
+          RefreshStyle.pullDown => 40,
+          RefreshStyle.pullOver => 80,
+        },
+        displacement: switch (feedRefreshStyle) {
+          RefreshStyle.pullDown => 44,
+          RefreshStyle.pullOver => 40,
+        },
         builder: (context, pager, pull) => Stack(
           children: [
             pager,
             if (!_pipWindow) ...[
-              if (_pullDown)
+              if (feedRefreshStyle == RefreshStyle.pullDown)
                 // The pull's own label and the dots ride with the content,
                 // the label kept through the refresh and the way back: the
                 // refresh completes at once here, and a loading word
@@ -872,7 +898,7 @@ class _TikTokDemoState extends State<TikTokDemo> with WidgetsBindingObserver {
                 left: 0,
                 right: 0,
                 child: AnimatedOpacity(
-                  opacity: !_pullDown &&
+                  opacity: feedRefreshStyle == RefreshStyle.pullOver &&
                           (pull.phase == RefreshPhase.pulling ||
                               pull.phase == RefreshPhase.armed ||
                               pull.phase == RefreshPhase.refreshing)
@@ -884,8 +910,6 @@ class _TikTokDemoState extends State<TikTokDemo> with WidgetsBindingObserver {
                 onSelect: _selectFeed,
                 pipActive: _pipActive,
                 onTogglePip: _togglePip,
-                pullDown: _pullDown,
-                onToggleStyle: _toggleStyle,
               ),
                 ),
               ),
