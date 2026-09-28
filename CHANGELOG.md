@@ -1,9 +1,107 @@
 # Changelog
 
-<!-- Generated file — edits here are overwritten on the next release.
+<!-- Generated file: edits here are overwritten on the next release.
      The changelog is maintained at https://dartnative.com/changelog -->
 
-## Code push, platform parity, new widgets and demos, and fixes for reported issues — Preview (2026-09-26)
+## Three new widgets, a smoother pull to refresh, and fixes for reported issues
+
+Preview (2026-09-28)
+
+This release adds `ReorderableListView`, `TabBar` with `TabBarView`, and
+`NestedScrollView`, all on native views. Pull to refresh takes an
+indicator of your own in both styles and moves as one motion on iPhone.
+It fixes the issues you reported on the public repo: #50, #52, #53, #55
+and #56, plus a webview report from a Firebase user.
+
+**To get it, run `dn upgrade`.** On an older `dn`, that prints the install
+command for your system: run it, then `dn upgrade` again.
+
+**Code push:** every framework build is a new build for code push. After
+`dn upgrade`, fixes you send reach only apps released with this build, so
+make a new release before sending fixes. With the new `dn`, a fix can add
+a new top-level function or static method to a file it changes; a fixed
+function in the same file can call it.
+
+Two plugins have new versions: `dartnative_share` 1.0.1 and
+`dartnative_webview` 1.0.1. Run `dn pub upgrade` in your app to get them.
+
+### New widgets
+
+- **`ReorderableListView`.** Drag rows into a new order with the
+  platform's own reordering: drag and drop or the reorder control on
+  iPhone, the touch helper on Android. It is compatible with Flutter's
+  `ReorderableListView` API, `onReorder` included. Along with it, `Card`
+  takes an optional child, compatible with Flutter's `Card`.
+- **`TabBar` and `TabBarView`.** Tabs under the app bar with swipeable
+  pages. `AppBar.bottom` hosts the bar, `TabController` and
+  `DefaultTabController` drive it, and the indicator follows a swipe
+  natively. On Android the strip is Material's own.
+- **`NestedScrollView`.** A collapsing app bar over a scrolling body:
+  the `SliverAppBar` header collapses, floats and snaps with the body's
+  scroll. `SliverAppBar` is compatible with Flutter's `SliverAppBar`
+  parameters, all of them, and
+  `SliverOverlapAbsorber`, `SliverOverlapInjector` and
+  `SliverFixedExtentList` are there.
+
+### Pull to refresh
+
+- **Draw your own indicator.** Give `RefreshIndicator` a `builder` in the
+  default pull-down style and the platform's spinner steps aside: the
+  content still follows the finger, and your builder gets the pull's
+  phase and distance through the refresh and the way back. Use
+  `PullDownIndicator` with a `child` for a logo or an animated icon that
+  rides with the content, or draw the band yourself. `PullOverIndicator`
+  takes a `child` in the spinner's place too.
+- **One motion on iPhone.** The release settles onto the hold with a
+  spring, a refresh that ends during the settle carries straight on into
+  the way back, and the content comes back over 0.4 s on the standard
+  ease. Your indicator rides the content the whole way.
+- **The playground's TikTok feed** shows both: animated dots in the
+  pull-over style, and a switch in its tab row to try pull down.
+
+### Fixed
+
+- **Native controls run your latest callback.** `FloatingActionButton`,
+  `Switch`, `SegmentedControl`, `Slider`, `BottomNavigationBar`,
+  `Checkbox` and `Radio` kept the callback from their first build. (#52)
+- **A horizontal drag in a list row leaves the list scrolling.** A
+  `GestureDetector` that only listens sideways no longer stops the list's
+  vertical scroll on iPhone. (#55)
+- **A dropdown declared with a type argument reports its choice.**
+  `DropdownButton<String>` lost its `onChanged` in a type check. Control
+  callbacks that throw now print the exception instead of swallowing it.
+- **Android release builds have network access** without editing the
+  manifest: the framework declares the INTERNET permission itself. New
+  apps target Android 8.0 (API 26) and later; an existing app keeps the
+  minimum its own build file names. (#50)
+- **iPhone screens keep updating while the app runs a burst of work.** A
+  feed that rebuilt its pages while their players started could freeze
+  for half a second with the app still responsive. Frames now reach the
+  screen within one frame of being ready, whatever the app does next.
+- **A jump to the top of a list no longer cuts its bounce** on iPhone.
+- **A `SizedBox` that starts without a child shows the child you give it
+  later.** A box built with `child: null` and rebuilt with a child kept
+  its size and stayed empty. (#56)
+- **A bar at the very bottom of an iPhone screen stays visible.** An app
+  that sets a navigation bar colour had that colour painted over its own
+  content under the home indicator; the colour now sits behind the app,
+  as it does on Android.
+
+### Plugins
+
+- **`dartnative_webview` 1.0.1:** `NavigationDelegate.onNavigationRequest`
+  now decides each navigation before it loads, on both platforms, and a
+  `Future` decides later. A sign-in flow that returns to your app through
+  its own scheme reaches your code instead of leaving a blank page.
+  `NavigationRequest` carries `isMainFrame`.
+- **`dartnative_share` 1.0.1:** sharing from a sheet that is closing
+  works; the share sheet lives in a window of its own. (#53)
+
+---
+
+## Code push, platform parity, new widgets and demos, and fixes for reported issues
+
+Preview (2026-09-26)
 
 This is a large release:
 - **Code push** arrives as a preview: send a fix straight to phones,
@@ -265,7 +363,9 @@ you see there is what your app gets.
 
 ---
 
-## PageView, plus fixes to the keyboard, text fields and right-to-left bars — Preview (2026-09-17)
+## PageView, plus fixes to the keyboard, text fields and right-to-left bars
+
+Preview (2026-09-17)
 
 This release has ten changes: one new widget, seven fixes in the
 framework, and two plugin updates. Several of them come from issues you
@@ -386,7 +486,9 @@ Xcode this was already true for you. The framework now states it.
 
 ---
 
-## Six fixes from community reports: text input, system appearance, rebuilds, preferences — Preview (2026-09-15)
+## Six fixes from community reports: text input, system appearance, rebuilds, preferences
+
+Preview (2026-09-15)
 
 Six changes, all from reports and requests on the public repo,
 verified on an iPhone and on an Android phone. Five are in the
@@ -438,7 +540,9 @@ run `dn pub upgrade` in your app.
 
 ---
 
-## Right-to-left layout, text input formatters, keyboard and tab bar behaviour — Preview (2026-09-12)
+## Right-to-left layout, text input formatters, keyboard and tab bar behaviour
+
+Preview (2026-09-12)
 
 Three fixes, two of them reported through the public repo by a team
 building an Arabic-first app, all verified on an iPhone and on an Android
@@ -476,7 +580,9 @@ update is there on your next command.
 
 ---
 
-## iOS 26 fixes: navigation bars, search bar, date picker — Preview (2026-09-08)
+## iOS 26 fixes: navigation bars, search bar, date picker
+
+Preview (2026-09-08)
 
 Seven fixes, most of them reported through the public repo, all verified
 on an iPhone running iOS 26. To get them, install the SDK again with the
@@ -549,7 +655,9 @@ untouched by the navigation bar change.
 
 ---
 
-## The first public preview — Preview (2026-07-31)
+## The first public preview
+
+Preview (2026-07-31)
 
 DartNative is in preview and already used in production — see **Gee**, a
 voice-first AI companion app available on the
