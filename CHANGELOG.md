@@ -3,6 +3,28 @@
 <!-- Generated file: edits here are overwritten on the next release.
      The changelog is maintained at https://dartnative.com/changelog -->
 
+## DartNative is out of preview
+
+1.0.0 (2026-09-28)
+
+DartNative is out of preview. Since the first public preview on 31 July,
+six releases have brought iOS 26 fixes, CodePush, new widgets and many
+fixes from your reports, and every issue opened on the
+public repo so far is closed. The framework has held steady through all of
+it, so we now call it stable: build your production apps on it.
+
+**Nothing to install.** The build you get from `dn upgrade` today is the
+stable one; there is no new build with this note.
+
+Releases keep coming the same way: `dn` tells you when a new build is out,
+and every one is listed on this page with its version number.
+
+Thank you to everyone who built with DartNative during the preview and
+told us what broke. Keep the reports coming on the
+[public repo](https://github.com/DartNative/dartnative/issues).
+
+---
+
 ## Three new widgets, a smoother pull to refresh, and fixes for reported issues
 
 Preview (2026-09-28)
