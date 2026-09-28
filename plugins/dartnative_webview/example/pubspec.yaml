@@ -12,7 +12,7 @@ dependencies:
   dartnative_android: ^1.0.0
   dartnative_skia: ^1.0.0
   dartnative_splash: ^1.0.0
-  dartnative_webview: ^1.0.0
+  dartnative_webview: ^1.0.1
   # Used by the example's browser-style bottom bar (Share + Open-in-browser).
   dartnative_share: ^1.0.0
   dartnative_url_launcher: ^1.0.0

@@ -72,56 +72,94 @@ private final class DNShareTextItemSource: NSObject, UIActivityItemSource {
   }
 }
 
-/// Walk the VC hierarchy to find the topmost presented controller.
-private func topViewController(
-  base: UIViewController? = nil
-) -> UIViewController? {
-  let root = base ?? UIApplication.shared
-    .connectedScenes
+/// The window scene the app is showing on.
+private func activeWindowScene() -> UIWindowScene? {
+  let scenes = UIApplication.shared.connectedScenes
     .compactMap { $0 as? UIWindowScene }
-    .first { $0.activationState == .foregroundActive }?
-    .windows
-    .first { $0.isKeyWindow }?
-    .rootViewController
-  if let nav = root as? UINavigationController {
-    return topViewController(base: nav.visibleViewController)
-  }
-  if let tab = root as? UITabBarController,
-     let selected = tab.selectedViewController {
-    return topViewController(base: selected)
-  }
-  if let presented = root?.presentedViewController {
-    return topViewController(base: presented)
-  }
-  return root
+  return scenes.first { $0.activationState == .foregroundActive }
+    ?? scenes.first
 }
+
+/// Hosts the activity controller in a window of its own and reports when
+/// the controller has gone, whichever way it went.
+private final class DNShareHostViewController: UIViewController {
+  var onDismissed: (() -> Void)?
+
+  override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+    super.dismiss(animated: flag) {
+      completion?()
+      self.onDismissed?()
+    }
+  }
+}
+
+/// The window the share sheet is showing in, while it is showing.
+private var _shareWindow: UIWindow?
 
 /// Present the sheet. When `completion` is non-nil it is installed as the
 /// activity controller's `completionWithItemsHandler`; returns false when
-/// there is no view controller to present from.
+/// there is no scene to present in, or a share sheet is already up.
+///
+/// The activity controller gets a window of its own, above the app's
+/// windows, instead of being presented by the app's top-most view
+/// controller. It then outlives whatever the app does to its own
+/// presentation stack: UIKit dismisses a controller together with what it
+/// presents, so a modal sheet that shares and closes in the same tap would
+/// take a share sheet presented from it down before it appeared. In Flutter
+/// the share sheet is system UI over the app, and this keeps it so.
 @discardableResult
 private func presentShareSheet(
   items: [Any],
   completion: UIActivityViewController.CompletionWithItemsHandler? = nil
 ) -> Bool {
-  guard let vc = topViewController() else { return false }
+  guard _shareWindow == nil, let scene = activeWindowScene() else {
+    return false
+  }
+  let previousKeyWindow = scene.windows.first { $0.isKeyWindow }
+
+  let host = DNShareHostViewController()
+  host.view.backgroundColor = .clear
+  let window = UIWindow(windowScene: scene)
+  window.backgroundColor = .clear
+  window.windowLevel = .normal + 1
+  window.rootViewController = host
+  window.makeKeyAndVisible()
+  _shareWindow = window
+
+  var tornDown = false
+  let tearDown = {
+    guard !tornDown else { return }
+    tornDown = true
+    window.isHidden = true
+    window.rootViewController = nil
+    if _shareWindow === window { _shareWindow = nil }
+    previousKeyWindow?.makeKey()
+  }
+  host.onDismissed = { DispatchQueue.main.async(execute: tearDown) }
 
   let activity = UIActivityViewController(
     activityItems: items,
     applicationActivities: nil
   )
-  activity.completionWithItemsHandler = completion
+  activity.completionWithItemsHandler = { type, completed, returned, error in
+    completion?(type, completed, returned, error)
+    // The host's dismiss override takes the window down; this is the
+    // fallback for a dismissal that bypasses it, once the sheet is gone.
+    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+      if host.presentedViewController == nil { tearDown() }
+    }
+  }
 
   // iPad: anchor the popover to a sensible default (top-center of the screen)
   // so the app doesn't crash with the "no sourceView" assertion.
   if let popover = activity.popoverPresentationController {
-    popover.sourceView = vc.view
-    let w = vc.view.bounds.width
+    popover.sourceView = host.view
+    let w = host.view.bounds.width
     popover.sourceRect = CGRect(x: w / 2, y: 0, width: 1, height: 1)
     popover.permittedArrowDirections = .up
   }
 
-  vc.present(activity, animated: true)
+  host.present(activity, animated: true)
   return true
 }
 

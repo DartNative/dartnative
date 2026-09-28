@@ -26,6 +26,7 @@ import 'dart:io' show Platform;
 import 'dart:math';
 
 import 'package:dartnative/dartnative.dart';
+import 'package:dartnative_lottie/dartnative_lottie.dart';
 import 'package:dartnative_video_player/dartnative_video_player.dart';
 
 import '../home/demo_ui.dart' show playgroundOverlayStyle;
@@ -88,6 +89,10 @@ class _TikTokDemoState extends State<TikTokDemo> with WidgetsBindingObserver {
   /// Pages the user paused by tapping; they stay paused when revisited.
   final Set<int> _userPaused = {};
   bool _pipActive = false;
+  /// The pull's style, switched from the tab row: pull over by default,
+  /// the content holding still under the line; pull down moves the content
+  /// with the finger and the label rides with it.
+  bool _pullDown = false;
   bool _airPlayActive = false;
   bool _inBackground = false;
 
@@ -684,6 +689,15 @@ class _TikTokDemoState extends State<TikTokDemo> with WidgetsBindingObserver {
   /// so while it is open the screen is the playing clip alone.
   bool get _pipWindow => Platform.isAndroid && _pipActive;
 
+  void _toggleStyle() => setState(() => _pullDown = !_pullDown);
+
+  /// The feed's loading mark, two animated dots (a Lottie animation).
+  static const Widget _dots = SizedBox(
+    width: 40,
+    height: 16,
+    child: Lottie(asset: 'assets/animations/loading_dots.json', loop: true),
+  );
+
   VideoPlayerController? _readyController(int row) {
     final c = _controllers[row];
     return c != null && c.isInitialized ? c : null;
@@ -767,46 +781,101 @@ class _TikTokDemoState extends State<TikTokDemo> with WidgetsBindingObserver {
               onSelect: _selectFeed,
               pipActive: _pipActive,
               onTogglePip: _togglePip,
+              pullDown: _pullDown,
+              onToggleStyle: _toggleStyle,
             ),
           ),
           _backButton(context, insets),
         ],
       )
     else
-      // Pull over: the video holds still under the finger, and the tab
-      // row turns into the refresh line while the pull and the refresh
-      // last, as the platform's own feeds do.
+      // Pull over, the default: the video holds still under the finger,
+      // and the tab row turns into the refresh line while the pull and the
+      // refresh last, as the platform's own feeds do. Pull down, from the
+      // arrow glyph in the tab row: the content follows the finger and the
+      // label rides with it in the band below the tab row. Both show the
+      // feed's two animated dots.
       RefreshIndicator(
         key: _refreshKey,
-        style: RefreshStyle.pullOver,
+        style: _pullDown ? RefreshStyle.pullDown : RefreshStyle.pullOver,
         onRefresh: _refresh,
+        // Pull down: the band opens below the tab row, and a trigger close
+        // to the rest keeps the content from bumping up at the release.
+        edgeOffset: _pullDown ? insets.top + 44 : 0,
+        triggerDistance: _pullDown ? 40 : 80,
+        displacement: _pullDown ? 44 : 40,
         builder: (context, pager, pull) => Stack(
           children: [
             pager,
             if (!_pipWindow) ...[
-              // While the finger pulls, the refresh line slides down in the
-              // tab row's place over the top gradient and the tabs fade out;
-              // on release the line slides back up and the tabs return while
-              // the refresh runs.
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: IgnorePointer(
-                  child: PullOverIndicator(
+              if (_pullDown)
+                // The pull's own label and the dots ride with the content,
+                // the label kept through the refresh and the way back: the
+                // refresh completes at once here, and a loading word
+                // flashing as the row rides up reads wrong. A fixed width
+                // keeps the dots in place as the label changes.
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: PullDownIndicator(
                     state: pull,
-                    labelOffset: insets.top + 30,
-                    showSpinner: false,
+                    edgeOffset: insets.top + 44,
+                    size: 20,
+                    gap: 12,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 136,
+                          child: Text(
+                            pull.phase == RefreshPhase.pulling
+                                ? 'Pull down to refresh'
+                                : 'Release to refresh',
+                            textAlign: TextAlign.right,
+                            maxLines: 1,
+                            style: const TextStyle(
+                              color: Color(0xFFFFFFFF),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        _dots,
+                      ],
+                    ),
+                  ),
+                )
+              else
+                // While the finger pulls, the refresh line slides down in
+                // the tab row's place over the top gradient and the tabs
+                // fade out; on release the line slides back up, the dots
+                // that rode beside it stay where it rested while the
+                // refresh runs, and the tabs return when it ends.
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: IgnorePointer(
+                    child: PullOverIndicator(
+                      state: pull,
+                      labelOffset: insets.top + 30,
+                      child: _dots,
+                    ),
                   ),
                 ),
-              ),
               Positioned(
                 top: insets.top + 4,
                 left: 0,
                 right: 0,
                 child: AnimatedOpacity(
-                  opacity: pull.phase == RefreshPhase.pulling ||
-                          pull.phase == RefreshPhase.armed
+                  opacity: !_pullDown &&
+                          (pull.phase == RefreshPhase.pulling ||
+                              pull.phase == RefreshPhase.armed ||
+                              pull.phase == RefreshPhase.refreshing)
                       ? 0
                       : 1,
                   duration: const Duration(milliseconds: 160),
@@ -815,6 +884,8 @@ class _TikTokDemoState extends State<TikTokDemo> with WidgetsBindingObserver {
                 onSelect: _selectFeed,
                 pipActive: _pipActive,
                 onTogglePip: _togglePip,
+                pullDown: _pullDown,
+                onToggleStyle: _toggleStyle,
               ),
                 ),
               ),

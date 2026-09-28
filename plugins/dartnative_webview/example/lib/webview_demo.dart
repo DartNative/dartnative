@@ -30,6 +30,8 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
   String _title = 'dartnative_webview';
   bool _canGoBack = false;
   bool _canGoForward = false;
+  // The last navigation the app kept for itself, shown above the page.
+  String? _kept;
 
   @override
   void initState() {
@@ -48,6 +50,17 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
+          // Every navigation the page asks for comes here first. A URL of
+          // another app's scheme (a sign-in flow returning to the app, a
+          // store link) is the app's to take: the web view keeps its page.
+          onNavigationRequest: (request) {
+            final scheme = Uri.tryParse(request.url)?.scheme ?? '';
+            if (scheme == 'http' || scheme == 'https' || scheme == 'about') {
+              return NavigationDecision.navigate;
+            }
+            if (mounted) setState(() => _kept = request.url);
+            return NavigationDecision.prevent;
+          },
           onProgress: (p) {
             if (mounted) setState(() => _progress = p);
           },
@@ -97,24 +110,37 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
             height: _progress < 100 ? 2 : 0,
             color: const Color(0xFF0A84FF),
           ),
+          if (_kept != null)
+            Container(
+              width: double.infinity,
+              color: const Color(0xFFFFF4CE),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Text(
+                'Kept for the app: $_kept',
+                maxLines: 2,
+                style: const TextStyle(fontSize: 13, color: Color(0xFF5C4400)),
+              ),
+            ),
           // the web view fills the space between the app bar and the bottom bar
           Expanded(child: WebViewWidget(controller: _controller)),
-          _bottomBar(),
+          _bottomBar(context),
         ],
       ),
     );
   }
 
   // ── Browser-style bottom bar: Back · Forward · Share · Open-in-browser ──
-  // Sits flush against the bottom edge (no SafeArea/home-indicator inset).
-  Widget _bottomBar() {
+  // The bar's background reaches the screen's bottom edge; its buttons sit
+  // above the home indicator or the gesture bar, by the bottom inset.
+  Widget _bottomBar(BuildContext context) {
+    final inset = MediaQuery.of(context).padding.bottom;
     return Container(
       decoration: const BoxDecoration(
         color: Color(0xFFFFFFFF),
         border: Border(top: BorderSide(color: Color(0x22000000), width: 0.5)),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 4),
+        padding: EdgeInsets.fromLTRB(13, 4, 13, 4 + inset),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

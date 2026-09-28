@@ -301,10 +301,12 @@ anything was sent:
   cannot add one. The same goes for a plugin's native code and for the
   framework itself.
 
-And one thing a fix may do that looks odd on the phone: **add a new
-function** to the file you change. It is accepted (a fifth module), but the
-installed app has no function by that name, so the iPhone's launch report
-lists it as not found. The fix still applies.
+And one thing a fix may do: **add a new function**. A new top-level
+function or static method in the file you change travels inside the fix,
+and a fixed function in that same file can call it; the phone keeps it
+as it came, since the installed app has no function by that name to
+replace. Adding a method to a class the app was released with is refused,
+like adding a class.
 
 ## If something does not look right
 

@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- A DartNative app uses the network: the licence check and code push
+         need it, and so does any request the app makes. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="hero_stories"
         android:name=".Application"

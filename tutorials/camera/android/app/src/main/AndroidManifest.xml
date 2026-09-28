@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Required for Flutter hot-reload / dart_native dev-mode connection. -->
+    <!-- A DartNative app uses the network: the licence check and code push
+         need it, and so does any request the app makes. -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <!-- Camera plugin permissions: the plugin's own AndroidManifest already

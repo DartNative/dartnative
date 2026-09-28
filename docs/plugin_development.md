@@ -172,6 +172,16 @@ class VideoPlayerElement extends NativeElement {
 }
 ```
 
+**Callbacks follow the latest build.** When the element hands the native
+side a Dart callback (a tap, a value change), register a closure that reads
+the widget when it fires, `() => _vp.onPlay?.call()`, never the widget's
+callback itself. Flutter runs the callback of the latest build; a closure
+captured in `mount` would keep running the first build's callback after
+every rebuild. Register once and leave it alone in `update`: tearing a
+handler down under a touch in flight cancels the touch. If the widget can
+start without a callback and gain one later, attach the handler in `update`
+when it appears.
+
 ### 2c. Register the factory
 
 Call this once, before `runApp()`:

@@ -19,13 +19,13 @@ layout. iOS and Android.
 - **`WebViewController`** — `loadRequest(Uri)`, `goBack()` / `goForward()` / `reload()`,
   `canGoBack()` / `canGoForward()`, `getTitle()`.
 - **`setJavaScriptMode(JavaScriptMode…)`** and **`setBackgroundColor(Color)`** — configure inline.
-- **`NavigationDelegate(onProgress:, onPageStarted:, onPageFinished:)`** — load progress (0–100) + page lifecycle.
+- **`NavigationDelegate(onNavigationRequest:, onProgress:, onPageStarted:, onPageFinished:)`** — decide each navigation before it loads, load progress (0–100), page lifecycle.
 
 ## Install
 
 ```yaml
 dependencies:
-  dartnative_webview: ^1.0.0   # from dartpub.dev
+  dartnative_webview: ^1.0.1   # from dartpub.dev
 ```
 
 ```bash
@@ -62,6 +62,25 @@ Track loading and the page title:
 controller.setNavigationDelegate(NavigationDelegate(
   onProgress: (percent) => print('loading $percent%'),
   onPageFinished: (url) async => print(await controller.getTitle()),
+));
+```
+
+Decide each navigation before the web view loads it. A page that sends the
+user back to your app through its own scheme (a sign-in flow's return
+link, `myapp://signed-in?code=…`) lands here too, so your app takes the
+URL instead of the web view failing on it; return a `Future` to decide
+later:
+
+```dart
+controller.setNavigationDelegate(NavigationDelegate(
+  onNavigationRequest: (request) {
+    final uri = Uri.parse(request.url);
+    if (uri.scheme == 'myapp') {
+      finishSignIn(uri);                  // the app takes over
+      return NavigationDecision.prevent;  // the web view keeps its page
+    }
+    return NavigationDecision.navigate;
+  },
 ));
 ```
 
