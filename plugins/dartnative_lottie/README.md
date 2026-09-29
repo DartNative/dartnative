@@ -3,6 +3,26 @@
 Play Lottie animations natively in DartNative — from a bundled asset, runtime JSON, or a
 URL — driven by Airbnb's Lottie engine. iOS and Android.
 
+## See it in action
+
+<table>
+  <tr>
+    <td width="50%"><video src="https://github.com/user-attachments/assets/326430ad-f074-4205-a5e1-10f37ffbe8f2" controls><a href="https://github.com/user-attachments/assets/326430ad-f074-4205-a5e1-10f37ffbe8f2">Watch the grid</a></video></td>
+    <td width="50%"><video src="https://github.com/user-attachments/assets/49edbb05-48f2-4614-bc69-369a9930ed67" controls><a href="https://github.com/user-attachments/assets/49edbb05-48f2-4614-bc69-369a9930ed67">Watch the stickers keyboard</a></video></td>
+  </tr>
+</table>
+
+Left, a grid of animated stickers scrolling fast, every cell playing.
+Right, the stickers keyboard: a chat with a sticker keyboard, packs
+loading and playing the moment they appear, and a sticker sent into the
+conversation.
+
+This is the example app. The grid plays dozens of Lottie animations at
+once and stays smooth as you scroll; the stickers keyboard opens with
+its packs playing the moment they appear, and the sticker you pick plays
+in the conversation. Both demos are in the [playground app](https://github.com/DartNative/dartnative/tree/main/playground), as
+Sticker Grid and Stickers Keyboard.
+
 ## Why you'll like it
 
 - **The real Lottie engine** — `lottie-ios` and `lottie-android`, so animations play through

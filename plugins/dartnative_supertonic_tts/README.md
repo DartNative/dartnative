@@ -7,6 +7,26 @@ High-quality offline TTS in 31 languages and 10 voices. A pure-Dart, all-ONNX
 code of its own, no espeak/phonemizer** (the tokenizer is a pure-Dart codepoint
 lookup). Output is PCM Float32 at 44.1 kHz, mono.
 
+## See it in action
+
+<table>
+  <tr>
+    <td width="50%"><video src="https://github.com/user-attachments/assets/a2b76215-1a9e-4cff-925e-11d07b4d66f4" controls><a href="https://github.com/user-attachments/assets/a2b76215-1a9e-4cff-925e-11d07b4d66f4">Watch the multilingual run</a></video></td>
+    <td width="50%"><video src="https://github.com/user-attachments/assets/541b1d80-f69f-4010-b654-575852945859" controls><a href="https://github.com/user-attachments/assets/541b1d80-f69f-4010-b654-575852945859">Watch the English run</a></video></td>
+  </tr>
+</table>
+
+Left, the same text spoken in English, Korean, French and Spanish, one
+voice after another, the first audio under two seconds after each tap.
+Right, a shorter English run with the streaming stats line.
+
+This is the example app. Type or paste a text, pick a language and one of the ten voices, adjust quality and speed, and tap
+Speak. You hear the first words in under two seconds, and the rest
+follows as it is generated. Switch to Korean and the same screen just
+works, and so do the other 29 languages in the picker: one model covers
+them all, with nothing extra to download. The demo is in the
+[playground app](https://github.com/DartNative/dartnative/tree/main/playground) as SuperTonic TTS.
+
 ## Why you'll like it
 
 - **Truly multilingual** — 31 languages incl. English, Italian, Spanish, French,

@@ -3,6 +3,28 @@
 A high-performance video player for DartNative — backed by the platform's own engines
 (AVPlayer on iOS, ExoPlayer on Android) with byte-limited pre-caching. iOS and Android.
 
+## See it in action
+
+<table>
+  <tr>
+    <td width="50%"><video src="https://github.com/user-attachments/assets/c3397c4f-7652-4725-91eb-38fa6960c567" controls><a href="https://github.com/user-attachments/assets/c3397c4f-7652-4725-91eb-38fa6960c567">Watch playback</a></video></td>
+    <td width="50%"><video src="https://github.com/user-attachments/assets/33df8b52-28f1-4231-b080-8b8ec750bf82" controls><a href="https://github.com/user-attachments/assets/33df8b52-28f1-4231-b080-8b8ec750bf82">Watch pre-caching</a></video></td>
+  </tr>
+</table>
+
+Left, playback: a clip with the built-in controls, scrubbing, and a
+turn to full screen. Right, pre-caching: four clips pre-cached and
+pre-warmed for instant playback, so each one starts the moment you
+swipe to it.
+
+This is the example app. Playback runs on the platform's own engine, so
+it is smooth and easy on the battery, and you can keep the built-in
+controls or draw your own over the video. The pre-cache screen shows the
+other half: the next clips are pre-cached and pre-warmed, within a byte
+budget you choose, so playback is instant when the user gets there.
+The playback demo is in the [playground app](https://github.com/DartNative/dartnative/tree/main/playground) as Video Playback;
+the pre-cache demo is in the plugin's example.
+
 ## Why you'll like it
 
 - **Native playback engines** — AVPlayer and ExoPlayer do the decoding, so playback is smooth

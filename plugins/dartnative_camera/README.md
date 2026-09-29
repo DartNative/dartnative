@@ -3,6 +3,18 @@
 Camera for DartNative — a live preview widget, photo capture, and video recording on the
 device's native camera stack (AVFoundation on iOS, CameraX on Android).
 
+## See it in action
+
+https://github.com/user-attachments/assets/379b7cbb-8f7e-47e4-b623-f87a67c2e9cb
+
+The viewfinder in photo mode, a switch to video, the phone turned
+sideways while recording, and the clip saved to Photos.
+
+This is the plugin's example app. Tap to focus, pinch to zoom, pick an
+aspect ratio, and take a photo or record a video from the same screen.
+Rotation is smooth, with no freeze or stutter. Photos and videos save
+straight to the phone's gallery. The same example is in the [playground app](https://github.com/DartNative/dartnative/tree/main/playground) as Camera.
+
 ## Why you'll like it
 
 - **A real preview widget** — drop `CameraPreview` into your tree and you get a hardware-backed
