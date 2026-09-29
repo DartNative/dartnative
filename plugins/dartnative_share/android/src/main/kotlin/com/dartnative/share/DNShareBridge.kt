@@ -172,7 +172,7 @@ private fun chooserFor(target: Intent, token: Long?): Intent {
  *   this becomes the photo/video caption.
  *
  * Each file is copied into the app's cache dir
- * (`cacheDir/dn_share/<basename>`) and vended via `FileProvider` so the
+ * (`cacheDir/dn_share/<index>/<basename>`) and vended via `FileProvider` so the
  * receiving app can read it. The cache dir is cleared on every call.
  */
 @Keep
@@ -220,14 +220,17 @@ private fun shareFilesImpl(
 
             val authority = providerAuthority(ctx)
             val uris = ArrayList<Uri>(paths.size)
-            for (path in paths) {
+            for ((index, path) in paths.withIndex()) {
                 if (path.isEmpty()) continue
                 val src = File(path)
                 if (!src.exists()) {
                     Log.w(TAG, "shareFiles: source file does not exist: $path")
                     continue
                 }
-                val dest = File(cacheDir, src.name)
+                // Preserve the filename without colliding with another source.
+                val attachmentDir = File(cacheDir, index.toString())
+                attachmentDir.mkdirs()
+                val dest = File(attachmentDir, src.name)
                 src.copyTo(dest, overwrite = true)
                 uris += FileProvider.getUriForFile(ctx, authority, dest)
             }
@@ -341,5 +344,5 @@ private fun startChooser(chooser: Intent) {
 
 private fun clearDir(dir: File) {
     if (!dir.exists()) return
-    dir.listFiles()?.forEach { it.delete() }
+    dir.listFiles()?.forEach { it.deleteRecursively() }
 }
