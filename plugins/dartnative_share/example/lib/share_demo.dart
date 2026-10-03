@@ -29,7 +29,7 @@ import 'package:dartnative_media_picker/dartnative_media_picker.dart';
 /// before sharing — the live controller value is what actually gets passed to
 /// `Share.share` / `Share.shareFiles`.
 const _defaultCaption =
-    'Check out dartnative_share from Dart Native! https://dartnative.com';
+    'Check out dartnative_share from DartNative! https://dartnative.com';
 
 class ShareDemoApp extends StatelessWidget {
   const ShareDemoApp({super.key});
@@ -201,7 +201,7 @@ class _ShareDemoScreenState extends State<ShareDemoScreen> {
         children: [
           // ── Subtitle ─────────────────────────────────────────────────
           const Text(
-            'Share media or text from your Dart Native app to other apps.',
+            'Share media or text from your DartNative app to other apps.',
             style: TextStyle(color: Color(0xFF8E8E93), fontSize: 13),
           ),
           const SizedBox(height: 24),
