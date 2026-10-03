@@ -3,6 +3,113 @@
 <!-- Generated file: edits here are overwritten on the next release.
      The changelog is maintained at https://dartnative.com/changelog -->
 
+## A layer above every screen, Hive 2.0, and Rive
+
+1.1.0 (2026-10-03)
+
+This release adds `App(builder:)`, a layer that stays above every screen,
+and brings three plugins: `dartnative_rive`, new, plays Rive animations
+and state machines on the platform's own Rive runtimes; `dartnative_hive`
+2.0.0 stores boxes in memory-mapped files and writes many times faster;
+and `dartnative_hive_generator`, new, generates Hive's type adapters. It
+also brings layout fixes toward Flutter's behaviour and fixes on Android
+and iPhone.
+
+**To get it, run `dn upgrade`.** On an older `dn`, that prints the install
+command for your system: run it, then `dn upgrade` again.
+
+**Code push:** every framework build is a new build for code push. After
+`dn upgrade`, fixes you send reach only apps released with this build, so
+make a new release before sending fixes.
+
+### New
+
+- **`App(builder:)`.** Puts a layer above every screen, as Flutter's
+  `builder` does: what you lay beside `child`, such as a performance meter
+  or a debug badge, stays in place while screens push and pop. Touches that
+  miss your widgets reach the screen below, and the layer sees your theme
+  and `MediaQuery`.
+
+### Plugins
+
+- **`dartnative_rive` 1.0.0, new.** Play Rive animations and state
+  machines from a bundled asset, a URL, a file or bytes, drawn by Rive's
+  own runtimes on iOS and Android. Set boolean, number and trigger inputs
+  by name, listen to the events and state changes the machine reports, and
+  taps and drags reach the artboard. Add `dartnative_rive: ^1.0.0` to your
+  app.
+- **`dartnative_hive` 2.0.0.** We departed from hive_ce and built our own
+  storage backend, which keeps boxes in memory-mapped files (mmap) for
+  blazing-fast writes. A `put` hands the value to the operating system
+  before it returns, so nothing is lost if the app crashes or is killed. On hive_ce's
+  own benchmark, writes are 13 to 57 times faster than hive_ce in a Flutter
+  app on an iPhone 16 Pro, and Android shows similar gains. Raise the
+  constraint to `^2.0.0` to take it.
+- **`dartnative_hive_generator` 2.0.0, new.** Generates the type adapters
+  `dartnative_hive` uses for your own classes and enums. Add it from
+  dartpub.dev as a dev dependency and run `dn pub run build_runner build`;
+  an app that generated adapters with `hive_ce_generator` runs it once
+  after upgrading.
+- **`dartnative_share` 1.0.2 (Android).** Sharing two files with the same
+  name, such as two `photo.jpg` from different folders, sent the last
+  one's contents in both attachments: each file was copied under its own
+  name into one shared folder, so the second overwrote the first. Each
+  file now gets a folder of its own, so both arrive with their own name
+  and contents. Thanks to Imgkl (#57).
+- **`dartnative_video_player` 1.3.1 (iPhone).** Smoother video feeds:
+  cached videos now load in the background.
+- Run `dn pub upgrade` in your app to get the share and video player
+  versions.
+- The camera, lottie, supertonic_tts and video_player pages on dartpub.dev
+  show a demo video.
+
+### Layout: Flutter parity improvements
+
+- A widget with no size of its own, such as a Rive animation or a
+  shrink-wrapped list or grid, fills the room a `Stack`, `Align` or
+  `Center` gives it, as in Flutter. This also holds through nested Stacks,
+  `Padding` and `ColoredBox`.
+- A vertical `ListView(shrinkWrap: true)` takes its items' height.
+- A `Stack` holding an `Align` inside a `Column` takes its content's
+  height instead of the whole column.
+- A fixed-size child bigger than its `Center`, `Align` or `Stack` is
+  clamped to the room instead of spilling out.
+- **iPhone:** a widget added to a `Row` or `Column` beside a `Spacer`
+  after the first frame, such as a close button that appears once
+  something is picked, takes its room from the `Spacer` instead of being
+  pushed past the edge of the screen.
+
+### Faster
+
+- **iPhone:** `Image.memory` decodes off the main thread, so a screen full
+  of in-memory images opens without a stall.
+
+### Fixed
+
+- **`Ticker` calls back once per display frame,** in step with the
+  screen, so motion driven by it is even at 60 and 120 Hz, as it already
+  was for `AnimationController`.
+- **`AppBar` (Android):** turning the phone gives the bar its height for
+  the new orientation. It kept the status bar's height from before the
+  turn, so on phones whose status bar is shorter in landscape an empty
+  strip stayed above the title. A bar with tabs under it keeps their
+  height.
+- **Push transition (Android):** a screen pushed with a slide from the
+  side slides in again; it appeared at rest at once, with whatever had not
+  loaded yet in view. A view that draws on a surface of its own, such as a
+  Rive artboard, can hold the incoming screen until it has a frame
+  (`DNNavigator.holdReveal`), at most half a second, so the screen enters
+  complete.
+- **`FastList` and `FastGrid` (Android):** cells are laid out one screen
+  ahead of the viewport, so a cell that draws into its own surface, such
+  as a Rive artboard or a video, is already drawn when it scrolls into
+  view instead of appearing white a few frames later.
+- **`DropdownButton` (Android):** the hint shows inside the box, not on
+  its border, and a pick no longer resizes it.
+- Assets whose names contain spaces load.
+
+---
+
 ## DartNative is out of preview
 
 1.0.0 (2026-09-28)
