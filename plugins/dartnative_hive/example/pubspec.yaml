@@ -12,7 +12,7 @@ dependencies:
   dartnative_android: ^1.0.0
   dartnative_skia: ^1.0.0
   dartnative_splash: ^1.0.0
-  dartnative_hive: ^1.0.0
+  dartnative_hive: ^2.0.0
   dartnative_path_provider: ^1.0.0
   # The documents-path helper resolves DNGetDocumentsDirectory over FFI.
   ffi: ^2.1.4

@@ -1,0 +1,117 @@
+name: dartnative_rive_example
+description: "Example app for dartnative_rive — Rive animation and state machine demos."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.12.0-192.0.dev
+
+# Plain version deps: `dn pub get` resolves DartNative packages from your
+# installed SDK (closed resolution) — no registry setup, works offline.
+dependencies:
+  dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  dartnative_skia: ^1.0.0
+  dartnative_rive: ^1.0.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  image: ^4.0.0
+
+dartnative_skia:
+  variant: full
+
+dartnative:
+  assets:
+    - assets/dn-logo.png
+    # Sample .riv files from rive-ios's Example-iOS/Assets, MIT — see
+    # THIRD_PARTY_NOTICES in the plugin package.
+    - assets/rive/Bear.riv
+    - assets/rive/light_switch.riv
+    - assets/rive/rating_animation.riv
+    - assets/rive/leg_day_events_example.riv
+    # From rive-flutter's own example app, so its screens can be ported and
+    # compared side by side.
+    - assets/rive/skills.riv
+    - assets/rive/little_machine.riv
+    - assets/rive/off_road_car.riv
+    - assets/rive/multitouch.riv
+    # From rive-ios's Example-iOS/Assets (its own Layout demo).
+    - assets/rive/truck.riv
+    - assets/rive/artboard_animations.riv
+    - assets/rive/testtext.riv
+    # From rive-flutter's example/assets (their events.dart).
+    - assets/rive/rating.riv
+    # Also from rive-flutter's example app, for the screens under
+    # lib/rive_examples/ that rebuild their menu one for one.
+    - assets/rive/rewards.riv
+    - assets/rive/button.riv
+    - assets/rive/layout_test.riv
+    - assets/rive/lip-sync.riv
+    - assets/rive/vehicles.riv
+    - assets/rive/electrified_button_nested_text.riv
+    - assets/rive/hit_test_consume.riv
+    - assets/rive/url_event_button.riv
+    - assets/rive/focus.riv
+    - assets/rive/coyote.riv
+    # Also from rive-flutter's example/assets, for the data-binding screens.
+    - assets/rive/ball_elements.riv
+    - assets/images/Basketball.webp
+    - assets/images/Beach ball.webp
+    - assets/images/Coffee.webp
+    - assets/images/Cola.webp
+    - assets/images/Cookie.webp
+    - assets/images/Donut.webp
+    - assets/images/Earth.webp
+    - assets/images/Egg.webp
+    - assets/images/Football.webp
+    - assets/images/Paper.webp
+    - assets/images/Pizza.webp
+    - assets/images/Vinyl record.webp
+    - assets/rive/lists_demo.riv
+    - assets/rive/data_binding_lists.riv
+    - assets/rive/rive_rendering_test.riv
+    - assets/rive/travel_icons_pack.riv
+    - assets/rive/web_icons_pack.riv
+    # Also from rive-flutter's example/assets, for the two Semantics screens.
+    - assets/rive/semantics.riv
+    - assets/rive/tabtest.riv
+    - assets/rive/semantic_list_scroll_focus_fixed.riv
+    - assets/rive/zero_area_semantics.riv
+    # Also from rive-flutter's example/assets, for the out-of-band screens:
+    # each references a font, an image or audio that is NOT in the file.
+    - assets/rive/acqua_text_out_of_band.riv
+    - assets/rive/image_out_of_band.riv
+    - assets/rive/ping_pong_audio_demo.riv
+    # Inter (SIL OFL 1.1, rsms/inter), the font acqua_text_out_of_band.riv
+    # references out of band — see THIRD_PARTY_NOTICES.
+    - assets/fonts/Inter-Regular.ttf
+    # The clips ping_pong_audio_demo.riv references out of band, from
+    # rive-flutter's example/assets/audio (see THIRD_PARTY_NOTICES).
+    - assets/audio/racket1-59343.wav
+    - assets/audio/racket2-59344.wav
+    - assets/audio/table-59328.wav
+    # The Rive Marketplace Demos section's files (see marketplace/NOTICE.md;
+    # the Marketplace files' licence is in marketplace/LICENSE-CC-BY-4.0.txt).
+    # "Audio Player" by RiottersDesign, CC BY 4.0, unmodified:
+    # https://rive.app/marketplace/28160-53178-audio-player/
+    - assets/rive/marketplace/audio_player.riv
+    # "StudioRun - A Cosmic Game by TheLittleLabs" by thelittlelabs,
+    # CC BY 4.0, unmodified:
+    # https://rive.app/marketplace/26133-49002-studiorun-a-cosmic-game-by-thelittlelabs/
+    - assets/rive/marketplace/studiorun.riv
+    # "Big Wheel Demo" by JcToon, CC BY 4.0, unmodified:
+    # https://rive.app/marketplace/9939-18941-big-wheel-demo/
+    - assets/rive/marketplace/big_wheel.riv
+    # "Sleep onboarding screen" by marciofpantoja, UI design and illustration
+    # by Afsar Hossen, CC BY 4.0, unmodified:
+    # https://rive.app/marketplace/19960-38531-sleep-onboarding-screen/
+    - assets/rive/marketplace/sleep_onboarding.riv
+    # DartNative's own: the Dragon Ball screen's file, written by
+    # tool/dragon_ball/build.sh from a trace of an image generated with
+    # Craiyon (credited on the screen).
+    - assets/rive/marketplace/dragon_ball.riv
+
+# Branded launch splash + app icon: add the dartnative_splash plugin from
+# dartpub.dev, then see tool/generate_app_assets.dart.

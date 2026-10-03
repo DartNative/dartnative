@@ -1,14 +1,16 @@
-/// Hive demo — standalone example for dartnative_hive.
+/// Hive demo: standalone example for dartnative_hive.
 ///
-
-/// Pure-Dart Hive (community edition): `Hive.initDartNative(path)` replaces
-/// `Hive.initFlutter()`; in-memory after open, persists to disk on every write.
-/// The documents path comes from `dartnative_path_provider`.
+/// `Hive.initDartNative(path)` opens boxes in the documents folder from
+/// `dartnative_path_provider`. Values live in memory after open, and every
+/// change is written to disk. The benchmark screen times writes and reads
+/// on the file backend and on the memory-mapped one.
 library;
 
 import 'package:dartnative/dartnative.dart';
 import 'package:dartnative_hive/dartnative_hive.dart';
 import 'package:dartnative_path_provider/dartnative_path_provider.dart';
+
+import 'benchmark_screen.dart';
 
 // ── Screen ────────────────────────────────────────────────────────────────────
 
@@ -123,9 +125,9 @@ class _HivePanelState extends State<_HivePanel> {
   Widget build(BuildContext context) {
     return _PanelScaffold(
       title: 'Hive',
-      subtitle: 'Pure-Dart Hive (community edition) for dartnative — '
-          '`Hive.initDartNative(path)` replaces `Hive.initFlutter()`. '
-          'In-memory after open; persists to disk on every write.',
+      subtitle: 'Hive for DartNative: `Hive.initDartNative(path)` opens '
+          'boxes in the documents folder. Values live in memory after open, '
+          'and every change is written to disk.',
       log: _log,
       actions: [
         _Action(
@@ -142,6 +144,16 @@ class _HivePanelState extends State<_HivePanel> {
           label: 'Clear box',
           hint: 'deletes all entries from memory and disk',
           onTap: _clear,
+        ),
+        _Action(
+          label: 'Benchmark',
+          hint: 'writes and reads, file backend against the memory-mapped one',
+          onTap: () async {
+            await Navigator.push(
+              context,
+              PageRoute(builder: (_) => const BenchmarkScreen()),
+            );
+          },
         ),
       ],
     );

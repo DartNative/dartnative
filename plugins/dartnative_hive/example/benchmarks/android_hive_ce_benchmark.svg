@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="523" viewBox="0 0 1240 523" role="img" aria-labelledby="title description">
+  <title id="title">Hive Benchmark: Xiaomi 11 Lite 5G NE</title>
+  <desc id="description">Elapsed-time comparison of hive_ce and dartnative_hive across 5 cases. Lower is better.</desc>
+  <rect width="1240" height="523" fill="#0d1117"/>
+  <rect x="28" y="24" width="1184" height="475" rx="18" fill="#161b22" stroke="#30363d"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">
+    <text x="66.0" y="77" fill="#f0f6fc" font-size="27" font-weight="700">Hive Benchmark: Xiaomi 11 Lite 5G NE</text>
+    <text x="67.0" y="108" fill="#8b949e" font-size="14">Mid-range Android phone - profile builds - average of 5 passes - lower is better</text>
+    <rect x="66.0" y="138" width="15" height="15" rx="3" fill="#f59e0b"/>
+    <text x="89.0" y="151" fill="#e6edf3" font-size="13">mmap: false (hive_ce file storage)</text>
+    <rect x="352.0" y="138" width="15" height="15" rx="3" fill="#10b981"/>
+    <text x="375.0" y="151" fill="#e6edf3" font-size="13">dartnative_hive</text>
+  </g>
+  <g font-family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">
+    <text x="282.0" y="208.0" fill="#c9d1d9" font-size="14" font-weight="600" text-anchor="end">10 writes</text>
+    <rect x="300.0" y="188.0" width="692.0" height="12.0" rx="4" fill="#f59e0b"/>
+    <text x="1000.0" y="198.0" fill="#fde68a" font-size="11" font-weight="600" text-anchor="start">7.66 ms</text>
+    <rect x="300.0" y="204.0" width="7.1" height="12.0" rx="4" fill="#10b981"/>
+    <text x="315.1" y="214.0" fill="#a7f3d0" font-size="11" font-weight="600" text-anchor="start">0.079 ms</text>
+    <text x="1182.0" y="206.0" fill="#a7f3d0" font-size="15" font-weight="700" text-anchor="end">96.9x faster</text>
+    <text x="282.0" y="262.0" fill="#c9d1d9" font-size="14" font-weight="600" text-anchor="end">100 writes</text>
+    <rect x="300.0" y="242.0" width="692.0" height="12.0" rx="4" fill="#f59e0b"/>
+    <text x="1000.0" y="252.0" fill="#fde68a" font-size="11" font-weight="600" text-anchor="start">13.25 ms</text>
+    <rect x="300.0" y="258.0" width="28.4" height="12.0" rx="4" fill="#10b981"/>
+    <text x="336.4" y="268.0" fill="#a7f3d0" font-size="11" font-weight="600" text-anchor="start">0.543 ms</text>
+    <text x="1182.0" y="260.0" fill="#a7f3d0" font-size="15" font-weight="700" text-anchor="end">24.4x faster</text>
+    <text x="282.0" y="316.0" fill="#c9d1d9" font-size="14" font-weight="600" text-anchor="end">1,000 writes</text>
+    <rect x="300.0" y="296.0" width="692.0" height="12.0" rx="4" fill="#f59e0b"/>
+    <text x="1000.0" y="306.0" fill="#fde68a" font-size="11" font-weight="600" text-anchor="start">87.73 ms</text>
+    <rect x="300.0" y="312.0" width="41.5" height="12.0" rx="4" fill="#10b981"/>
+    <text x="349.5" y="322.0" fill="#a7f3d0" font-size="11" font-weight="600" text-anchor="start">5.26 ms</text>
+    <text x="1182.0" y="314.0" fill="#a7f3d0" font-size="15" font-weight="700" text-anchor="end">16.7x faster</text>
+    <text x="282.0" y="370.0" fill="#c9d1d9" font-size="14" font-weight="600" text-anchor="end">10,000 writes</text>
+    <rect x="300.0" y="350.0" width="692.0" height="12.0" rx="4" fill="#f59e0b"/>
+    <text x="1000.0" y="360.0" fill="#fde68a" font-size="11" font-weight="600" text-anchor="start">811.09 ms</text>
+    <rect x="300.0" y="366.0" width="42.7" height="12.0" rx="4" fill="#10b981"/>
+    <text x="350.7" y="376.0" fill="#a7f3d0" font-size="11" font-weight="600" text-anchor="start">50.02 ms</text>
+    <text x="1182.0" y="368.0" fill="#a7f3d0" font-size="15" font-weight="700" text-anchor="end">16.2x faster</text>
+    <text x="282.0" y="424.0" fill="#c9d1d9" font-size="14" font-weight="600" text-anchor="end">100,000 writes</text>
+    <rect x="300.0" y="404.0" width="692.0" height="12.0" rx="4" fill="#f59e0b"/>
+    <text x="1000.0" y="414.0" fill="#fde68a" font-size="11" font-weight="600" text-anchor="start">8.58 s</text>
+    <rect x="300.0" y="420.0" width="43.1" height="12.0" rx="4" fill="#10b981"/>
+    <text x="351.1" y="430.0" fill="#a7f3d0" font-size="11" font-weight="600" text-anchor="start">534.81 ms</text>
+    <text x="1182.0" y="422.0" fill="#a7f3d0" font-size="15" font-weight="700" text-anchor="end">16.0x faster</text>
+  </g>
+  <text x="66.0" y="474.0" fill="#8b949e" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="12">Both in the same DartNative app: mmap: false, the file storage of hive_ce 2.20.1, against the default memory-mapped storage.</text>
+</svg>

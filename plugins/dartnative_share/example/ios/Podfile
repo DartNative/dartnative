@@ -32,6 +32,8 @@ target 'Runner' do
 
   dartnative_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 
+  pod 'FlexLayout', '2.0.10'
+
   target 'RunnerTests' do
     inherit! :search_paths
   end

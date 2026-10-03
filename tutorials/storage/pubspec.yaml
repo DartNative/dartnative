@@ -14,7 +14,7 @@ dependencies:
   dartnative_android: ^1.0.0
   dartnative_shared_preferences: ^1.0.0
   dartnative_secure_storage: ^1.0.0
-  dartnative_hive: ^1.0.0
+  dartnative_hive: ^2.0.0
   dartnative_sqlite: ^1.0.0
   dartnative_path_provider: ^1.0.0
 

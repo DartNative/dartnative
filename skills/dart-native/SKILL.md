@@ -400,7 +400,7 @@ keeping a Flutter plugin. Browse the current catalog on dartpub.dev/explore.
 
 | Area | Plugins |
 |---|---|
-| Media | `dartnative_video_player` (AVPlayer/ExoPlayer, pre-caching), `dartnative_audio` (play, PCM streaming, record), `dartnative_camera`, `dartnative_media_picker`, `dartnative_lottie` (Core Animation Lottie), `dartnative_compressor` (image/video compression), `dartnative_image_crop`, `dartnative_svg` |
+| Media | `dartnative_video_player` (AVPlayer/ExoPlayer, pre-caching), `dartnative_audio` (play, PCM streaming, record), `dartnative_camera`, `dartnative_media_picker`, `dartnative_lottie` (Core Animation Lottie), `dartnative_rive` (Rive's own runtimes, data binding), `dartnative_compressor` (image/video compression), `dartnative_image_crop`, `dartnative_svg` |
 | Storage | `dartnative_sqlite`, `dartnative_shared_preferences`, `dartnative_secure_storage` (Keychain/Keystore), `dartnative_hive` (cache), `dartnative_path_provider` |
 | Platform & system | `dartnative_system`, `dartnative_connectivity`, `dartnative_permissions`, `dartnative_share`, `dartnative_url_launcher`, `dartnative_splash`, `dartnative_background`, `dartnative_autostart_settings`, `dartnative_keys`, `dartnative_crypto` |
 | Services | `dartnative_firebase` (core + FCM), `dartnative_notifications`, `dartnative_social_sign_in` (Sign in with Apple + Google), `dartnative_supabase`, `dartnative_revenuecat` (IAP/subscriptions), `dartnative_google_maps`, `dartnative_webview` (real WKWebView/WebView) |

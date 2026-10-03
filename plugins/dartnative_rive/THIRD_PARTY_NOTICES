@@ -1,0 +1,368 @@
+THIRD-PARTY NOTICES — dartnative_rive
+
+This plugin depends on the open-source projects below. Their licenses are
+reproduced here as required by their terms, and this file must accompany
+source and binary distributions of the plugin.
+
+The Rive runtimes are consumed unmodified as dependencies — RiveRuntime
+through the plugin's podspec, app.rive:rive-android through Gradle — so no
+line of their source is copied or changed here. From rive-flutter and
+rive_native the plugin mirrors Dart API names only (the fit, alignment and
+hit-test enums, the input and event names), so that code written against them
+moves across with the import swap.
+
+The example app contains code adapted from rive-flutter. It rebuilds
+rive-flutter's example app screen for screen (example/lib/rive_examples/):
+the menu, section and screen names, descriptions and .riv files are theirs,
+and each ported screen — example/lib/rive_examples/screens/*.dart and
+example/lib/rive_official/*.dart — is adapted from the matching file under
+rive-flutter/example/lib/examples/ (0.15.0-dev.3), re-expressed against this
+plugin's API, with a header naming its source and what changed. That code is
+covered by rive-flutter's MIT licence, reproduced below, and ships with the
+example only, never with the plugin package.
+
+The example also bundles sample .riv files from Rive's own example apps, so
+its screens can be compared against theirs. Every file is byte-identical to
+its upstream copy. From rive-ios's Example-iOS/Assets: Bear.riv,
+artboard_animations.riv, leg_day_events_example.riv, light_switch.riv,
+rating_animation.riv, testtext.riv, truck.riv. From rive-flutter's
+example/assets: ball_elements.riv, button.riv, coyote.riv,
+data_binding_lists.riv, electrified_button_nested_text.riv, focus.riv,
+hit_test_consume.riv, layout_test.riv, lip-sync.riv, lists_demo.riv,
+little_machine.riv, multitouch.riv, off_road_car.riv, rating.riv, rewards.riv,
+rive_rendering_test.riv, semantic_list_scroll_focus_fixed.riv, semantics.riv,
+skills.riv, tabtest.riv, travel_icons_pack.riv, url_event_button.riv,
+vehicles.riv, web_icons_pack.riv, zero_area_semantics.riv, and the three
+out-of-band files acqua_text_out_of_band.riv, image_out_of_band.riv and
+ping_pong_audio_demo.riv (lip-sync.riv and off_road_car.riv also ship in
+rive-ios's assets, unchanged). They carry no separate asset licence and are
+covered by the MIT licences of those repositories, reproduced below. They
+ship with the example only, never with the plugin package.
+
+The example also bundles the three audio clips ping_pong_audio_demo.riv
+references out of band — racket1-59343.wav, racket2-59344.wav and
+table-59328.wav — taken unchanged from rive-flutter's example/assets/audio
+and covered by the same MIT licence. The out-of-band screens fetch their
+fonts and images at runtime, as upstream's do (fonts from cdn.rive.app,
+images from picsum.photos); none of those are bundled.
+
+The example also bundles one font, Inter-Regular.ttf (version 3.019), which
+acqua_text_out_of_band.riv references out of band, taken from rive-flutter's
+example/assets/fonts. Inter is by The Inter Project Authors under the SIL
+Open Font License 1.1, reproduced below; the font's own name table carries
+the same notice. The images and sounds upstream's out-of-band screens use
+are not bundled: the ports fetch them by URL at run time.
+
+The example also bundles four files from the Rive Marketplace, all under the
+Creative Commons Attribution 4.0 licence and unmodified (see their entries
+below, and NOTICE.md beside them): example/assets/rive/marketplace/
+audio_player.riv, "Audio Player" by RiottersDesign, which embeds the font
+Inter Tight (SIL Open Font License 1.1, reproduced below) and three music
+tracks credited in its entry; example/assets/rive/marketplace/
+studiorun.riv, "StudioRun - A Cosmic Game by TheLittleLabs" by thelittlelabs,
+which embeds the font Inter (same licence), six images and 40 sounds;
+example/assets/rive/marketplace/big_wheel.riv, "Big Wheel Demo" by JcToon,
+which embeds the font Londrina Solid (same licence) and one sound; and
+example/assets/rive/marketplace/sleep_onboarding.riv, "Sleep onboarding
+screen" by marciofpantoja, UI design and illustration by Afsar Hossen, which
+embeds the font Inter (same licence). The licence's full text is in
+example/assets/rive/marketplace/LICENSE-CC-BY-4.0.txt, and the font
+licence's in OFL-1.1.txt beside it. They ship with the example only, never
+with the plugin package.
+
+The example's example/assets/rive/marketplace/dragon_ball.riv is
+DartNative's own, written by example/tool/dragon_ball/build.sh from a trace
+of an image generated with Craiyon
+(https://www.craiyon.com/fr/image/ngkUyMYoSyKO_gBOI_zQ6Q). It leaves out
+Craiyon's logo; as Craiyon's terms accept, its screen credits Craiyon in text
+instead. It embeds example/assets/rive/marketplace/dragonball_sound_4s.mp3,
+the sound dragonball_sound.mp3 beside it from its fourth second on: "Anime
+Powerup (Dragonball becoming Super Saiyan) - Sound Effect for editing" by
+Sound Library (2023), credited on the screen.
+
+──────────────────────────────────────────────────────────────────────────────
+rive-ios (Rive) — 6.26 (RiveRuntime ~> 6.26, the podspec's dependency)
+https://github.com/rive-app/rive-ios
+
+MIT License
+
+Copyright (c) 2020 Rive
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+──────────────────────────────────────────────────────────────────────────────
+rive-android (Rive) — 11.12.0
+https://github.com/rive-app/rive-android
+
+MIT License
+
+Copyright (c) 2020-2024 Rive
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+──────────────────────────────────────────────────────────────────────────────
+rive-flutter (Rive) — 0.15.0-dev.1 (API names); example code and assets from 0.15.0-dev.3
+https://github.com/rive-app/rive-flutter
+
+MIT License
+
+Copyright (c) 2020 Rive
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+──────────────────────────────────────────────────────────────────────────────
+rive_native (Rive) — 0.2.0-dev.1
+https://pub.dev/packages/rive_native
+
+MIT License
+
+Copyright (c) 2024 Rive
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+──────────────────────────────────────────────────────────────────────────────
+"Audio Player" (RiottersDesign) — example/assets/rive/marketplace/audio_player.riv
+https://rive.app/marketplace/28160-53178-audio-player/
+
+"Audio Player" by RiottersDesign (https://rive.app/@RiottersDesign/), licensed
+under the Creative Commons Attribution 4.0 International licence (CC BY 4.0):
+https://creativecommons.org/licenses/by/4.0/
+
+The file is bundled unmodified, byte-identical to the one the page above
+offers as 28160-53178-audio-player.riv, renamed only. The licensor offers it
+as-is and as-available, without warranties of any kind (Section 5 of the
+licence). Neither RiottersDesign nor Rive endorses this example.
+
+The file embeds, as published, the font Inter Tight 3.004 (Copyright 2022 The
+Inter Project Authors, https://github.com/rsms/inter-tight, SIL Open Font
+License 1.1, below), and three music tracks, credited as the file names them:
+"Slide" by Simon Osterhold, "Happy like You" by Loya, and "Big Shot" by
+Vic Sage and ZISO, tracks from Artlist's catalogue (https://artlist.io).
+
+──────────────────────────────────────────────────────────────────────────────
+"Sleep onboarding screen" (marciofpantoja) — example/assets/rive/marketplace/sleep_onboarding.riv
+https://rive.app/marketplace/19960-38531-sleep-onboarding-screen/
+
+"Sleep onboarding screen" by marciofpantoja (https://rive.app/@marciofpantoja/),
+UI design and illustration by Afsar Hossen (@imshuvo97), licensed under the
+Creative Commons Attribution 4.0 International licence (CC BY 4.0):
+https://creativecommons.org/licenses/by/4.0/ (full text in
+example/assets/rive/marketplace/LICENSE-CC-BY-4.0.txt)
+
+The file is bundled unmodified, byte-identical to the one the page above
+offers as 19960-38531-sleep-onboarding-screen.riv, renamed only. The licensor
+offers it as-is and as-available, without warranties of any kind (Section 5
+of the licence). Neither marciofpantoja, Afsar Hossen nor Rive endorses this
+example.
+
+The file embeds, as published, the font Inter 3.019 (Copyright 2020 The Inter
+Project Authors, SIL Open Font License 1.1, below).
+
+──────────────────────────────────────────────────────────────────────────────
+"Big Wheel Demo" (JcToon) — example/assets/rive/marketplace/big_wheel.riv
+https://rive.app/marketplace/9939-18941-big-wheel-demo/
+
+"Big Wheel Demo" by JcToon (https://rive.app/@JcToon/), licensed under the
+Creative Commons Attribution 4.0 International licence (CC BY 4.0):
+https://creativecommons.org/licenses/by/4.0/ (full text in
+example/assets/rive/marketplace/LICENSE-CC-BY-4.0.txt)
+
+The file is bundled unmodified, byte-identical to the one the page above
+offers as 9939-18941-big-wheel-demo.riv, renamed only. The licensor offers it
+as-is and as-available, without warranties of any kind (Section 5 of the
+licence). Neither JcToon nor Rive endorses this example.
+
+The file embeds, as published, the font Londrina Solid 1.002 (Copyright 2011
+The Londrina Solid Authors, with Reserved Font Name "Londrina Solid", SIL
+Open Font License 1.1, below) and one sound, credited as the file names it:
+"Scifi, Computer, Console, Button, Harsh, Negative SND32494 2".
+
+──────────────────────────────────────────────────────────────────────────────
+"StudioRun - A Cosmic Game by TheLittleLabs" (thelittlelabs) — example/assets/rive/marketplace/studiorun.riv
+https://rive.app/marketplace/26133-49002-studiorun-a-cosmic-game-by-thelittlelabs/
+
+"StudioRun - A Cosmic Game by TheLittleLabs" by thelittlelabs
+(https://rive.app/@thelittlelabs/), licensed under the Creative Commons
+Attribution 4.0 International licence (CC BY 4.0):
+https://creativecommons.org/licenses/by/4.0/
+
+The file is bundled unmodified, byte-identical to the one the page above
+offers as 26133-49002-studiorun-a-cosmic-game-by-thelittlelabs.riv, renamed
+only. The licensor offers it as-is and as-available, without warranties of
+any kind (Section 5 of the licence). Neither thelittlelabs nor Rive endorses
+this example.
+
+The file embeds, as published, two versions of the font Inter (4.001 and
+3.019, SIL Open Font License 1.1, below), six images and 40 sounds, among
+them music tracks and effects it
+names as "Game_Track_V01", "Menu_Track_V03", and two effects credited in
+their names to Marmoset TrackClub.
+
+──────────────────────────────────────────────────────────────────────────────
+Inter (The Inter Project Authors) — 3.019, example/assets/fonts/Inter-Regular.ttf
+Inter (The Inter Project Authors) — 4.001 and 3.019, embedded in studiorun.riv
+Inter (The Inter Project Authors) — 3.019, embedded in sleep_onboarding.riv
+Inter Tight (The Inter Project Authors) — 3.004, embedded in audio_player.riv
+Londrina Solid (The Londrina Solid Authors) — 1.002, embedded in big_wheel.riv
+https://github.com/rsms/inter
+
+Copyright (c) 2016 The Inter Project Authors (https://github.com/rsms/inter)
+Copyright 2016 The Inter Project Authors (https://github.com/rsms/inter)
+Copyright 2020 The Inter Project Authors (https://github.com/rsms/inter)
+Copyright 2022 The Inter Project Authors (https://github.com/rsms/inter-tight)
+Copyright 2011 The Londrina Solid Authors (https://github.com/marcelommp/Londrina-Typeface), with Reserved Font Name "Londrina Solid"
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+This license is copied below, and is also available with a FAQ at:
+http://scripts.sil.org/OFL
+
+-----------------------------------------------------------
+SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
+-----------------------------------------------------------
+
+PREAMBLE
+The goals of the Open Font License (OFL) are to stimulate worldwide
+development of collaborative font projects, to support the font creation
+efforts of academic and linguistic communities, and to provide a free and
+open framework in which fonts may be shared and improved in partnership
+with others.
+
+The OFL allows the licensed fonts to be used, studied, modified and
+redistributed freely as long as they are not sold by themselves. The
+fonts, including any derivative works, can be bundled, embedded,
+redistributed and/or sold with any software provided that any reserved
+names are not used by derivative works. The fonts and derivatives,
+however, cannot be released under any other type of license. The
+requirement for fonts to remain under this license does not apply
+to any document created using the fonts or their derivatives.
+
+DEFINITIONS
+"Font Software" refers to the set of files released by the Copyright
+Holder(s) under this license and clearly marked as such. This may
+include source files, build scripts and documentation.
+
+"Reserved Font Name" refers to any names specified as such after the
+copyright statement(s).
+
+"Original Version" refers to the collection of Font Software components as
+distributed by the Copyright Holder(s).
+
+"Modified Version" refers to any derivative made by adding to, deleting,
+or substituting -- in part or in whole -- any of the components of the
+Original Version, by changing formats or by porting the Font Software to a
+new environment.
+
+"Author" refers to any designer, engineer, programmer, technical
+writer or other person who contributed to the Font Software.
+
+PERMISSION AND CONDITIONS
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of the Font Software, to use, study, copy, merge, embed, modify,
+redistribute, and sell modified and unmodified copies of the Font
+Software, subject to the following conditions:
+
+1) Neither the Font Software nor any of its individual components,
+in Original or Modified Versions, may be sold by itself.
+
+2) Original or Modified Versions of the Font Software may be bundled,
+redistributed and/or sold with any software, provided that each copy
+contains the above copyright notice and this license. These can be
+included either as stand-alone text files, human-readable headers or
+in the appropriate machine-readable metadata fields within text or
+binary files as long as those fields can be easily viewed by the user.
+
+3) No Modified Version of the Font Software may use the Reserved Font
+Name(s) unless explicit written permission is granted by the corresponding
+Copyright Holder. This restriction only applies to the primary font name as
+presented to the users.
+
+4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font
+Software shall not be used to promote, endorse or advertise any
+Modified Version, except to acknowledge the contribution(s) of the
+Copyright Holder(s) and the Author(s) or with their explicit written
+permission.
+
+5) The Font Software, modified or unmodified, in part or in whole,
+must be distributed entirely under this license, and must not be
+distributed under any other license. The requirement for fonts to
+remain under this license does not apply to any document created
+using the Font Software.
+
+TERMINATION
+This license becomes null and void if any of the above conditions are
+not met.
+
+DISCLAIMER
+THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT
+OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
+DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
+OTHER DEALINGS IN THE FONT SOFTWARE.

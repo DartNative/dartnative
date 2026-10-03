@@ -56,6 +56,7 @@ dependencies:
       | `image_picker` | `dartnative_media_picker` |
       | `flutter_svg` | `dartnative_svg` |
       | `lottie` | `dartnative_lottie` |
+      | `rive` | `dartnative_rive` |
       | `flutter_image_compress` | `dartnative_compressor` |
       | `image_cropper` | `dartnative_image_crop` |
       | `url_launcher` | `dartnative_url_launcher` |
