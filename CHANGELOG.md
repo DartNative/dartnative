@@ -3,6 +3,163 @@
 <!-- Generated file: edits here are overwritten on the next release.
      The changelog is maintained at https://dartnative.com/changelog -->
 
+## iPhone Duo, accessibility, InteractiveViewer, fixes and new feature requests
+
+1.2.0 (2026-10-06)
+
+This release brings iPhone Duo support: two panes the system places
+around the fold, where the fold and the cameras are, the hinge, and the
+vertical bar. It adds accessibility, with `Semantics` for VoiceOver and
+TalkBack, and `InteractiveViewer` to pinch to zoom and pan. Every open
+issue is fixed and every feature the community asked for is in (#58 to
+#71 and #75), among them `Overlay`, `Tooltip`, `SegmentedButton` and date
+range pickers. It also adds `ShaderMask`.
+
+**To get it, run `dn upgrade`.** On an older `dn`, that prints the install
+command for your system: run it, then `dn upgrade` again.
+
+**Code push:** every framework build is a new build for code push. After
+`dn upgrade`, fixes you send reach only apps released with this build, so
+make a new release before sending fixes.
+
+**If you used these, your code changes:**
+
+- `TextInputType.url2` is gone: use `url`.
+- `TextInputType` is now a class, as in Flutter, so a `switch` over it
+  needs a default case.
+- The framework no longer has its own `showMediaPicker`. Add the
+  `dartnative_media_picker` plugin and call its `showMediaPicker`, without
+  `context:`.
+
+### New
+
+- **iPhone Duo.** Show two panes side by side, stacked, or one over the
+  other with `ArrangementView`: the system places them around the fold and
+  moves them when the phone folds or unfolds, and you choose how much space
+  each one gets. You can also ask where the fold and the cameras are
+  (`MediaQuery.displayFeaturesOf`, `DisplayFeatureBuilder`), how far the
+  phone is open (`DeviceHinge.current`), which bar buttons go into the
+  vertical bar along the side (`BarButtonItemIOSConfig`), and keep a
+  screen out of it (`ScaffoldIOSConfig`). On Android and older iPhones the
+  panes become a row, a column or a stack.
+- **Accessibility.** VoiceOver and TalkBack can now read controls you draw
+  yourself: wrap one in `Semantics` to give it a name, say it is a button
+  or a heading, and let the screen reader tap it. `MergeSemantics` reads a
+  label and its switch as one item, `ExcludeSemantics` hides decoration,
+  and `Icon` and `Image` take a `semanticLabel`. Thanks to
+  AbdurahmanAlmehdi (#63).
+- **`InteractiveViewer`.** Pinch to zoom and drag to pan any widget, such
+  as a photo, with limits you set. It runs natively on iPhone and Android.
+  Thanks to AbdurahmanAlmehdi (#62).
+- **Images behind a login.** `Image.network` and `NetworkImage` take
+  `headers:`, for example a bearer token, and `precacheImage` sends them
+  too. Thanks to AbdurahmanAlmehdi (#62).
+- **`Overlay`.** Show widgets above every screen, even above the app bar,
+  that stay while screens open and close, such as a toast that outlives
+  the page that showed it. Thanks to AbdurahmanAlmehdi (#67).
+- **`Tooltip`** and `IconButton(tooltip:)`. A short label that appears on
+  a long press on Android, and on a mouse or trackpad hover on iPhone and
+  iPad. Screen readers read it too. Thanks to AbdurahmanAlmehdi (#68).
+- **`SegmentedButton`.** Segments with a label and an icon, on the
+  platform's own segmented control. Android shows both, with a check mark
+  on the selected one; iPhone shows the label, or the icon when there is
+  no label. Thanks to AbdurahmanAlmehdi (#69).
+- **Date pickers.** `showDatePicker` opens on the date you give and greys
+  out the days outside `firstDate` and `lastDate`. The new
+  `showDateRangePicker` picks a start and an end date: Material's range
+  picker on Android, two date pickers in a sheet on iPhone, as in the
+  Calendar app. Thanks to AbdurahmanAlmehdi (#59).
+- **Number keyboards with a decimal point or a minus sign:**
+  `TextInputType.numberWithOptions(decimal: true, signed: true)`. Thanks
+  to AbdurahmanAlmehdi (#58).
+- **Plugins receive links on iPhone.** The link that opened the app, links
+  that arrive while it runs, home screen quick actions and the push token
+  now reach plugins directly, so a deep-link plugin needs no extra code in
+  your app. If your own `AppDelegate` or `SceneDelegate` implements one of
+  these methods, mark it `override` and call `super`. Thanks to
+  AbdurahmanAlmehdi (#65).
+- **`keyboardDismissBehavior` on lists.** `ListView`, `CustomScrollView`
+  and `SingleChildScrollView` now take `keyboardDismissBehavior`, as in
+  Flutter. On iPhone you can already drag the keyboard down while you
+  scroll; with `onDrag` it closes as soon as the scroll starts, which suits
+  long forms. On Android, `onDrag` closes it the same way. Thanks to
+  AbdurahmanAlmehdi (#71).
+- **`ShaderMask`.** Show a widget through a gradient, for example a title
+  that fades out at its edges. The system draws the mask, so content that
+  moves inside it is not redrawn. It supports the `dstIn` and `dstOut`
+  blend modes, and the default, `modulate`, with white colours.
+- **Smaller additions from Flutter:** `ListView.separated`,
+  `Rect.fromCenter` and `EdgeInsetsDirectional.fromSTEB` (#71);
+  `PositionedDirectional`, which places a `Stack` child by start and end so
+  it flips in right-to-left languages (#66); and `Cubic`, for a curve of
+  your own (#70). Thanks to AbdurahmanAlmehdi.
+
+### Plugins
+
+- **`dartnative_lottie` 1.3.1.** Your app's build no longer prints the
+  plugin's log lines. Raise the constraint to `^1.3.1` to take it.
+- **`dartnative_background` 1.0.1.** Apps that `import
+  dartnative_background` in their `AppDelegate`, as its README shows, now
+  build with Xcode 27 as well as Xcode 26. Raise the constraint to
+  `^1.0.1`.
+- **`dartnative_camera` 1.0.1 and `dartnative_notifications` 1.0.1.** Their
+  iOS libraries are built again so that every Xcode can read them; the code
+  is unchanged.
+
+### Fixed
+
+- **Animations move as they do in Flutter.** `Curves.ease` and the other
+  curves now have Flutter's exact values; `Curves.ease` was a different
+  curve before. Animations the platform runs itself, such as a page change
+  in `PageView`, keep the platform's own feel. Thanks to AbdurahmanAlmehdi
+  (#70).
+- **Dialogs on iPhone.** Content that fills the card's width, such as a
+  segmented control or a row of buttons, now fits inside the card instead
+  of running past its right edge. Thanks to definev (#75).
+- **Right-to-left layouts.** `Directionality` on part of a screen now
+  flips its rows and alignments, as in Flutter. `Row`, `Column` and `Flex`
+  also take a `textDirection`, for example to keep a phone number left to
+  right in an Arabic screen. Thanks to AbdurahmanAlmehdi (#60).
+- **Text styles.** `TextStyle.copyWith` no longer drops the fields you
+  don't pass, and font features now apply, so
+  `FontFeature.tabularFigures()` lines up the numbers in a column. Thanks
+  to AbdurahmanAlmehdi (#61).
+- **`dartnative_media_picker` and `package:dartnative` import together.**
+  The framework had an older picker with the same names, so you needed
+  `hide`. Thanks to AbdurahmanAlmehdi (#64).
+- **Landscape and iPhone Duo.** A screen whose body starts with `Padding`,
+  or with a list that has `padding:`, keeps its padding beside the notch or
+  the Duo's vertical bar; the padding was lost. Tab content no longer
+  slides under the notch or the vertical bar.
+- **Scrolling on iPhone.** A list pulled past its end keeps following your
+  finger while something on screen updates, such as a timer; it used to
+  snap back at each update.
+- **The right keyboard for each `keyboardType`.** On iPhone, street
+  addresses, dates, names and passwords opened the wrong keyboard. On
+  Android, names and addresses now get their own keyboards.
+- **`showDatePicker` on Android** returned the evening of the day before
+  for users west of UTC.
+- **`AppBar` on iPhone.** Changing only the title or one button's icon now
+  updates just that, instead of rebuilding every button in the bar.
+- **Images.** `ImageCachePolicy.memoryOnly` now really keeps images off
+  the disk. `CircleAvatar.backgroundImage` takes an image, as in Flutter,
+  and shows it. `Canvas.drawImage` on iPhone uses the blend mode you set.
+- **Smaller fixes.** `GestureDetector.onScaleEnd` reports the pinch's
+  speed (it was always 0). `TweenAnimationBuilder` animates to a new end
+  value. Changing `showScrollBar`, `reverse` or `physics` after the first
+  build now takes effect. `SegmentedControl` on Android gives every
+  segment the same width and Material's text size.
+- **Older plugin versions work.** An app can stay on an older version of a
+  DartNative plugin, such as `dartnative_lottie: 1.2.0`, after upgrading;
+  `dn pub get` used to accept only the newest.
+- **Package versions agree.** Packages from pub.dev that are built into
+  DartNative, such as `http` or `collection`, now name the exact version
+  they were built with, so your lock file, your editor and the build all
+  use the same one. If your `pubspec.yaml` rules that version out,
+  `dn pub get` tells you what to change.
+
+---
+
 ## A layer above every screen, Hive 2.0, and Rive
 
 1.1.0 (2026-10-03)
