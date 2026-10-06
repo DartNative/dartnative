@@ -49,7 +49,7 @@ Sticker Grid and Stickers Keyboard.
 
 ```yaml
 dependencies:
-  dartnative_lottie: ^1.3.0   # from dartpub.dev
+  dartnative_lottie: ^1.3.1   # from dartpub.dev
 ```
 
 ```bash

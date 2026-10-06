@@ -14,6 +14,7 @@ import '../media/chatgpt_picker_demo.dart';
 import '../media/stickers_keyboard_demo.dart';
 import '../media/video_feed_demo.dart';
 import '../music/music_demo.dart';
+import '../spotify/spotify_demo.dart';
 import '../tiktok/tiktok_demo.dart';
 import '../color_picker_demo.dart';
 import '../carousel_demo.dart';
@@ -44,6 +45,22 @@ class ShowcaseTab extends StatelessWidget {
               PageRoute(
                 builder: (_) => const MusicDemo(),
                 settings: '/music',
+              ),
+            ),
+          ),
+          ShowcaseCard(
+            gradient: const [Color(0xFF1ED760), Color(0xFF0C3B1E)],
+            icon: CupertinoIcons.music_mic,
+            title: 'Spotify demo',
+            pitch: 'The now-playing screen, recreated: a looping video behind '
+                'the controls and lyrics that follow the song. Open an iPhone '
+                'Duo flat and the lyrics move beside the player.',
+            tags: const ['video player', 'synced lyrics', 'two panes'],
+            onTap: (ctx) => Navigator.push(
+              ctx,
+              PageRoute(
+                builder: (_) => const SpotifyDemo(),
+                settings: '/spotify',
               ),
             ),
           ),

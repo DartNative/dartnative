@@ -38,7 +38,7 @@ straight to the phone's gallery. The same example is in the [playground app](htt
 
 ```yaml
 dependencies:
-  dartnative_camera: ^1.0.0   # from dartpub.dev
+  dartnative_camera: ^1.0.1   # from dartpub.dev
 ```
 
 ```bash

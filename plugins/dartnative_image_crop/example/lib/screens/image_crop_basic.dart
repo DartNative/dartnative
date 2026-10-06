@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dartnative/dartnative.dart';
 import 'package:dartnative_image_crop/dartnative_image_crop.dart';
+import 'package:dartnative_media_picker/dartnative_media_picker.dart';
 
 /// Demo app for the dartnative image_crop plugin.
 ///
@@ -47,7 +48,6 @@ class _ImageCropBasicState extends State<ImageCropBasic> {
 
   Future<void> _openImage() async {
     final picked = await showMediaPicker(
-      context: context,
       type: MediaPickerType.images,
       maxSelection: 1,
     );

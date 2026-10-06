@@ -5,8 +5,7 @@
 import 'dart:async';
 import 'dart:io' show Platform;
 
-import 'package:dartnative/dartnative.dart'
-    hide showMediaPicker, MediaPickerType, MediaFile;
+import 'package:dartnative/dartnative.dart';
 import 'package:dartnative_media_picker/dartnative_media_picker.dart';
 import 'home/demo_ui.dart';
 

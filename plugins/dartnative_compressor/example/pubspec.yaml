@@ -12,6 +12,7 @@ dependencies:
   dartnative_android: ^1.0.0
   dartnative_skia: ^1.0.0
   dartnative_compressor: ^1.0.0
+  dartnative_media_picker: ^1.1.0
   dartnative_video_player: ^1.0.0
   dartnative_splash: ^1.0.0
 

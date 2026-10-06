@@ -262,6 +262,9 @@ ImageCache.configure(
 // Per-image cache policy
 Image.network(url, cachePolicy: ImageCachePolicy.memoryOnly);
 
+// An image behind a login
+Image.network(url, headers: {'Authorization': 'Bearer $token'});
+
 // Pre-warm before the screen opens
 await precacheImage(NetworkImage(heroUrl));
 

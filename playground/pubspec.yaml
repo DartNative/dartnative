@@ -90,6 +90,30 @@ dartnative:
     - assets/carousel/covers/
     # TikTok-style feed (Showcase tab): the bar's icons.
     - assets/tiktok/
+    # Spotify demo (Showcase tab): the song, the background loop, the timed
+    # lyrics and the cards' artwork.
+    - assets/spotify/
+    - assets/spotify/images/
+
+  # Spotify demo: Figtree (SIL Open Font License, assets/spotify/fonts/OFL.txt),
+  # one family per weight, named after each file's PostScript name so the same
+  # name resolves on iOS and Android.
+  fonts:
+    - family: Figtree-Regular
+      fonts:
+        - asset: assets/spotify/fonts/Figtree-Regular.ttf
+    - family: Figtree-Medium
+      fonts:
+        - asset: assets/spotify/fonts/Figtree-Medium.ttf
+    - family: Figtree-SemiBold
+      fonts:
+        - asset: assets/spotify/fonts/Figtree-SemiBold.ttf
+    - family: Figtree-Bold
+      fonts:
+        - asset: assets/spotify/fonts/Figtree-Bold.ttf
+    - family: Figtree-ExtraBold
+      fonts:
+        - asset: assets/spotify/fonts/Figtree-ExtraBold.ttf
 
 # ── dartnative_splash ─────────────────────────────────────────────────────────
 # Build-time splash screen generator.

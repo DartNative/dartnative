@@ -22,7 +22,7 @@ chat-style Communication Notifications with a sender avatar. iOS and Android.
 
 ```yaml
 dependencies:
-  dartnative_notifications: ^1.0.0   # from dartpub.dev
+  dartnative_notifications: ^1.0.1   # from dartpub.dev
 ```
 
 ```bash

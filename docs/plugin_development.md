@@ -320,6 +320,66 @@ zero compile-time coupling. Every official view plugin uses this trick.
 | Editing `Runner.xcodeproj/project.pbxproj`               | Nothing to edit                         |
 | `import dartnative_ios` in the plugin pod               | `dlsym` lookup at runtime               |
 
+### 3d. Links, user activities, quick actions and the push token
+
+iOS hands these to the app's scene and application delegates. The
+DartNative base delegates (`DartNativeSceneDelegate`, `DartNativeAppDelegate`)
+forward them to plugins, so a plugin listens without swizzling and the app
+developer forwards nothing. The listeners are C functions, resolved with
+`dlsym` like the rest of the framework:
+
+| Function | Calls the listener with |
+|:--|:--|
+| `DNSceneEventsAddConnectListener` | the scene's connection; a link, Universal Link, quick action or notification that launched the app is in its options |
+| `DNSceneEventsAddOpenURLContextsListener` | a link opened while the app runs |
+| `DNSceneEventsAddContinueUserActivityListener` | a Universal Link or Handoff activity while the app runs |
+| `DNSceneEventsAddShortcutItemListener` | a quick action chosen while the app runs; the listener returns whether it handled it |
+| `DNSceneEventsAddRemoteNotificationTokenListener` | the push token, or the registration error |
+| `DNSceneEventsRemoveListener` | takes the token an add returned |
+
+```swift
+private typealias _AddConnect = @convention(c)
+    (@escaping @convention(block) (UIScene, UISceneSession, UIScene.ConnectionOptions) -> Void) -> Int64
+private typealias _AddOpenURL = @convention(c)
+    (@escaping @convention(block) (UIScene, Set<UIOpenURLContext>) -> Void) -> Int64
+
+private func _sceneEvents<T>(_ name: String, _: T.Type) -> T? {
+    guard let s = dlsym(dlopen(nil, RTLD_NOLOAD), name) else { return nil }
+    return unsafeBitCast(s, to: T.self)
+}
+
+private var _listening = false
+
+@_cdecl("DNMyLinksStart")
+public func DNMyLinksStart() {
+    guard !_listening else { return }  // listeners outlive a hot restart
+    _listening = true
+    _ = _sceneEvents("DNSceneEventsAddConnectListener", _AddConnect.self)? { _, _, options in
+        if let url = options.urlContexts.first?.url ?? options.userActivities.first?.webpageURL {
+            initialLink = url
+        }
+    }
+    _ = _sceneEvents("DNSceneEventsAddOpenURLContextsListener", _AddOpenURL.self)? { _, contexts in
+        contexts.forEach { deliver($0.url) }
+    }
+}
+```
+
+- The connection replays to a listener added after it, so a plugin that
+  starts on its first call from Dart still receives the link that launched
+  the app; so does the last push token or registration error. Every other
+  event reaches the listeners present when it happens.
+- Listeners live for the process and outlive a hot restart: add them once.
+  A listener that calls into Dart uses the dispatcher slot (see "Calling
+  Dart from native" below).
+- Everything runs on the main thread.
+- The listener's type marks the block `@escaping`, as above: the hub keeps
+  it, and Swift stops the app when a block passed without it is kept.
+- An app that overrides one of these methods in its own `SceneDelegate` or
+  `AppDelegate` calls `super`; otherwise plugins stop receiving that event.
+- On a framework built before the hub, `dlsym` returns nil: fall back or
+  log.
+
 ---
 
 ## 4. Kotlin side — `DNAndroidPluginProvider` (Android)
@@ -542,6 +602,23 @@ Wrap the registration in a `try` against `Throwable`: an app on a framework
 built before the hooks throws at the call, and the plugin falls back (the
 video player reads the mode off the activity on a configuration change and
 leaves automatic entry to Android 12 and later, where the system does it).
+
+Intents and permission results reach plugins through `DNActivityEvents`
+(same package): `DartNativeActivity` forwards the launch intent, every new
+intent (a notification tap, a link) and every permission result. The last
+intent replays to a listener added after it, so a plugin that starts on its
+first call from Dart still receives the intent that launched the app. Keep
+the listener to remove it:
+
+```kotlin
+private val onIntent: (Intent) -> Unit = { handleIntent(it) }
+
+DNActivityEvents.addIntentListener(onIntent)
+DNActivityEvents.removeIntentListener(onIntent)  // when done
+```
+
+`addPermissionResultListener` and `removePermissionResultListener` work the
+same way.
 
 ## 5. Calling Dart from native — callback safety
 

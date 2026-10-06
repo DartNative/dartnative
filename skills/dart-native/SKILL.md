@@ -202,7 +202,8 @@ curves.
 actions:)` → `Future<int>` (tapped index); `showActionSheet`;
 `showModalSheet(context:, builder:)` (native detent sheet, Dart content);
 `showModalBottomSheet` / `showDialog` (light-dismiss
-cards); `showDatePicker`; `showMediaPicker`; `BottomSheet`.
+cards); `showDatePicker`; `showMediaPicker` (from the
+`dartnative_media_picker` plugin); `BottomSheet`.
 `ScaffoldMessenger.showSnackBar` works (routes to the native toast).
 
 **`CustomPaint`** — supported, painting through Core Graphics /

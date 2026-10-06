@@ -310,6 +310,32 @@ Remove the offending package and replace its functionality:
 
 ---
 
+## A plugin's version changed after `dn upgrade`
+
+### Symptom
+
+After `dn upgrade`, getting packages reports a new version of a DartNative
+plugin, and `dn_plugins.lock` records it.
+
+### Root cause
+
+`pubspec.yaml` says which versions of a DartNative plugin your app accepts;
+`dn_plugins.lock` records the one it uses. Getting packages never changes
+`pubspec.yaml`, and the recorded version stays until you run
+`dn pub upgrade` or change `pubspec.yaml`. One exception: if the recorded
+version cannot be used with the new DartNative release, `dn` takes the
+newest version your `pubspec.yaml` accepts and tells you.
+
+### Fix
+
+If the app works with the new version, commit `dn_plugins.lock`. To accept
+no change at all, write the exact version in `pubspec.yaml`
+(`dartnative_lottie: 1.2.1`), or on a build server run
+`dn pub get --enforce-lockfile` before the build: it stops instead of
+changing the file.
+
+---
+
 ## `setState` in gesture callbacks doesn't trigger a rebuild
 
 ### Symptom

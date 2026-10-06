@@ -1,3 +1,10 @@
+## 1.0.1
+
+* iOS: apps that `import dartnative_background` in their `AppDelegate`, as
+  this README shows, now build with Xcode 27 as well as Xcode 26. The plugin's
+  native library is built again, with the files Xcode needs to read it from
+  any newer Swift. The code is unchanged.
+
 ## 1.0.0
 
 * iOS: A cancelled periodic task no longer re-arms itself. A `BGAppRefreshTask`

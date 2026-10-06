@@ -41,8 +41,10 @@ tar -xzf dn-sdk.tar.gz -C $HOME
 
 This unpacks the SDK to a `zero` folder in your home directory. Two more steps for Windows:
 
-1. Search Windows for "environment variables" and add `%USERPROFILE%\zero\bin` to `Path`.
+1. Search Windows for "environment variables" and add `%USERPROFILE%\zero\bin` to `Path`. If Flutter is already in `Path`, keep the new entry below Flutter's (select it and click **Move Down**): the folder also holds `flutter` and `dart` commands, and the entry higher in the list wins. Use `dn` for DartNative.
 2. Install [Git for Windows](https://git-scm.com/download/win) if you don't have it — `dn` needs it.
+
+> **A space in your Windows user name** (`C:\Users\Jane Doe`) breaks the build of an app that uses a package with native code, such as `sqlite3`. Give the SDK a path without a space: open Command Prompt, run `mklink /J C:\zero "%USERPROFILE%\zero"`, and add `C:\zero\bin` to `Path` instead of `%USERPROFILE%\zero\bin`.
 
 Open a new terminal and verify:
 
@@ -125,8 +127,11 @@ dependencies:
   # dartnative_skia: ^1.0.0   # GPU canvas, about 9 MB on iPhone; two steps, see skia.md
 ```
 
-Add plugins the same way — `dn pub add dartnative_video_player`, or edit
-`pubspec.yaml` and run `dn pub get`.
+Add a package with `dn pub add`: `dn pub add http` for a pub.dev package,
+`dn pub add dartnative_video_player` for a DartNative plugin. `dn` writes the
+line into `pubspec.yaml` and gets the packages; `dn pub remove <name>` takes it
+out again. Listing a package in `pubspec.yaml` and running `dn pub get` works
+too.
 
 Besides `pubspec.lock`, `dn pub get` writes `dn_plugins.lock` with the versions
 of the DartNative plugins your app uses; commit both. When a newer framework
@@ -180,6 +185,10 @@ Installed DartNative before you had Flutter, and now `flutter` runs
 DartNative? Open the profile the installer edited (`~/.zshrc`, `~/.bashrc` or
 `~/.profile`), find the line ending in `zero/bin:$PATH`, and put your Flutter
 `bin` ahead of it. Then open a new terminal.
+
+On Windows, the order of the entries in `Path` decides the same way: in the
+environment variables editor, move Flutter's `bin` above the `zero\bin`
+entry, then open a new terminal.
 
 ---
 

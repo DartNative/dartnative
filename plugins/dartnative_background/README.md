@@ -24,7 +24,7 @@ iOS (`BGTaskScheduler`) and Android (`WorkManager`), all over FFI — no `Method
 
 ```yaml
 dependencies:
-  dartnative_background: ^1.0.0   # from dartpub.dev
+  dartnative_background: ^1.0.1   # from dartpub.dev
 ```
 
 ```bash

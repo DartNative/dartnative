@@ -20,6 +20,7 @@ import 'dart:io';
 
 import 'package:dartnative/dartnative.dart';
 import 'package:dartnative_compressor/dartnative_compressor.dart';
+import 'package:dartnative_media_picker/dartnative_media_picker.dart';
 import 'package:dartnative_video_player/dartnative_video_player.dart';
 
 class CompressorDemo extends StatefulWidget {
@@ -109,7 +110,6 @@ class _CompressorDemoState extends State<CompressorDemo> {
     setState(() => _isPicking = true);
     try {
       final files = await showMediaPicker(
-        context: context,
         type: MediaPickerType.videos,
       );
       if (files.isEmpty) {
@@ -344,7 +344,6 @@ class _CompressorDemoState extends State<CompressorDemo> {
     setState(() => _imageIsPicking = true);
     try {
       final files = await showMediaPicker(
-        context: context,
         type: MediaPickerType.images,
       );
       if (files.isEmpty) {

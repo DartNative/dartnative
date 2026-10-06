@@ -22,6 +22,7 @@ import 'dart:math' as math;
 
 import 'package:dartnative/dartnative.dart';
 import 'package:dartnative_image_crop/dartnative_image_crop.dart';
+import 'package:dartnative_media_picker/dartnative_media_picker.dart';
 
 class _CropAspectRatios {
   static const double? custom = null;
@@ -62,7 +63,6 @@ class _ImageCropFullState extends State<ImageCropFull> {
 
   Future<void> _loadImage() async {
     final picked = await showMediaPicker(
-      context: context,
       type: MediaPickerType.images,
       maxSelection: 1,
     );
