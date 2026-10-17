@@ -17,8 +17,8 @@ SplashScreen API — with no native code to write.
 
 ## Highlights
 
-- **`dart run dartnative_splash:setup`** — reads your config and writes every asset.
-- **iOS** — `LaunchScreen.storyboard` + the `LaunchImage` asset-catalog images.
+- **`dn run-tool dartnative_splash:setup`** — reads your config and writes every asset.
+- **iOS** — `LaunchScreen.storyboard` + the `LaunchImage` asset-catalog images, and the logo once more as a data asset (`DNLaunchImage`) for the runtime's launch overlay, so the decoded launch image does not stay in memory for the app's life.
 - **Android** — `launch_background` (API < 31) **and** the Android 12+ SplashScreen API
   (`values-v31` / `values-night-v31` + `android12splash.png`), with Material3 launch themes.
 - **Light + dark** — optional `dark_image` / `dark_background_color` variants.
@@ -53,7 +53,7 @@ dartnative_splash:
 Generate the native assets (re-run any time you change the config or the logo):
 
 ```bash
-dart run dartnative_splash:setup
+dn run-tool dartnative_splash:setup
 ```
 
 The Android 12 safe-zone is enforced automatically — the logo is scaled to fit a
@@ -90,7 +90,7 @@ Run it:
 cd example
 
 # 1. (Re)generate the splash assets from the config block in pubspec.yaml:
-dart run dartnative_splash:setup
+dn run-tool dartnative_splash:setup
 
 # 2. Launch on a device/emulator (Android shown; iOS works the same):
 dn run

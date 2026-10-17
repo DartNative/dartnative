@@ -18,7 +18,7 @@ dependencies:
   dartnative_skia: ^1.0.0
 
   # ─── Plugin under test ───────────────────────────────────────────────────
-  dartnative_firebase: ^1.0.0
+  dartnative_firebase: ^1.0.1
 
   # HTTP client for the "Send" button (POSTs to FCM legacy API).
   http: ^1.2.0

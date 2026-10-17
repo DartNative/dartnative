@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One image of a card's rail in advanced mode. -->
+<com.google.android.material.imageview.ShapeableImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="80dp"
+    android:layout_height="80dp"
+    android:background="#1F1F1F"
+    android:scaleType="centerCrop"
+    app:shapeAppearanceOverlay="@style/Rounded8" />

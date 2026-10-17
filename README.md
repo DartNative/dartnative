@@ -4,9 +4,13 @@
 
 # DartNative
 
-DartNative is a framework for building iOS and Android applications using Dart — with real, native platform UI instead of a custom rendering engine.
+The official repository of DartNative, a framework for building iOS and Android apps in Dart with truly native UI and behavior from a single codebase.
 
-Your Dart code drives UIKit on iOS and the Android View system on Android directly, through synchronous FFI calls on the main thread. There is no JavaScript bridge, no custom rendering engine abstracting system components, no thread hops. What you ship is a native app that happens to be written in Dart: AOT-compiled, full speed from the first frame, the platform's own look and feel, and no custom renderer between your code and the screen.
+DartNative drives UIKit on iOS and the Android View system on Android through synchronous FFI calls on the main thread. There is no JavaScript bridge, no custom rendering engine and no thread hop between your Dart code and the native views.
+
+You get the platform's own scrolling, animations, text, text input, keyboard and more, alongside Liquid Glass on iOS 26, Material 3 on Android, and full custom UI support.
+
+The result is an AOT-compiled native app that runs at full speed from the first frame, with the look, feel, and behavior users expect from each platform, all written in Dart.
 
 ---
 

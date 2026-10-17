@@ -136,7 +136,9 @@ consult it for any param-level question).
   menus.
 - **State & misc**: `setState`, `ValueNotifier` + `ValueListenableBuilder`,
   `ScrollController`, `GestureDetector` (incl. `HitTestBehavior.translucent`
-  — fully supported sibling-forwarding),
+  — fully supported sibling-forwarding), `Dismissible` (swipe a row away),
+  `RepaintBoundary` + `RenderRepaintBoundary.toImage` (capture a widget as
+  an image; `ui.` types from `package:dartnative/canvas.dart`),
   `WidgetsBinding.instance.addPostFrameCallback`,
   `WidgetsBindingObserver` (`didChangeAppLifecycleState`,
   `didChangeMetrics`, `didHaveMemoryPressure`, registered with
@@ -228,7 +230,6 @@ glass; `DynamicColor.colorScheme(brightness:)` for Material You;
 |---|---|
 | `NestedScrollView` (not planned) | `AppBar.largeTitle` covers the collapsing-header case natively; `CustomScrollView` + slivers for the rest |
 | `TabBar` (the swipeable material one) | `SegmentedControl` or `BottomNavigationBar` |
-| `Dismissible` | No swipe-to-dismiss rows yet |
 | `SelectableText` | `Text(selectable: true)` — long-press to select and copy |
 | `Offstage` ⚠️ | The offstage child is UNMOUNTED (state lost) — Flutter keeps it mounted. Use `IndexedStack` for state-preserving show/hide |
 | `Theme.of` inheritance beyond `App(theme:)` | Pass styles explicitly where the theme object isn't enough |

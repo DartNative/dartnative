@@ -503,6 +503,15 @@ existed keeps working. On iOS a view is released with its last reference when
 it leaves the hierarchy; a plugin that needs a signal there gives its view a
 `deinit`.
 
+`mayDrawIntoSurface(typeIndex)` is Android only too. A list holding a view
+that may draw into a surface of its own (a `TextureView` or a `SurfaceView`
+made once the view is laid out, as a video or a Rive artboard does) lays
+out and draws a screen of rows beyond each edge, so the surface is ready
+before its row scrolls in; those rows stay attached, and an animation in
+one keeps playing off screen. A view that draws on the canvas it is given,
+as most views do, overrides it to return `false` and spares every list that
+holds it that work. The default, `true`, is safe for any view.
+
 > **⚠️ Hosting a real SDK view (webview, map, video)?** Two non-obvious gotchas
 > make a native view *load but render BLACK* on Android (while iOS looks fine):
 > (1) it collapses to **width 0** in a `Column` (default

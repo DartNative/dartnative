@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The example's screen: a DayNight theme, so the 56 dp toolbar follows
+         the system theme like React Navigation's header (#121212 dark, white
+         light), over the list's own background. -->
+    <style name="Theme.Cards" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">#445566</item>
+        <!-- The toolbar runs under the status bar (MainActivity pads it by
+             the inset), so the bar itself draws nothing. -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">@bool/light_status_bar</item>
+    </style>
+    <style name="Circle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+    <style name="Rounded8">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+</resources>

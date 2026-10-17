@@ -1,0 +1,45 @@
+# A UI-test runner that scrolls a benchmark app by its bundle id and reads
+# Apple's scroll metric. Generate the project with `xcodegen generate` (the
+# scripts do this when it is missing).
+# Signing: export DEVELOPMENT_TEAM=<your team id> before generating.
+name: ScrollRunner
+options:
+  bundleIdPrefix: com.dartnative.benchmarks
+  deploymentTarget:
+    iOS: "17.0"
+targets:
+  ScrollRunner:
+    type: application
+    platform: iOS
+    sources: [ScrollRunner]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dartnative.benchmarks.scrollrunner
+        DEVELOPMENT_TEAM: ${DEVELOPMENT_TEAM}
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        SWIFT_VERSION: "5.9"
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_STYLE: Automatic
+  ScrollRunnerUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [ScrollRunnerUITests]
+    dependencies:
+      - target: ScrollRunner
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dartnative.benchmarks.scrollrunner.uitests
+        DEVELOPMENT_TEAM: ${DEVELOPMENT_TEAM}
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: ScrollRunner
+        SWIFT_VERSION: "5.9"
+        CODE_SIGN_STYLE: Automatic
+schemes:
+  ScrollRunner:
+    build:
+      targets:
+        ScrollRunner: all
+        ScrollRunnerUITests: [test]
+    test:
+      targets: [ScrollRunnerUITests]

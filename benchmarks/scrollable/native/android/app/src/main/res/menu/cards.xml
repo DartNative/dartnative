@@ -1,0 +1,10 @@
+<!-- The bar's Scroll button, on the Cards and Chat screens: each press
+     animates to the next target of the scroll sequence. -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/scroll"
+        android:icon="@drawable/ic_arrow_downward"
+        android:title="Scroll"
+        app:showAsAction="always" />
+</menu>

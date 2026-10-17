@@ -40,7 +40,7 @@ purchases, and entitlements go through the shipping RevenueCat SDK. iOS and Andr
 
 ```yaml
 dependencies:
-  dartnative_revenuecat: ^1.0.0   # from dartpub.dev
+  dartnative_revenuecat: ^1.0.1   # from dartpub.dev
 ```
 
 ```bash
@@ -131,6 +131,18 @@ To show packages or take a payment you also need products in the store **and** a
   to the Runner target with your offering's product ids, then select it under
   Edit Scheme ▸ Run ▸ Options ▸ **StoreKit Configuration**. Or test against an
   **App Store Connect** sandbox.
+
+### A crash report you can ignore
+
+Crash reporting may show a `NullPointerException` in
+`com.android.billingclient.api.ProxyBillingActivity.onCreate`, on
+`PendingIntent.getIntentSender()`, with no frame of your app on the stack.
+It is Google Play Billing's own purchase activity started without a purchase
+intent, which happens on modified Play Stores, rooted devices and automated
+test farms, not on retail devices with a signed-in user; RevenueCat lists it
+as a known issue. On Android 10 and later the plugin hands that activity a
+cancelled purchase instead, so the app stays up and a purchase in flight
+ends with a store error in your callback.
 
 ## Example
 

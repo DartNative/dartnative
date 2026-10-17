@@ -11,6 +11,7 @@ import 'package:dartnative/dartnative.dart';
 import 'package:dartnative_intl/dartnative_intl.dart' show Locale;
 import 'package:dartnative_shared_preferences/dartnative_shared_preferences.dart';
 import 'package:intl/intl.dart' show Intl;
+import 'package:intl/date_symbol_data_local.dart';
 
 import '../generated/l10n.dart';
 
@@ -88,7 +89,7 @@ class LanguageProvider {
     if (saved == null || saved.isEmpty) {
       await _persist(prefs, _language.value);
     }
-    await S.load(locale);
+    await _load(locale);
   }
 
   /// Switches language: loads the messages first, then tells the screens.
@@ -102,9 +103,17 @@ class LanguageProvider {
     AppLanguage language,
   ) async {
     if (language == _language.value) return;
-    await S.load(Locale(language.languageCode, language.countryCode));
+    await _load(Locale(language.languageCode, language.countryCode));
     _language.value = language;
     await _persist(prefs, language);
+  }
+
+  /// Loads a language: the messages, and the date and number symbols that go
+  /// with it. `S().today_is(...)` builds a `DateFormat`, which throws unless
+  /// the locale's symbols have been initialised, so the two belong together.
+  Future<void> _load(Locale locale) async {
+    await initializeDateFormatting(locale.languageCode);
+    await S.load(locale);
   }
 
   Future<void> _persist(SharedPreferences prefs, AppLanguage language) =>

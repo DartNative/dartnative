@@ -43,13 +43,13 @@ Sticker Grid and Stickers Keyboard.
 - **`LottieController`** — `play()` / `pause()` / `stop()` / `setProgress(0..1)` / `setLoopMode(LottieLoopMode…)`, plus a `progress` `ValueNotifier`.
 - **`LottieCache.preload([urls])`** — warm `.json` / `.zip` / `.lottie` URLs ahead of time; watch `LottieCache.progressStream`.
 - **`LottiePreWarm.warmAssets([paths], size: …, renderCache: …)`** — get bundled animations ready at the size they will show at, ahead of their first use. For `RenderCache.raster` it renders their frames ahead on both platforms, after anything on screen, so the first widget decodes instead of drawing. For the animation engine, iOS only, it builds each off-screen and keeps the built view for the first widget that shows it, on the same budgeted queue grid cells use, so warming a screen of stickers never stalls a frame.
-- **One warning per file that the engine approximates** — iOS renders through Core Animation, which simplifies a few features (a trim on a filled shape, an animated dash pattern). A file with such layers is named once in the log, whether or not logging is verbose, with the count of layers concerned. It still plays at full speed; the line tells you which asset to check. The frames renderer draws every feature as written.
+- **Every animation drawn in full**: on iOS, lottie plays an animation through Core Animation, which costs nothing per frame. A few features are beyond Core Animation, such as a trim on a filled shape or an animated dash pattern; an animation that uses one plays on lottie's other engine instead, which draws every frame on the main thread. To find those files, turn on verbose logging: each one is named once in the log, with the feature. The frames renderer draws every feature.
 
 ## Install
 
 ```yaml
 dependencies:
-  dartnative_lottie: ^1.3.1   # from dartpub.dev
+  dartnative_lottie: ^1.3.2   # from dartpub.dev
 ```
 
 ```bash

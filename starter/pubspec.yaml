@@ -34,7 +34,7 @@ dependencies:
   dartnative_url_launcher: ^1.0.0
 
   # Branded launch splash.
-  dartnative_splash: ^1.0.0
+  dartnative_splash: ^1.0.2
 
   # Used by the Apple sign in nonce (sha256).
   crypto: ^3.0.0
@@ -64,7 +64,7 @@ dartnative:
 
 # Branded launch splash + app icon. Replace assets/dn-logo.png with your logo, then:
 #   dart run tool/generate_app_assets.dart --source=assets/dn-logo.png --bg=#000000
-# (Splash only: dart run dartnative_splash:setup)
+# (Splash only: dn run-tool dartnative_splash:setup)
 dartnative_splash:
   background_color: "#000000"
   image: assets/dn-logo.png

@@ -73,7 +73,7 @@ DartNative provides Flutter-compatible scroll widgets plus a native **Fast famil
 
 ### FastList — real recycling
 
-`FastList` is a real `UITableView` / `RecyclerView`: cells recycle as they scroll off-screen, scrolling stays smooth at any length, and index jumps are exact. The item builder runs for the rows that fill the first screen and a margin beyond it, then for each row as the scroll brings it near, so the mount costs the same at any `itemCount`. By default every built cell is held for the widget's lifetime; set **`keepAliveCount`** and only a sliding window around the viewport holds content, independent of `itemCount`. Pair it with `Image.cacheWidth`/`cacheHeight` (decode at cell size) for image lists.
+`FastList` is a real `UITableView` / `RecyclerView`: cells recycle as they scroll off-screen, scrolling stays smooth at any length, and index jumps are exact. The item builder runs for the rows that fill the first screen, for a margin beyond them right after the first frame, then for each row as the scroll brings it near, so the mount costs the same at any `itemCount`. By default every built cell is held for the widget's lifetime; set **`keepAliveCount`** and only a sliding window around the viewport holds content, independent of `itemCount`. Pair it with `Image.cacheWidth`/`cacheHeight` (decode at cell size) for image lists. Add **`recycleItems: true`** and the rows the window lets go are reused for the rows that scroll in, as the platform reuses its cells. On Android, rows built ahead of the viewport wait in the window with their drawing already done, so the frame that scrolls a row in only puts it in place.
 
 **Programmatic scrolling:**
 
@@ -137,7 +137,7 @@ Flutter draws its navigation transitions using Impeller. `CupertinoPageRoute` an
 | Timing curve | Approximated cubic bezier | Exact `UINavigationController` spring |
 | Interactive back gesture (iOS) | Dart pan recognizer + manual animation | `UIScreenEdgePanGestureRecognizer` (system) |
 | Navigation bar | Custom-drawn `CupertinoNavigationBar` | Real `UINavigationBar` + `UIBarButtonItem` |
-| 120 Hz ProMotion | Vsync-bound, can drop frames | GPU compositor driven, no per-frame CPU cost |
+| 120 Hz ProMotion | Vsync-bound, can drop frames | GPU compositor driven, no per-frame CPU cost; a moving list asks the display for its full rate, as Flutter and Reanimated do, where a plain UIKit scroll view lets a slowing fling fall to 60 Hz; the hold ends as the fling slows to a crawl, so the panel slows down with the content |
 | Status bar style | Manual override per route | Automatic per-VC `preferredStatusBarStyle` |
 
 ### Push / pop

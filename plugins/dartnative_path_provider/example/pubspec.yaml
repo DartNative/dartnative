@@ -22,7 +22,7 @@ dev_dependencies:
 dartnative_skia:
   variant: full
 
-# Run:  dart run dartnative_splash:setup
+# Run:  dn run-tool dartnative_splash:setup
 dartnative_splash:
   background_color: "#000000"
   image: assets/dn-logo.png

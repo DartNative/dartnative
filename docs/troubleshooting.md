@@ -336,6 +336,38 @@ changing the file.
 
 ---
 
+## "The method 'showMediaPicker' isn't defined" after upgrading
+
+### Symptom
+
+An app that compiled before `dn upgrade` now fails with
+
+```
+Error: The method 'showMediaPicker' isn't defined for the type '_MyScreenState'.
+Error: The getter 'MediaPickerType' isn't defined for the type '_MyScreenState'.
+```
+
+The error names the class that makes the call, not a missing import, so it
+can point at a `part` file whose imports live in another file.
+
+### Root cause
+
+`showMediaPicker`, `MediaPickerType` and `MediaFile` used to come from
+`package:dartnative`. They now come only from the `dartnative_media_picker`
+plugin, and the plugin's `showMediaPicker` takes no `context:` argument.
+
+### Fix
+
+1. Add the plugin: `dn pub add dartnative_media_picker`.
+2. Import `package:dartnative_media_picker/dartnative_media_picker.dart`
+   in the file that holds the imports (for a `part`, its parent file).
+3. Drop the `context:` argument: `showMediaPicker(type: ...)`.
+
+The next `dn run` or `dn build` installs the plugin's native side on both
+platforms; nothing else to run.
+
+---
+
 ## `setState` in gesture callbacks doesn't trigger a rebuild
 
 ### Symptom
@@ -462,10 +494,10 @@ generator scales images as `@Nx = source × N/4`.
 
 iOS shows the launch screen only until the window is up, before the Dart side
 has drawn anything. DartNative keeps the splash on screen until the first frame
-is ready, with a short minimum display time and the window background matched
-to the splash colour, so there is no gap to fill by hand.
+is ready, with the window background matched to the splash colour, so there is
+no gap to fill by hand.
 
-No manual configuration is needed — run `dart run dartnative_splash:setup`
+No manual configuration is needed — run `dn run-tool dartnative_splash:setup`
 after changing splash config in `pubspec.yaml`, then rebuild.
 
 ---

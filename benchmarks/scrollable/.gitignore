@@ -1,0 +1,9 @@
+# Legend List's checkout and its build: cloned and built by react_native/setup.sh.
+react_native/.work/
+# Screen recordings are large; the numbers drawn from them are kept, and the
+# Scroll button recordings play from the links in RESULTS.md.
+assets/recordings/
+# Instruments traces and their exports: large, and the numbers drawn from them are kept.
+**/*.trace/
+**/*.trace.*.xml
+__pycache__/

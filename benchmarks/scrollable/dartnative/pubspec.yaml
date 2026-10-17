@@ -1,0 +1,24 @@
+name: scrollable_benchmark
+description: The Cards and Chat screens of the scrolling benchmark, in DartNative.
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: ^3.5.0
+
+# `dn pub get` fetches these packages from dartpub.dev; no token is needed
+# to build.
+dependencies:
+  dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  dartnative_lottie: ^1.3.2
+
+dev_dependencies:
+  lints: ^6.0.0
+
+dartnative:
+  uses-material-design: false
+  assets:
+    - assets/chat.json
+    - assets/stickers/

@@ -1,3 +1,10 @@
+## 1.0.2
+
+* iOS: simulator builds work again with Xcode 26. 1.0.1's native library was
+  built by a tool that left its simulator half unaligned, which Xcode 26
+  refuses to link ("Slice is not page aligned"); it is built again. The code
+  is unchanged.
+
 ## 1.0.1
 
 * iOS: apps that `import dartnative_background` in their `AppDelegate`, as

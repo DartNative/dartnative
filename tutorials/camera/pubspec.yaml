@@ -12,8 +12,8 @@ dependencies:
   dartnative: ^1.0.0
   dartnative_ios: ^1.0.0
   dartnative_android: ^1.0.0
-  dartnative_camera: ^1.0.0
-  dartnative_audio: ^1.0.0
+  dartnative_camera: ^1.0.2
+  dartnative_audio: ^1.0.1
   dartnative_compressor: ^1.0.0
   dartnative_image_crop: ^1.0.0
 

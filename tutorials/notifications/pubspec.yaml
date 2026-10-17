@@ -12,8 +12,8 @@ dependencies:
   dartnative: ^1.0.0
   dartnative_ios: ^1.0.0
   dartnative_android: ^1.0.0
-  dartnative_notifications: ^1.0.0
-  dartnative_firebase: ^1.0.0
+  dartnative_notifications: ^1.0.2
+  dartnative_firebase: ^1.0.1
 
 dev_dependencies:
   lints: ^6.0.0

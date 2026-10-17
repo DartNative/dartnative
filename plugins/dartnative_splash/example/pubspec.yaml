@@ -1,7 +1,7 @@
 name: splash_example
 description: >
   Example for dartnative_splash. Shows the generated native splash screen,
-  then lands on a bare welcome screen. Run `dart run dartnative_splash:setup`
+  then lands on a bare welcome screen. Run `dn run-tool dartnative_splash:setup`
   to (re)generate the splash assets from the config block below.
 publish_to: 'none'
 version: 0.1.0+1
@@ -17,13 +17,13 @@ dependencies:
 
 dev_dependencies:
   lints: ^6.0.0
-  # Build-time tool under test — provides `dart run dartnative_splash:setup`.
-  dartnative_splash: ^1.0.0
+  # Build-time tool under test — provides `dn run-tool dartnative_splash:setup`.
+  dartnative_splash: ^1.0.2
 
 dartnative_skia:
   variant: full
 
-# Consumed by `dart run dartnative_splash:setup` to generate the native
+# Consumed by `dn run-tool dartnative_splash:setup` to generate the native
 # iOS + Android splash assets (including the Android 12 SplashScreen API).
 dartnative_splash:
   background_color: "#000000"

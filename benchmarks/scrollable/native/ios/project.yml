@@ -1,0 +1,74 @@
+# XcodeGen project for the UIKit twin of the Cards and Chat screens.
+#   DEVELOPMENT_TEAM=<team id> xcodegen generate
+name: Cards
+# The Chat screen's stickers: lottie-ios, the version React Native's
+# lottie-react-native 7.3.8 uses.
+packages:
+  Lottie:
+    url: https://github.com/airbnb/lottie-spm
+    exactVersion: 4.6.0
+options:
+  bundleIdPrefix: com.dartnative.benchmarks
+  deploymentTarget:
+    iOS: "16.0"
+settings:
+  DEVELOPMENT_TEAM: ${DEVELOPMENT_TEAM}
+  CODE_SIGN_STYLE: Automatic
+targets:
+  Cards:
+    type: application
+    platform: iOS
+    sources:
+      - Cards
+      # The auto-scroll driver the harness launches the app with
+      # (harness/README.md); it stays idle in every other launch.
+      - ../../harness/ios/autoscroll/BenchAutoScroll.m
+      # The Chat screen's messages and stickers, shared with the other apps.
+      - path: ../../assets/chat.json
+        buildPhase: resources
+      - path: ../../assets/stickers
+        type: folder
+        buildPhase: resources
+    dependencies:
+      - package: Lottie
+    info:
+      path: Cards/Info.plist
+      properties:
+        CFBundleDisplayName: CardsList (Swift)
+        CADisableMinimumFrameDurationOnPhone: true
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: Default Configuration
+                UISceneDelegateClassName: $(PRODUCT_MODULE_NAME).SceneDelegate
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+    # Each screen is its own app, so all of them can sit on one phone.
+    # BENCH_SCREEN (cards, the default, chat or empty) picks the screen, the
+    # app's id (com.dartnative.benchmarks.scrollable.uikit.chat) and its
+    # name, which gives the screen and the framework, as in the other apps:
+    # "ChatList (Swift)".
+    #   xcodebuild ... BENCH_SCREEN=chat build
+    postBuildScripts:
+      - name: Name the App
+        basedOnDependencyAnalysis: false
+        inputFiles:
+          - $(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)
+        script: |
+          case "$BENCH_SCREEN" in
+            chat) name=Chat ;;
+            empty) name=Empty ;;
+            *) name=Cards ;;
+          esac
+          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName ${name}List (Swift)" "$TARGET_BUILD_DIR/$INFOPLIST_PATH"
+    settings:
+      BENCH_SCREEN: cards
+      PRODUCT_BUNDLE_IDENTIFIER: com.dartnative.benchmarks.scrollable.uikit.$(BENCH_SCREEN)
+      # The compile condition each screen's code is built under.
+      BENCH_CONDITION_cards: ""
+      BENCH_CONDITION_chat: CHAT
+      BENCH_CONDITION_empty: EMPTY
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) $(BENCH_CONDITION_$(BENCH_SCREEN))
+      # The naming script edits the app's Info.plist in place.
+      ENABLE_USER_SCRIPT_SANDBOXING: NO
