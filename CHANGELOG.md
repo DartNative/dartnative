@@ -3,6 +3,228 @@
 <!-- Generated file: edits here are overwritten on the next release.
      The changelog is maintained at https://dartnative.com/changelog -->
 
+## Performance improvements, Dismissible, widget capture, drawer and native image encoding
+
+1.3.0 (2026-10-17)
+
+This release brings performance improvements on both platforms,
+`Dismissible`, widget capture, a native drawer on iPhone, and PNG and JPEG
+encoding by the phone's own encoder. Simulator builds work again on
+Xcode 26.
+
+**How to update.** Run `dn upgrade`. This release needs a new version of
+`dn`, so `dn upgrade` prints the install command for your system. Run that
+command, then run `dn upgrade` again.
+
+**Code push.** This release is a new framework build on a new engine.
+After you update, the fixes you send reach only apps released with this
+version. Make a new release of your app before you send fixes.
+
+**A change that can affect your code:**
+
+- If your app defines its own class named `ElevatedButton`, `TextButton`,
+  `OutlinedButton` or `FilledButton`, that name now also comes from
+  `package:dartnative`. Rename your class, or hide DartNative's:
+  `import 'package:dartnative/dartnative.dart' hide TextButton;`.
+
+### New
+
+- **A native drawer on iPhone.** On the root screen, `Scaffold.drawer` is
+  now the drawer that UIKit apps use. The panel sits behind the app, and
+  opening it slides the whole screen aside, navigation bar and tab bar
+  included. The app bar stays the system bar, so its buttons morph into the
+  next screen's buttons when you push a screen, and back when you pop it,
+  also in an app with a drawer. Both styles remain: `DrawerStyle.push`, and
+  `slideOver` with its shadow and rounded corners. Swipe to open, tap to
+  close, `Scaffold.of(context).openDrawer()` and `onDrawerChanged` work as
+  before. You do not need to change your app. A screen pushed on top that
+  has its own drawer keeps that drawer.
+- **`Dismissible`.** Flutter's widget for swiping a row away. Drag a row
+  and its `background` shows in the space it leaves. If you release the row
+  past its threshold, or fling it, it slides off, unless `confirmDismiss`
+  keeps it. The list then closes the gap and calls `onDismissed`. All of
+  Flutter's fields work, in a `ListView`, a `FastList` or anywhere else.
+- **Capture a widget as an image.** Wrap the widget in a `RepaintBoundary`
+  with a `GlobalKey`, then call
+  `(key.currentContext!.findRenderObject() as RenderRepaintBoundary).toImage(pixelRatio: 3)`,
+  as in Flutter. Import `package:dartnative/canvas.dart` as `ui` where
+  Flutter code imports `dart:ui`.
+- **Native image encoding, PNG and JPEG.** `image.toByteData(format:
+  ui.ImageByteFormat.png)` gives a PNG file, as in Flutter.
+  `image.toJpeg(quality: 90)` gives a JPEG file, at a quality from 0 to
+  100. Flutter has no JPEG encoder, so Flutter apps add a package for it.
+  We built it into DartNative, because encoding an image, like decoding
+  one, is a core feature that should not need a plugin. The phone's own
+  encoder makes both files, without holding up the screen. On an iPhone 16 Pro
+  and a Xiaomi 11 Lite, a JPEG took 2 to 10 ms, about four times faster
+  than Flutter with the `image` package. A PNG took 14 to 27 ms, three to
+  four times faster than Flutter's own encoder. On iPhone the PNG is made
+  for speed rather than size, so use a JPEG when you need a small file. A
+  JPEG has no transparency: transparent areas come out white.
+- **`context.size` and `findRenderObject()` work on any widget.** In a
+  `StatelessWidget` or a `StatefulWidget` they now answer as in Flutter.
+  Before, they returned null.
+- **`FastList.cacheExtent`.** Keeps rows built up to a distance in points
+  beyond the screen, as in Flutter. Unlike `keepAliveCount`, which counts
+  rows, it holds the same memory whatever your rows contain.
+- **Reused rows in `FastList`.** Set `recycleItems: true` together with
+  `keepAliveCount` or `cacheExtent`. Rows that leave the screen are then
+  reused for the rows that scroll in, as the platform's own lists do.
+- **The buttons come with the main import.** `ElevatedButton`,
+  `TextButton`, `OutlinedButton` and `FilledButton` now come with
+  `package:dartnative/dartnative.dart`, so that one import is enough for a
+  new app or a ported Flutter app. `flutter_compat.dart` still works. It is
+  now the same library, marked as deprecated, so your editor suggests the
+  new import.
+- **`IconButton` shows a press on Android.** Pressing it draws the
+  platform's ripple, the circle that toolbar icons show under your finger.
+- **`Interval`.** Flutter's curve that runs over part of an animation.
+- **The soft scroll edge on iPhone.** Under a bar with a title, iOS 27
+  draws a hard edge with a line, where iOS 26 faded the content softly. To
+  keep the soft fade, use
+  `Scaffold(ios: ScaffoldIOSConfig(scrollEdgeEffectStyle: ScrollEdgeEffectStyle.soft))`.
+  It applies to the screen's lists and scroll views where they run under a
+  bar: a clear or frosted app bar with `extendBodyBehindAppBar`, or the tab
+  bar with `extendBody`. `hard` asks for the hard edge. The default,
+  `automatic`, leaves the choice to the system.
+- **An adaptive launcher icon for new Android apps.** The logo fills the
+  phone's icon shape and follows themed icons. Before, it was a square
+  shrunk inside a white circle. To give an existing app the same icon, copy
+  `packages/flutter_tools/templates/app/tool/generate_app_assets.dart.copy.tmpl`
+  from the folder where DartNative is installed (`~/zero` by default) over
+  your app's `tool/generate_app_assets.dart`. Then run it again:
+  `dn pub run tool/generate_app_assets.dart --source=assets/your-logo.png`.
+  The logo needs a transparent background. `--bg=#RRGGBB` sets the colour
+  behind it.
+- **For plugin authors on Android: `mayDrawIntoSurface`.** If your plugin's
+  view draws onto the canvas it is given, return `false` from your
+  provider's `mayDrawIntoSurface`, and lists that hold the view do less
+  work. The default, `true`, keeps a video or a Rive animation ready before
+  its row scrolls in.
+- **Benchmarks.** A new `benchmarks` folder in the repository compares
+  scrolling in DartNative with each platform's own code and with React
+  Native, on an iPhone and an Android phone.
+
+### Performance
+
+- **Faster launch on iPhone.** Apps show their first screen sooner. The
+  launch logo no longer stays for a minimum time: it disappears as soon as
+  the first screen is ready. To keep a minimum time, set
+  `DNSplashMinDuration` in `Info.plist`, in milliseconds.
+- **Faster launch on Android.** Apps show their first screen sooner. The
+  launch logo's minimum time (`dartnative.splash.min_duration_ms` in the
+  manifest) now works on Android 12 and later.
+- **Screens with a list appear sooner.** A screen with a `FastList` shows
+  its first rows sooner when it opens.
+- **Smoother scrolling in `FastList`.** Lists scroll more smoothly on both
+  platforms.
+- **120 Hz while a list moves on iPhone.** A moving list runs at the
+  display's full refresh rate, and slows down with the content as the
+  platform's own lists do.
+- **Lists use less memory.** Lists hold fewer rows in memory on both
+  platforms, including a list inside each row of another list.
+- **Memory is freed while the app is idle.** Unused memory is released
+  when the app is idle, never during a scroll.
+- **Images appear sooner on iPhone.** Network images are ready sooner, and
+  an image shown in several places at once is downloaded only once.
+
+### Plugins
+
+To get a new plugin version, raise its constraint in `pubspec.yaml` or run
+`dn pub upgrade`.
+
+- **`dartnative_lottie` 1.3.2.** A chat full of stickers scrolls more
+  smoothly and uses less memory on both platforms. On Android, a sticker
+  that leaves the screen stops playing.
+- **`dartnative_background`, `dartnative_camera`,
+  `dartnative_notifications` and `dartnative_revenuecat` 1.0.2.** Simulator
+  builds work with Xcode 26 again (see Fixed). `dartnative_camera` also
+  prints its log lines only when verbose logging is on.
+- **`dartnative_audio`, `dartnative_connectivity`, `dartnative_firebase`,
+  `dartnative_permissions` and `dartnative_system` 1.0.1,
+  `dartnative_media_picker` 1.1.1, `dartnative_onnxruntime` 1.6.5 and
+  `dartnative_share` 1.0.3.** They no longer print log lines at launch in
+  an Android release build.
+- **`dartnative_splash` 1.0.2.** On iPhone, apps use less memory once
+  they have started. To get this, run `dn run-tool dartnative_splash:setup`
+  in your app again.
+
+### Fixed
+
+- **Simulator builds work again on Xcode 26.** Since 1.2.0, building for
+  the iOS simulator with Xcode 26 failed with "Slice is not page aligned".
+  If your app uses `dartnative_background`, `dartnative_camera`,
+  `dartnative_lottie`, `dartnative_notifications` or
+  `dartnative_revenuecat`, also run `dn pub upgrade` after you update,
+  because their new versions carry the same fix.
+- **Android release builds no longer print DartNative's startup lines.**
+  They now print only when verbose logging is on, as on iPhone. The plugin
+  versions listed above stop their own launch lines too, and
+  `dn pub upgrade` brings them.
+- **Clean installs on Linux.** The SDK download contained a hidden macOS
+  file next to every file. On Linux these became real files in the SDK,
+  and `tar` printed a warning for each one. The new download has none, and
+  installing again removes the old ones.
+- **Scrolling to an item lands on it.** On Android, `scrollToIndex` and
+  `jumpToItem` now place the item where `alignment` asks, as on iPhone. On
+  both platforms, the list finishes the move even when rows it passes
+  change size. On Android, an animated scroll to an item
+  a few tall rows away goes straight to it, without passing it and coming
+  back. In a reversed list, such as a chat, the last part of the scroll
+  glides as in the platform's own reversed list. The scroll also starts
+  immediately: on a screen of heavy rows, the list used to wait up to half
+  a second after the tap.
+- **`cacheWidth` and `cacheHeight` work on every image.** `Image.asset`,
+  `Image.file` and `Image.memory` now decode at the size you give, as
+  `Image.network` already did, so a large photo shown small uses little
+  memory. On Android, the longest side now comes out at that size, as on
+  iPhone. Before, a wide photo came out about a third larger than asked.
+- **An image fills a box that is fixed on both sides.** An image in a
+  `Container` with a height, in a `Column` that stretches its children, or
+  in a `ListView`, kept its own proportions and sat at the top of the box.
+  It now fills the box, and `fit` places the picture inside it, centred,
+  as in Flutter. When only the height is fixed, as in a `Row`, the image
+  keeps its proportions.
+- **`Image.memory` on Android, in a box that takes its size from the
+  image.** The image never appeared. It now shows at its own size, as
+  `Image.file` and `Image.asset` do.
+- **An item builder gets the list's context.** In `ListView.builder`,
+  `FastList`, the grids and the sliver lists, the context passed to
+  `itemBuilder` had nothing above it. So `Theme.of(context)` returned the
+  default theme, and `Navigator.of(context)`, `showDialog` and `showAlert`
+  failed. It is now the list's own context, as in Flutter.
+- **`ListTile.onTap` and `InkWell` work.** `ListTile` accepted `onTap` but
+  never called it, and `InkWell` did not show its child. Both now respond
+  to a press with the platform's feedback: the grey highlight of a table
+  row on iPhone, the ripple of a Material list item on Android. `ListTile`
+  adds `onLongPress` and `enabled`, and `InkWell` accepts `splashColor`,
+  `highlightColor` and `borderRadius`.
+- **`ListTile` has Material's height on Android.** A one-line tile was
+  48 dp tall, while Flutter's and Material's are 56 dp. It is now at least
+  56 dp, or 72 dp with a subtitle, with its content centred, as in Flutter.
+  On iPhone it keeps the 70 pt row of a plain list.
+- **`ElevatedButton` looks like Material's elevated button on Android.** It
+  used to be filled with the theme colour. It now has the light surface
+  colour, a label in the theme colour and a soft shadow, as in Flutter. On
+  iPhone it stays a filled button. `Button(variant: ButtonVariant.elevated)`
+  gives the same look.
+- **Back returns to the previous screen on Android.** On a screen pushed
+  without a route name, for example with
+  `Navigator.push(context, PageRoute(builder: ...))`, the system Back
+  gesture or button closed the app. It now returns to the screen below, as
+  it already did for named screens.
+- **A sideways drag in a list keeps the touch on Android.** A horizontal
+  drag on a row that drifted slightly up or down was taken over by the
+  list, which scrolled while the row snapped back. A drag that starts in
+  its own direction now keeps the touch, as on iPhone. A drag's end speed
+  is now the finger's speed as it lifts, not its average speed over the
+  whole drag.
+- **`CustomPaint` and `Hero` with `flutter_compat.dart`.** That import gave
+  placeholder widgets that asked for Skia. It now gives the native widgets.
+- **TalkBack reads the names of app bar buttons on Android.**
+
+---
+
 ## iPhone Duo, accessibility, InteractiveViewer, fixes and new feature requests
 
 1.2.0 (2026-10-06)
