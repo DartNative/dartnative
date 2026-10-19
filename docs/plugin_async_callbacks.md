@@ -302,13 +302,63 @@ Timer.periodic(const Duration(milliseconds: 50), (_) {
 
 ### Option 1 — Native port (`Dart_PostCObject`)
 
-Dart hands native a **port id** (`ReceivePort().sendPort.nativePort`, an
-`int64`); native posts messages to it. Posting to a closed port is a harmless
-no-op, so this is safe across hot restart **and worker isolates** by
-construction. Cost: wiring `dart_api_dl.h` + `Dart_InitializeApiDL` into your
-native build, and there is no in-tree worked reference yet. It is the **only**
-safe channel for worker-isolate delivery; on the main isolate the slot pattern
+Dart hands native a **port id** (`RawReceivePort().sendPort.nativePort`, an
+`int64`); native posts messages to it with `Dart_PostCObject`. Posting to a
+closed port is a harmless no-op, so this is safe across hot restart **and
+worker isolates** by construction. Native needs no link to the Dart VM: Dart
+passes the function's address once (`NativeApi.postCObject`), and native
+calls through it; only the `dart_native_api.h` header is needed, for the
+`Dart_CObject` types. A large result travels without a copy as external typed
+data (`Dart_CObject_kExternalTypedData` with a free callback): Dart gets a
+`Uint8List` over the native buffer, and the VM frees it when the list is
+collected or when the message is never delivered. It is the **only** safe
+channel for worker-isolate delivery; on the main isolate the slot pattern
 gives the same safety with less machinery.
+
+In code, with `_init` and `_start` standing for your plugin's own FFI
+functions:
+
+```dart
+// Once per isolate: give native the VM's post function.
+_init(NativeApi.postCObject.cast());
+
+final port = RawReceivePort();
+port.handler = (Object? message) {
+  final bytes = message as Uint8List; // the native buffer, not a copy
+  port.close(); // once no more messages are due
+};
+_start(port.sendPort.nativePort); // native posts the result here
+```
+
+```c
+#include <stdlib.h>
+
+#include "dart_native_api.h"
+
+typedef bool (*PostFn)(Dart_Port, Dart_CObject*);
+static PostFn post;
+
+void my_init(void* postCObject) { post = (PostFn)postCObject; }
+
+static void free_buffer(void* isolate_data, void* peer) { free(peer); }
+
+// From any thread, when the result is ready. data comes from malloc.
+void deliver(Dart_Port port, uint8_t* data, intptr_t length) {
+  Dart_CObject m;
+  m.type = Dart_CObject_kExternalTypedData;
+  m.value.as_external_typed_data.type = Dart_TypedData_kUint8;
+  m.value.as_external_typed_data.length = length;
+  m.value.as_external_typed_data.data = data;
+  m.value.as_external_typed_data.peer = data;
+  m.value.as_external_typed_data.callback = free_buffer;
+  if (!post(port, &m)) free(data); // port closed: the buffer is still yours
+}
+```
+
+`dart_native_api.h` and the `dart_api.h` it includes come with your
+DartNative install, in `bin/cache/dart-sdk/include/` of the folder `dn` is
+installed in (`~/zero/bin/cache/dart-sdk/include/` by default). Copy both
+into your plugin's native sources: they match the Dart VM your `dn` runs.
 
 ---
 
