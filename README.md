@@ -125,7 +125,7 @@ For a detailed walkthrough of the architecture, see [docs/architecture.md](docs/
 
 DartNative runs on **Zero**, our fork of [flutter_zero](https://github.com/knopp/flutter_zero) by Matej Knopp: the Flutter engine with its rendering stack removed and Dart running on the platform's main thread instead of a background isolate. What remains is the Dart VM in AOT mode, `dart:ffi`, and the Flutter toolchain. DartNative builds its widgets and platform bindings on that foundation.
 
-DartNative CodePush is also built into Zero: `dn release` ships a build, and `dn patch` sends a Dart fix through the [dartpub.dev](https://dartpub.dev) server to apps that are already installed, picked up on the next launch. It works the same on iOS and Android. The service is still experimental and not open to the public yet — write to dev@dartnative.com to hear when it opens up.
+DartNative CodePush is also built into Zero: `dn release` ships a build, and `dn patch` sends a Dart fix through the [dartpub.dev](https://dartpub.dev) server to apps that are already installed, picked up on the next launch. It works the same on iOS and Android.
 
 None of this would exist without the [Dart team at Google](https://dart.dev) — the language, the AOT compiler, the FFI layer, and the tooling that makes all of this work are their foundation. Dart's AOT mode eliminates JIT warmup and GC pauses from recompilation, and its `dart:ffi` layer makes the synchronous native bridge possible with essentially zero overhead per call.
 

@@ -612,7 +612,7 @@ Two plugins have new versions: `dartnative_share` 1.0.1 and
 Preview (2026-09-26)
 
 This is a large release:
-- **Code push** arrives as a preview: send a fix straight to phones,
+- **Code push** arrives: send a fix straight to phones,
   without a new release to the App Store and Google Play.
 - **Platform parity:** your widgets now look the way the platform's own
   widgets look, on iPhone and on Android, with nothing set on them.
@@ -634,7 +634,7 @@ Two plugins have new versions that need this release:
 `dartnative_video_player` 1.3.0 and `dartnative_lottie` 1.3.0. Run
 `dn pub upgrade` in your app to get them.
 
-### Code push, as a preview
+### Code push
 
 Send a fix directly to phones, without a release to the App Store and
 Google Play. Every plan has it.
@@ -644,11 +644,9 @@ Google Play. Every plan has it.
 3. The phones running that release download the fix on their own, and the
    app is correct the next time it starts: no app store, no reinstall.
 
-Code push is experimental for now. `dn release` and `dn patch` run only
-after you opt in with `export DN_CODE_PUSH_EXPERIMENTAL=1`. The code push
-tutorial in the public repo, `tutorials/code_push`, is an app with four
-deliberate mistakes that you release, fix and watch change on a phone,
-in about 20 minutes.
+The code push tutorial in the public repo, `tutorials/code_push`, is an
+app with four deliberate mistakes that you release, fix and watch change
+on a phone, in about 20 minutes.
 
 ### New
 

@@ -3,9 +3,6 @@
 Send a fix directly to phones, without a release to App Store and Google Play.
 Every plan has it.
 
-> **Read this first.** Code push is experimental. The two commands refuse
-> to run until you opt in (see Before you start).
-
 This app ships four deliberate mistakes: a total that forgets the tax, a
 typo in the screen title, a total drawn far too small, and the wrong icon
 next to "Paid". You release it, install it on a phone, fix the mistakes in
@@ -33,15 +30,6 @@ It takes about 20 minutes, most of it build time.
   download a fix after the daily licence check your key allows. This app
   is not covered by the free demo licence; every build you make carries
   the key you configured.
-- **Opt in to the experiment**, in the shell you will use for every
-  command below:
-
-  ```sh
-  export DN_CODE_PUSH_EXPERIMENTAL=1
-  ```
-
-  Without it, `dn release` and `dn patch` stop with "Code push is not
-  available yet".
 - **Change the app id to one of your own**, on both platforms, before you
   run `dn release`. An app id belongs to the first account that ships it,
   so the id this tutorial comes with cannot work for everyone who tries
@@ -310,8 +298,6 @@ like adding a class.
 
 ## If something does not look right
 
-- **"Code push is not available yet"**: export `DN_CODE_PUSH_EXPERIMENTAL=1`
-  in this shell.
 - **"The update service does not recognise this licence key"**: run
   `dn config --license-key` again with the key from your account.
 - **A line says the app's id belongs to another DartNative account**: the
