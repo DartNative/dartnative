@@ -290,7 +290,7 @@ dn pub get
 dn run
 ```
 
-No account or key needed — the playground is an official demo, free to run.
+No account or key needed: the playground is an official demo, free to run.
 `dn` is the DartNative CLI; see
 [docs/getting_started.md](docs/getting_started.md) to install it.
 

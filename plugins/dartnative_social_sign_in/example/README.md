@@ -25,7 +25,7 @@ to *your* Apple team and Google Cloud project. Out of the box the buttons appear
 and report their missing configuration when tapped. Wire up whichever provider
 you want to try, per the next section.
 
-The example is an official demo — free to run, no license setup.
+The example is an official demo: free to run, no license setup.
 
 Always use **`dn`** for run/build/pub commands — not the underlying SDK CLI.
 

@@ -76,7 +76,7 @@ dn pub get
 dn run -d <device-id>
 ```
 
-The example is an official demo — free to run, no license setup. Always use
+The example is an official demo: free to run, no license setup. Always use
 `dn` for run/build/pub commands.
 
 ## Credits & license

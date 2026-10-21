@@ -123,7 +123,7 @@ dn pub get
 dn run -d <device-id>
 ```
 
-The example is an official demo — free to run, no license setup.
+The example is an official demo: free to run, no license setup.
 
 ## Credits & license
 

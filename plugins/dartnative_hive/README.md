@@ -129,7 +129,7 @@ dn pub get
 dn run -d <device-id>
 ```
 
-The example is an official demo — free to run, no license setup. Always use `dn` (not the
+The example is an official demo: free to run, no license setup. Always use `dn` (not the
 underlying SDK CLI) for run/build/pub commands.
 
 ## Credits & license

@@ -159,7 +159,7 @@ cp .dnkeys.example .dnkeys      # then add REVENUECAT_IOS_API_KEY / REVENUECAT_A
 dn pub get
 ```
 
-The example is an official demo — free to run, no license setup:
+The example is an official demo: free to run, no license setup.
 
 ```bash
 # Android — the simplest loop; drives Play Billing directly:
