@@ -87,5 +87,5 @@ Adapted from [`flutter-rsa`](https://github.com/jerson/flutter-rsa) (MIT) and
 [`native-crypto-flutter`](https://github.com/hugo-pcl/native-crypto-flutter) (MIT),
 reworked to FFI.
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues on
-the plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

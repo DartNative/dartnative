@@ -119,5 +119,5 @@ Inspired by the `.env` convention popularised by
 works in DartNative (no Flutter engine / `rootBundle`). Reading is backed by the
 DartNative framework (iOS app bundle / Android `AssetManager`).
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues on the
-plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

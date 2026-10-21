@@ -79,5 +79,5 @@ API mirrors
 EncryptedSharedPreferences on Android — over FFI, built on the DartNative framework's
 runtime (FFI loader, and the Android application context).
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues on the
-plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

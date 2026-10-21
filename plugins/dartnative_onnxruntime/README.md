@@ -130,5 +130,5 @@ Ported from
 [`flutter_onnxruntime`](https://github.com/masicai/flutter_onnxruntime)
 (MIT), reworked to FFI with CoreML and Android JNI backends.
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues on
-the plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

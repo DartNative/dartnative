@@ -185,5 +185,5 @@ Ported from [`purchases_flutter`](https://github.com/RevenueCat/purchases-flutte
 by RevenueCat, Inc. (MIT), on top of PurchasesHybridCommon — the RevenueCat SDK
 does the real work on both platforms.
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues
-on the plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

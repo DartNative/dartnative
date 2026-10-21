@@ -136,5 +136,5 @@ The frames renderer draws with Samsung's [`rlottie`](https://github.com/Samsung/
 with [LZ4](https://github.com/lz4/lz4) (BSD 2-Clause); all reproduced in the plugin's
 `THIRD_PARTY_NOTICES`.
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues on the
-plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

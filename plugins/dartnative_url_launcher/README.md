@@ -109,5 +109,5 @@ Adapted from Flutter's
 [`url_launcher`](https://github.com/flutter/packages/tree/main/packages/url_launcher)
 (BSD-3-Clause) — reworked to FFI, with the smart app-router added.
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues on
-the plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

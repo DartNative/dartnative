@@ -182,5 +182,5 @@ working API-key wiring — borrow from it freely.
 Adapted from Flutter's official [`google_maps_flutter`](https://pub.dev/packages/google_maps_flutter)
 (BSD-3-Clause), reworked to run natively on DartNative atop the Google Maps SDKs.
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues on the
-plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

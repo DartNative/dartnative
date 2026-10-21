@@ -109,5 +109,5 @@ Based on [`google_sign_in`](https://pub.dev/packages/google_sign_in) (Flutter Au
 [`sign_in_with_apple`](https://pub.dev/packages/sign_in_with_apple) (About You GmbH, MIT),
 reworked to run natively on DartNative.
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues on the
-plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

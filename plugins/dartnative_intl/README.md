@@ -87,4 +87,5 @@ Adapted from
 [`intl_utils`](https://pub.dev/packages/intl_utils)
 (MIT), reworked to use DartNative imports.
 
-Distributed via [dartpub.dev](https://dartpub.dev) — file issues on the plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

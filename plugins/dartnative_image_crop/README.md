@@ -81,5 +81,5 @@ The [`example/`](./example) app crops a picked image both ways — borrow from i
 Ported from [`image_crop`](https://github.com/lykhonis/image_crop) (lykhonis, Apache-2.0),
 reworked to FFI.
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues on the
-plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

@@ -281,5 +281,5 @@ the repackage by [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)
 (Apache-2.0) — [`sherpa-onnx-supertonic-3-tts-int8`](https://huggingface.co/csukuangfj2/sherpa-onnx-supertonic-3-tts-int8-2026-05-11);
 JSON sidecars (tokenizer, voices) come from the official SuperTonic repo.
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues
-on the plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

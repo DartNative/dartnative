@@ -113,5 +113,5 @@ No native setup required — the plugin declares `ACCESS_NETWORK_STATE` for you.
   (BSD-3-Clause) — the HEAD-probe strategy, reworked to use this plugin's own
   transport stream as the trigger, with a DNS double-check added.
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file
-issues on the plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

@@ -300,5 +300,5 @@ onboarding screen" by marciofpantoja (illustration by Afsar Hossen), are under
 `example/assets/rive/marketplace/NOTICE.md` credits them, with the licence's full
 text beside it.
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues on the
-plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

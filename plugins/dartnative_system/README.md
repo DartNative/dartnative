@@ -74,5 +74,5 @@ Adapted from
 [`package_info_plus`](https://github.com/fluttercommunity/plus_plugins/tree/main/packages/package_info_plus)
 (BSD-3-Clause) and [`app_badge_plus`](https://pub.dev/packages/app_badge_plus), reworked to FFI.
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues on
-the plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

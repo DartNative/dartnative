@@ -166,5 +166,5 @@ its debug notification, the `[dn-bg]` log line, and a `dnbg_<task>.txt` marker f
 Adapted from
 [`flutter_workmanager`](https://github.com/fluttercommunity/flutter_workmanager) (MIT).
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues on
-the plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

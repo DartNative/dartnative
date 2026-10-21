@@ -105,4 +105,5 @@ the `dartnative_splash:` block in `example/pubspec.yaml` and re-run the setup co
 
 Written from scratch for DartNative (not a port of `flutter_native_splash`).
 
-Distributed via [dartpub.dev](https://dartpub.dev) — file issues on the plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

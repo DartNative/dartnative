@@ -193,5 +193,5 @@ Ports of [`firebase_core`](https://pub.dev/packages/firebase_core),
 [`firebase_messaging`](https://pub.dev/packages/firebase_messaging) (FlutterFire, BSD-3-Clause),
 running on top of the native Firebase SDKs.
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues on the
-plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

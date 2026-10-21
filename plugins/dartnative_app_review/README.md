@@ -77,5 +77,7 @@ sharing) — see the upstream
 
 Adapted from [`in_app_review`](https://github.com/britannio/in_app_review)
 (MIT) — the StoreKit and Play In-App Review calls, reworked from
-method channels to an FFI `@_cdecl` / JNI bridge. Commercial plugin
-distributed via [dartpub.dev](https://dartpub.dev).
+method channels to an FFI `@_cdecl` / JNI bridge.
+
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

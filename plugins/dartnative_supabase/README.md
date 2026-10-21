@@ -53,5 +53,5 @@ A DartNative port of
 [`supabase_flutter`](https://github.com/supabase/supabase-flutter), built on the pure-Dart
 [`supabase`](https://pub.dev/packages/supabase) package (MIT).
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues on the
-plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

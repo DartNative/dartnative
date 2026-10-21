@@ -131,5 +131,5 @@ Adapted from Flutter's official [`webview_flutter`](https://pub.dev/packages/web
 (`webview_flutter_wkwebview` / `webview_flutter_android`, BSD-3-Clause), reworked to run
 natively on DartNative.
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues on the
-plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

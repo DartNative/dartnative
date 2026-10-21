@@ -67,5 +67,5 @@ run/build/pub commands — not the underlying SDK CLI.
 A thin facade over
 [`sqflite_common_ffi`](https://pub.dev/packages/sqflite_common_ffi) (BSD-2-Clause).
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues on the
-plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.

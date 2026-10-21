@@ -164,5 +164,5 @@ Adapted from Flutter's
 (Apache-2.0, by way of a private Presence Network Inc. fork), reworked to run
 natively on DartNative.
 
-Commercial plugin distributed via [dartpub.dev](https://dartpub.dev) — file issues on the
-plugin's page.
+First-party DartNative plugin, free to use in any DartNative app. Distributed
+through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.
