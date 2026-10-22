@@ -124,7 +124,7 @@ Then apply the known diffs proactively — don't wait for the analyzer:
 |---|---|
 | `Navigator.of(ctx).push(MaterialPageRoute(builder: (_) => X()))` | `Navigator.push(ctx, PageRoute(builder: (_) => X()))` |
 | `PageRouteBuilder` + `transitionsBuilder` | `PageRoute(builder:, transition: RouteTransition.x, duration:)` — custom transition curves have no equivalent |
-| `showDialog` + `AlertDialog` | `await showAlert(ctx: ctx, title:, message:, actions: [...])` → index of tapped action |
+| `showDialog` + `AlertDialog` | `await showAlert(context: context, title:, message:, actions: [...])` → index of tapped action |
 | `showModalBottomSheet` | Unchanged; `showModalSheet` for a native detent sheet, `showActionSheet` for action lists |
 | `ScaffoldMessenger.showSnackBar` | Unchanged (routes to a native toast) |
 | `InputDecoration(filled:, border: OutlineInputBorder(...))` | Minimal decoration + a wrapping `Container` for the border/fill |
@@ -135,7 +135,15 @@ Then apply the known diffs proactively — don't wait for the analyzer:
 | `rootBundle.load(...)` | `loadAssetBytes('assets/...')` — sync, returns `Uint8List?` |
 
 Keep `Platform.isIOS`/`isAndroid` checks — DartNative is cross-platform and
-they work as expected.
+they work as expected. Code that reads the iOS version to choose between
+Liquid Glass and a fallback becomes `isIOS26`.
+
+Leave these as the Flutter app has them; they behave as in Flutter, so add
+no wrapper or workaround: `double.infinity` sizes and `SizedBox.expand()`
+(in a `Stack` too), nested `Transform`s, the `GestureDetector` tap
+callbacks (`onTapDown`, `onTapUp`, `onTap`, `onTapCancel`), `async`
+callbacks that `await`, `ScrollController` on horizontal lists, and pubspec
+font families with a file per weight (`w800` and `w900` included).
 
 ## 4. Run and verify
 

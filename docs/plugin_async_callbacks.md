@@ -379,6 +379,30 @@ _dnRegisterCallback(DnCallbacks.arm(nc));   // NOT nc.nativeFunction.address
 DnCallbacks.disarmAndClose(nc);             // NOT nc.close()
 ```
 
+What a synchronous callback queues as a microtask (the code after an
+`await`, a `Completer` it completes, an event added to a non-sync
+`StreamController`) runs at the next event of the Dart event loop, not
+inside the callback: a call from native code is not such an event.
+DartNative starts that event itself as soon as the callback returns, so the
+work runs right after it, with no polling; on Android a callback that fires
+during a frame, such as a scroll, has its work run as soon as that frame is
+done. A `NativeCallable.listener` arrives as an event of its own.
+
+**Catch and log inside the body.** An exception thrown synchronously out of
+an `isolateLocal` callable or a `Pointer.fromFunction` dispatcher is
+swallowed by the VM at the boundary: nothing prints, and the feature just
+looks dead. Catch it in the body and log it yourself:
+
+```dart
+(int v) {
+  try {
+    onEvent(v);
+  } catch (e, st) {
+    dnLog('[MyPlugin] event callback threw: $e\n$st');
+  }
+}
+```
+
 ---
 
 ## Worker isolates

@@ -26,8 +26,8 @@ class StaggeredCardsDemo extends StatefulWidget {
 
 class _StaggeredCardsDemoState extends State<StaggeredCardsDemo> {
   // Per-card "visible" flags. AnimatedOpacity/AnimatedSlide tween based
-  // on these. A card is initially invisible (faded + 40 px below); we
-  // flip the flag to trigger the entrance animation.
+  // on these. A card is initially invisible (faded, half its height
+  // below); we flip the flag to trigger the entrance animation.
   final List<bool> _visible = [false, false, false, false];
 
   Timer? _resetTimer;
@@ -90,7 +90,7 @@ class _StaggeredCardsDemoState extends State<StaggeredCardsDemo> {
             const _SectionTitle('Fade + slide-up, staggered'),
             const _SectionBody(
               'Four cards rise into view with a 150 ms delay between each, '
-              'composing AnimatedOpacity (0→1) and AnimatedSlide (Offset(0, 40)→Offset.zero). '
+              'composing AnimatedOpacity (0→1) and AnimatedSlide (Offset(0, 0.5)→Offset.zero). '
               'No Skia, no orchestration framework — just two '
               'implicit-animation widgets and a staggered setState.',
             ),
@@ -173,9 +173,9 @@ class _Card extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSlide(
-      // AnimatedSlide in dartnative takes Offset in logical pixels.
-      // Start 40 px below the resting position, slide up to zero.
-      offset: visible ? Offset.zero : const Offset(0, 40),
+      // The offset is a fraction of the card's size: start half the card's
+      // height below the resting position, slide up to zero.
+      offset: visible ? Offset.zero : const Offset(0, 0.5),
       duration: const Duration(milliseconds: 380),
       child: AnimatedOpacity(
         opacity: visible ? 1.0 : 0.0,

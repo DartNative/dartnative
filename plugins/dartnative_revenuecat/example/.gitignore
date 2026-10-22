@@ -1,3 +1,4 @@
 # Local keys read by DnKeys.load() — copy .dnkeys.example to .dnkeys.
 # Gitignored so your own (non-sample) keys are never committed.
 .dnkeys
+pubspec_overrides.yaml

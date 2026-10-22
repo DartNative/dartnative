@@ -1,3 +1,16 @@
+## 1.0.3
+
+* iOS: builds work again with Xcode 27 / Swift 6.4. RevenueCat's
+  `PaywallColor` declared `init(stringRepresentation:) throws` beside the
+  memberwise initialiser Swift synthesises for the struct's one public stored
+  property; Swift 6.4 rejects that pair as a redeclaration, so the pod failed to
+  compile — in apps that never use Paywalls, since the file only has to build.
+  RevenueCat fixed it in 5.78.0, so `PurchasesHybridCommon` now asks for
+  `>= 18.12, < 19.0` instead of `~> 18.1`, which could still resolve to a
+  broken version. No API changes: all eight `RCCommonFunctionality` calls this
+  plugin makes are unchanged in 18.12. Android is unaffected — it pins
+  `purchases-hybrid-common:18.1.0` exactly, and the bug is Swift-only.
+
 ## 1.0.2
 
 * iOS: simulator builds work again with Xcode 26. 1.0.1's native library was

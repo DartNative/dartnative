@@ -86,6 +86,7 @@ abstract final class DartNativePluginRegistrant {
       'dartnative_secure_storage',
       'dartnative_share',
       'dartnative_shared_preferences',
+      'dartnative_skia',
       'dartnative_social_sign_in',
       'dartnative_splash',
       'dartnative_sqlite',

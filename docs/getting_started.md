@@ -215,6 +215,7 @@ complete, runnable app.
 - [Canvas & shaders](skia.md) — GPU canvas, SkSL shaders, rich text via `dartnative_skia`
 - [Debugging & logging](logging.md) — native log bridge, `DartNativeLogger`, file persistence
 - [Localization](localization.md) — ARB files, the generated `S` class, switching language at runtime
+- [JSON](json.md) — decoding JSON from bytes, faster than `jsonDecode`, in the background
 - [Playground](../playground/) — working demo app to build and explore
 - [Writing your own plugin](plugin_development.md) — plugins are ordinary Dart packages with FFI/JNI native sides; if your native code calls Dart back, see [async callbacks](plugin_async_callbacks.md)
 - [Code push](../tutorials/code_push/) — send a fix directly to phones, without a release to App Store and Google Play

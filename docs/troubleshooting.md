@@ -368,17 +368,19 @@ platforms; nothing else to run.
 
 ---
 
-## `setState` in gesture callbacks doesn't trigger a rebuild
+## Work started in a tap runs a moment late
 
 ### Symptom
 
-Calling `setState()` inside `onTap`, `onPressed`, or other gesture callbacks appears to do nothing. The widget is not rebuilt. Sometimes `Timer` callbacks created in the same context fire out of order.
+Work a tap queues takes effect a few frames later than it should: the code after an `await` in `onTap`, a `Future.microtask`, a `Completer` completed in the callback, a stream event or an `addPostFrameCallback`.
 
 ### Root cause
 
-Gesture callbacks run synchronously inside the platform's own event, not as a Dart event-loop event. The microtask queue only drains after a real event-loop event, so a `Future.microtask` scheduled inside a gesture callback may not run until the next run-loop turn.
+Gesture callbacks run synchronously inside the platform's own event, not as an event of the Dart event loop. The work an `await`, a `Completer`, a stream or `addPostFrameCallback` queues (a microtask) runs only after such an event, and before 1.4.0 the next one could be a few frames away.
 
 ### Fix
+
+Fixed in 1.4.0: update the SDK with `dn upgrade`. DartNative now starts that event as soon as the callback returns, so the work runs right after it, with no polling and no second touch needed.
 
 Use `setState()` directly without any scheduling wrapper — this is always safe and preferred:
 
@@ -386,13 +388,13 @@ Use `setState()` directly without any scheduling wrapper — this is always safe
 onTap: () => setState(() { _myState = newValue; }),
 ```
 
-If you genuinely need to defer the state update (e.g. to wait for an async result), use `Timer.run` instead of `Future.microtask`:
+If you genuinely need to defer the state update, `Timer.run` and `Future.microtask` both work: each runs right after the callback returns.
 
 ```dart
-// ✗ may feel "one frame late" in native callbacks
+// ✓ runs right after the callback returns
 onTap: () => Future.microtask(() => setState(() { ... })),
 
-// ✓ fires promptly after the current run-loop turn
+// ✓ fires promptly after the current event
 onTap: () => Timer.run(() => setState(() { ... })),
 ```
 
@@ -700,6 +702,37 @@ same way.
 Keep the back button on screens that should swipe back: leave `leading`
 out, or pass a `BackButton`. A screen with its own leading widget still
 pops from that widget's tap.
+
+## Something is wrong after a hot restart
+
+### Symptom
+
+In a debug session you press `R` for a hot restart while a sheet, an alert,
+an action sheet, a date picker or the colour picker is open. On iOS,
+closing it afterwards can crash the app; on Android an alert or a picker
+stays on screen, and a tap on it runs code from before the restart. On iOS
+26 a screen the restart brings back, or one pushed after it, can show no
+title and no back button, and on iOS a list inside a scrolling list can
+now and then come back blank.
+
+### Root cause
+
+A hot restart starts your Dart code again while the native screens stay
+up. Before 1.4.0, what DartNative had opened over the screens stayed open
+and still pointed at code from before the restart, and some of the screens'
+state on iOS was kept from before it.
+
+### Fix
+
+Fixed in 1.4.0: update the SDK with `dn upgrade`. Sheets, alerts, action
+sheets and pickers opened through DartNative now close at a hot restart,
+and the screens it brings back keep their bars and their lists.
+
+A share sheet, a photo picker or another screen shown by a plugin or by the
+system is not DartNative's and stays open through the restart, unless on
+iOS it was opened over a DartNative sheet, which takes it along; close it
+by hand. Hot restart exists only while you develop: a release build never
+meets any of this.
 
 ## A run misbehaves and nothing explains it
 

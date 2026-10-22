@@ -103,28 +103,41 @@ consult it for any param-level question).
 ### Ports unchanged — use as in Flutter
 
 - **Layout**: `Row`, `Column`, `Flex`, `Expanded`, `Flexible`, `Spacer`,
-  `Stack`/`Positioned`, `Padding`, `Container`, `ConstrainedBox`,
-  `DecoratedBox`, `Align`/`Center`, `SafeArea`, `AspectRatio`, `Wrap`,
-  `FractionallySizedBox`, `IntrinsicWidth`/`IntrinsicHeight`, `FittedBox`,
-  `ColoredBox`, `IndexedStack`, `LayoutBuilder`, `Divider`, `Opacity`,
-  `Visibility`, `IgnorePointer`/`AbsorbPointer`, `RepaintBoundary`,
-  `ClipRRect`, `ClipOval`.
-- **Text**: `Text`, `RichText`/`TextSpan`, `TextStyle`, `TextPainter`.
+  `Stack`/`Positioned`, `Padding`, `Container`, `SizedBox`,
+  `ConstrainedBox`, `DecoratedBox`, `Align`/`Center`, `SafeArea`,
+  `AspectRatio`, `Wrap`, `FractionallySizedBox`,
+  `IntrinsicWidth`/`IntrinsicHeight`, `FittedBox`, `ColoredBox`,
+  `IndexedStack`, `LayoutBuilder`, `Divider`, `Opacity`, `Visibility`,
+  `IgnorePointer`/`AbsorbPointer`, `RepaintBoundary`, `ClipRect`,
+  `ClipRRect`, `ClipOval`. `Align` takes any alignment and `widthFactor` /
+  `heightFactor`. `double.infinity` fills as in Flutter
+  (`SizedBox(width: double.infinity)`, `SizedBox.expand()`,
+  `SizedBox.fromSize(size: Size.infinite)`, `BoxConstraints.expand()`,
+  `Image(width: double.infinity)`), and a `SizedBox.expand()` child makes
+  its `Stack` fill.
+- **Text**: `Text`, `RichText`/`TextSpan`, `TextStyle`, `TextPainter`. A
+  pubspec font family with a file per weight and style draws each one's own
+  file, `w100` to `w900` and italic, as in Flutter; a missing bold is drawn
+  thickened and a missing italic slanted.
 - **Scrolling**: `ListView`, `SingleChildScrollView`, `GridView`,
   `CustomScrollView` with `SliverList`(+`.builder`), `SliverGrid`,
   `SliverToBoxAdapter`, `SliverPadding`, `SliverFillRemaining`,
-  `SliverAppBar`. **`ListView.builder` has Flutter's API but not its
-  laziness: all items are built eagerly.** For a long or data-driven list
+  `SliverAppBar`; `NestedScrollView` with a `SliverAppBar` header that
+  collapses natively; `TabBar` / `TabBarView` with `TabController` or
+  `DefaultTabController`, as in Flutter. **`ListView.builder` has
+  Flutter's API but not its laziness: all items are built eagerly.** For a long or data-driven list
   use `FastList` (native cell recycling, rows built as they near the
   viewport), and `FastGrid` for a grid; see below.
 - **Images**: `Image.network` (cached), `Image.asset`, `CircleAvatar`.
 - **Animation — the full suite**: `AnimationController` (+ both ticker
   mixins), `CurvedAnimation`, `AnimatedBuilder`/`AnimatedWidget`,
   `FadeTransition`, `SlideTransition`, `ScaleTransition`, `SizeTransition`,
-  `RotationTransition`, `AnimatedOpacity`, `AnimatedContainer`,
-  `AnimatedSwitcher`, `Transform`. One diff: `controller.duration` is
-  final — set it in the constructor, or pass `duration:` to
-  `animateTo()` / `animateBack()`.
+  `RotationTransition`, `AlignTransition`, `DecoratedBoxTransition`,
+  `FractionalTranslation`, `AnimatedOpacity`, `AnimatedContainer`,
+  `AnimatedSwitcher`, `Transform`. Nested transforms combine, also through
+  `AnimatedScale`, `AnimatedSlide`, `Opacity` or a widget of yours between
+  them. One diff: `controller.duration` is final — set it in the
+  constructor, or pass `duration:` to `animateTo()` / `animateBack()`.
 - **Theming**: `ThemeData.light()/.dark()`, `ColorScheme`, `TextTheme`
   (15 slots) — via `App(theme: ...)`. Explicit styles remain the common
   DartNative idiom, but ported `Theme`-based code has a target.
@@ -135,8 +148,12 @@ consult it for any param-level question).
   variants, `FloatingActionButton`, `BarButtonItem`), `Badge`, native
   menus.
 - **State & misc**: `setState`, `ValueNotifier` + `ValueListenableBuilder`,
-  `ScrollController`, `GestureDetector` (incl. `HitTestBehavior.translucent`
-  — fully supported sibling-forwarding), `Dismissible` (swipe a row away),
+  `ScrollController` (vertical or horizontal: `offset`, `jumpTo` and
+  `animateTo` work along the scroll axis), `GestureDetector` (tap callbacks
+  in Flutter's order: `onTapDown`, then `onTapUp` and `onTap`, or
+  `onTapCancel`; incl. `HitTestBehavior.translucent` — fully supported
+  sibling-forwarding), `async` callbacks (the code after an `await` in
+  `onTap` runs as in Flutter), `Dismissible` (swipe a row away),
   `RepaintBoundary` + `RenderRepaintBoundary.toImage` (capture a widget as
   an image; `ui.` types from `package:dartnative/canvas.dart`),
   `WidgetsBinding.instance.addPostFrameCallback`,
@@ -204,8 +221,11 @@ curves.
 actions:)` → `Future<int>` (tapped index); `showActionSheet`;
 `showModalSheet(context:, builder:)` (native detent sheet, Dart content);
 `showModalBottomSheet` / `showDialog` (light-dismiss
-cards); `showDatePicker`; `showMediaPicker` (from the
-`dartnative_media_picker` plugin); `BottomSheet`.
+cards); `showDatePicker`; `showColorPicker` (the system picker on iOS;
+completes with `null` on Android); `showMediaPicker` (from the
+`dartnative_media_picker` plugin); `BottomSheet`. A sheet, alert, action
+sheet, date picker or colour picker opened from inside a sheet appears on
+top of it.
 `ScaffoldMessenger.showSnackBar` works (routes to the native toast).
 
 **`CustomPaint`** — supported, painting through Core Graphics /
@@ -228,8 +248,6 @@ glass; `DynamicColor.colorScheme(brightness:)` for Material You;
 
 | Missing | Porting move |
 |---|---|
-| `NestedScrollView` (not planned) | `AppBar.largeTitle` covers the collapsing-header case natively; `CustomScrollView` + slivers for the rest |
-| `TabBar` (the swipeable material one) | `SegmentedControl` or `BottomNavigationBar` |
 | `SelectableText` | `Text(selectable: true)` — long-press to select and copy |
 | `Offstage` ⚠️ | The offstage child is UNMOUNTED (state lost) — Flutter keeps it mounted. Use `IndexedStack` for state-preserving show/hide |
 | `Theme.of` inheritance beyond `App(theme:)` | Pass styles explicitly where the theme object isn't enough |
@@ -270,7 +288,9 @@ unchanged (or call `controller.watch(context)` inline).
 - **iOS 26 Liquid Glass**: a translucent `AppBar.backgroundColor` (alpha <
   1) opts into the real frosted bar; no color = the clear bar with the
   system scroll-edge ramp; `GlassEffectContainer` for glass anywhere.
-  Everything no-ops cleanly pre-26 and on Android.
+  Everything no-ops cleanly pre-26 and on Android. For a fallback of your
+  own where there is no glass, branch on `isIOS26`, not on the OS version:
+  `isIOS26 ? GlassEffectContainer(...) : Container(decoration: ...)`.
 - **Search in the bar**: `AppBar.searchBar: SearchBar(...)` — the App Store
   in-place choreography on iOS 26, the real Material 3 search app bar on
   Android. `title` is skipped when set.
@@ -320,11 +340,7 @@ Taken from the starter app; adopt them in any app you generate.
    bars belong in `Scaffold.appBar` (it's a real `UINavigationBar`, pinned
    by the OS). If you must, set `resizeToAvoidBottomInset: false`.
 5. `setState` in `initState` → not mounted yet; schedule it.
-6. Deferring work inside native callbacks (`onTap` etc.) with
-   `Future.microtask` → may run a frame late (callbacks run synchronously
-   inside the platform event, not on the event loop). Use `Timer.run`.
-   Plain synchronous `setState` in the callback is fine and preferred.
-7. Importing `package:flutter/...` or unaliased `dart:ui` → type conflicts.
+6. Importing `package:flutter/...` or unaliased `dart:ui` → type conflicts.
    One import: `package:dartnative/dartnative.dart`.
 
 ## Localization

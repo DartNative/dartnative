@@ -684,6 +684,14 @@ recycles trampoline slots (a new callable on a previously-released address is
 silently dead without arming). Review rule: `grep nativeFunction.address` in
 your plugin must only match `DnCallbacks` call sites.
 
+**Microtasks and exceptions.** What a synchronous callback queues as a
+microtask (the code after an `await`, a `Completer` it completes, a
+`StreamController.add`) runs at the next event of the Dart event loop, not
+inside the callback; DartNative starts that event as soon as the callback
+returns, so the work runs right after it, with no polling. An exception
+thrown out of the callback's body is swallowed by the VM
+at the boundary, so catch and log it inside ([plugin_async_callbacks.md](plugin_async_callbacks.md) has the snippet).
+
 ### Async callbacks (fired later) — the dispatcher slot (REQUIRED)
 
 This covers **everything native delivers after your call returns**: one-shot

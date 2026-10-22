@@ -1,0 +1,3 @@
+# Each session's numbers, tool output and screen recording, written by tool/measure.py.
+results/
+__pycache__/

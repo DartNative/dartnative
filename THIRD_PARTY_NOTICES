@@ -135,6 +135,12 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 ──────────────────────────────────────────────────────────────────────────────
+yyjson  https://github.com/ibireme/yyjson
+Copyright (c) 2020 YaoYuan <ibireme@gmail.com>
+
+MIT License (the same terms as Yoga's above)
+
+──────────────────────────────────────────────────────────────────────────────
 Per-plugin notices
 
 First-party plugins that include third-party code carry their own

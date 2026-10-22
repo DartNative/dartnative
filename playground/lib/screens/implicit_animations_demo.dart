@@ -253,8 +253,8 @@ class _ImplicitAnimationsDemoState extends State<ImplicitAnimationsDemo> {
             _SectionHeader('5. AnimatedSlide'),
             const SizedBox(height: 6),
             const _Caption(
-              'Tap to slide left ↔ right. Offset is in logical pixels '
-              '(differs from Flutter\'s fraction-of-size AnimatedSlide).',
+              'Tap to slide left ↔ right. The offset is a fraction of the '
+              'box\'s own size, as in Flutter: Offset(1, 0) is one full width.',
             ),
             const SizedBox(height: 10),
             _Card(
@@ -262,7 +262,7 @@ class _ImplicitAnimationsDemoState extends State<ImplicitAnimationsDemo> {
               child: Center(
                 child: AnimatedSlide(
                   offset:
-                      _slideRight ? const Offset(80, 0) : const Offset(-80, 0),
+                      _slideRight ? const Offset(1, 0) : const Offset(-1, 0),
                   duration: _duration,
                   curve: _curve,
                   child: Container(
