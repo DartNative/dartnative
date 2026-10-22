@@ -3,6 +3,92 @@
 <!-- Generated file: edits here are overwritten on the next release.
      The changelog is maintained at https://dartnative.com/changelog -->
 
+## Faster JSON from the server to your app, an HTTP plugin, Flutter layout parity and performance improvements
+
+1.4.0 (2026-10-22)
+
+JSON gets from the server to your app faster in this release, thanks to two
+parts that work together: `dartnative_http`, a new plugin with an HTTP
+client on the phone's own networking, and a native JSON decoder in the
+framework. Improved Flutter parity for animations, layout and taps: more
+transitions, any `Align` alignment with width and height factors,
+`DecoratedBox` painting, and `onTapDown` and `onTapUp` beside `onTap`. Code
+that a tap starts now runs right away, and a hot restart closes open sheets
+and dialogs cleanly.
+
+**How to update.** Run `dn upgrade`. This release needs a new version of
+`dn`, so `dn upgrade` prints the install command for your system. Run that
+command, then run `dn upgrade` again.
+
+**Code push.** This release is a new framework build on a new engine.
+After you update, the fixes you send reach only apps released with this
+version. Make a new release of your app before you send fixes.
+
+**Changes that can affect your code:**
+
+- `AnimatedSlide` now moves its child by a fraction of the child's size, as
+  in Flutter: `Offset(1, 0)` is one full width. It used to move by points.
+  Divide the offsets you pass by the child's width or height, or use
+  `Transform.translate` to keep moving by points. `SlideTransition`, which
+  did not move before, now moves the same way.
+- An `Align` or a `Center` placed directly in a `Row` or a `Column` is now
+  only as long as its child along that direction, as in Flutter. A `Column`
+  holding a `Center` puts the centred text at the top, not in the middle of
+  the screen. It used to fill the free space. To fill it as before, wrap the
+  `Align` or the `Center` in `Expanded`.
+
+### New
+
+- **Faster JSON, from the server to your app.** The gain comes from two
+  parts working together, not from the HTTP client alone. `dartnative_http`
+  fetches the response on the phone's own networking and keeps the body in
+  native memory. The framework's new JSON decoder reads it right there and
+  builds the same maps and lists as `jsonDecode`, without making a `String`
+  first. `getJson` in `dartnative_http` does both in one call, on a
+  background isolate, so your screen keeps drawing while a large response
+  decodes. You can also use the decoder on its own, on bytes from any
+  source: `jsonDecodeNative(bytes)`, or `jsonDecodeInBackground(bytes)` to
+  keep the work off the main isolate. On an iPhone and an Android phone,
+  decoding was up to ~6x faster than `jsonDecode(response.body)`.
+- **More of Flutter's animation widgets.** You can now use
+  `FractionalTranslation`, `AlignTransition`, `DecoratedBoxTransition`,
+  `PositionedTransition`, `RelativePositionedTransition`,
+  `DefaultTextStyleTransition` and `ListenableBuilder`. `drive`, `chain`
+  and `CurveTween` compose animations as in Flutter, and there are new
+  tweens to compose with: `AlignmentTween`, `TextStyleTween`,
+  `DecorationTween`, `RelativeRectTween`, `StepTween`, `ConstantTween` and
+  `ReverseTween`.
+- **Smaller additions from Flutter:** `Positioned.fromRect`,
+  `Positioned.fromRelativeRect`, `SizedBox.fromSize` and `ReverseAnimation`.
+- **A hot reload benchmark.** The new `benchmarks/hot_reload` folder in the
+  repository measures the wait between saving a file and seeing the change.
+  On the iOS simulator, DartNative 1.4.0 reloads up to 2.4 times faster
+  than Flutter 3.47.7 from the editor, and up to 3.9 times faster from the
+  terminal.
+
+### Plugins
+
+To get a new plugin version, raise its constraint in `pubspec.yaml` or run
+`dn pub upgrade`.
+
+- **`dartnative_http` 1.0.0, new.** A `package:http` `Client` on the
+  phone's own networking. Code you wrote for `package:http` works
+  unchanged, and requests run off the UI thread. `getJson` downloads a URL
+  and decodes the JSON in the background. It needs DartNative 1.4.0.
+- **`dartnative_revenuecat` 1.0.3.** iPhone apps build with Xcode 27.
+
+### Fixed
+
+- **Improved Flutter parity** for taps, transitions, alignment,
+  decorations and text style animations, on both platforms.
+- **Other fixes.** Code that a tap starts runs right away. A hot restart
+  closes open sheets, dialogs and pickers cleanly. Each weight of your own
+  font uses its own file. On iOS 26, a screen without an app bar has no
+  faded band under the status bar. A progress bar without a value moves on
+  iPhone.
+
+---
+
 ## Performance improvements, Dismissible, widget capture, drawer and native image encoding
 
 1.3.0 (2026-10-17)
