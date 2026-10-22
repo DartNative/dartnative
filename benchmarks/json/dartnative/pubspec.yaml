@@ -1,0 +1,18 @@
+name: json_dartnative
+description: "The JSON benchmark, DartNative side: the framework decoder and dartnative_http."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.12.0-192.0.dev
+
+# Version dependencies: `dn pub get` takes the DartNative packages from the
+# SDK you installed, so there is no registry to set up and it works offline.
+dependencies:
+  dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  dartnative_http: ^1.0.0
+
+dev_dependencies:
+  lints: ^6.0.0
