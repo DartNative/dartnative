@@ -354,6 +354,7 @@ class _CoverCard extends StatelessWidget {
     return Container(
       width: size,
       height: size,
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         // Stands in until the artwork loads, so a card is never a hole.
         color: album.tint,

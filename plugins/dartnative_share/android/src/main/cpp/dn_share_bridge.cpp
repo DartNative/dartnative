@@ -120,7 +120,6 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* /*reserved*/) {
         "(J[Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)V"
     );
 
-    LOGI("JNI_OnLoad OK");
     return JNI_VERSION_1_6;
 }
 
@@ -208,12 +207,26 @@ void DNShareFilesWithResult(
 
 // ─── Kotlin externals (result delivery) ──────────────────────────────────────
 
+// The framework's core library is loaded with System.loadLibrary, which keeps
+// its symbols out of dlsym(RTLD_DEFAULT) for apps targeting API 23 and up, so
+// the counter is looked up in that library by name first.
+using GenFn = uint64_t (*)();
+static GenFn resolveIsolateGen() {
+    GenFn fn = nullptr;
+    if (void* core = dlopen("libdartnative_android.so", RTLD_NOW | RTLD_NOLOAD)) {
+        fn = (GenFn)dlsym(core, "DN_IsolateGen");
+        dlclose(core);
+    }
+    if (!fn) fn = (GenFn)dlsym(RTLD_DEFAULT, "DN_IsolateGen");
+    if (!fn) LOGE("DN_IsolateGen not found: callbacks are not dropped across a hot restart");
+    return fn;
+}
+
 /// Reads the framework's isolate-generation counter — bumped BEFORE the old
 /// isolate dies on hot restart, so Kotlin's gen-gate drops stale deliveries.
 extern "C" JNIEXPORT jlong JNICALL
 Java_com_dartnative_share_DNShareBridgeKt_nativeIsolateGen(JNIEnv*, jclass) {
-    using GenFn = uint64_t (*)();
-    static GenFn fn = (GenFn)dlsym(RTLD_DEFAULT, "DN_IsolateGen");
+    static GenFn fn = resolveIsolateGen();
     return fn ? (jlong)fn() : 0;
 }
 

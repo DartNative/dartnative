@@ -176,13 +176,12 @@ class _SearchPageState extends State<SearchPage> {
         child: Column(
           children: [
             // The field draws its own icon (`prefixIcon` takes an icon, not a
-            // widget): a rounded field on iPhone, and Material's outlined
-            // field with a floating label on Android. The padding keeps the
-            // icon off the border.
+            // widget): with the search icon it is Apple's search field on
+            // iPhone, and Material's outlined field with a floating label
+            // and its start icon on Android.
             TextField(
               onChanged: _runSearch,
               prefixIcon: Icons.search,
-              prefixIconPadding: const EdgeInsets.only(left: 8),
               decoration: const InputDecoration(
                 labelText: 'Search packages',
                 border: OutlineInputBorder(),

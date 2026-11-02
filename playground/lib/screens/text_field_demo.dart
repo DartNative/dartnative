@@ -286,6 +286,8 @@ class _NativeFeaturesGrid extends StatelessWidget {
           crossAxisCount: 3,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
+          // Inside the page's list: the safe area is that list's.
+          padding: EdgeInsets.zero,
           mainAxisSpacing: 10,
           crossAxisSpacing: 10,
           childAspectRatio: 0.6,

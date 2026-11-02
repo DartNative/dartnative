@@ -336,6 +336,49 @@ changing the file.
 
 ---
 
+## "This app was last built with DartNative …"
+
+### Symptom
+
+`dn pub get` or a build prints `This app was last built with DartNative
+1.4.0; this SDK is 1.3.0`, followed by how to switch.
+
+### Root cause
+
+`dn_plugins.lock` records the DartNative release the app was last built
+with, and the SDK on this machine is another one: you switched with
+`dn upgrade`, `dn downgrade` or `dn use`, or the app comes from a machine on
+another release. Nothing is stopped; the line only tells you.
+
+### Fix
+
+To build with the release you have, run `dn pub get` and commit
+`dn_plugins.lock`: it records this release. To build with the recorded one,
+switch to it with the command the line names, such as `dn use 1.4.0`.
+
+---
+
+## `dn use` refuses, or a release is "not recommended"
+
+### Symptom
+
+`dn use 1.3.0` prints why it cannot switch, or `dn` shows `DartNative 1.3.0
+is not recommended: <reason>.` with the release to use instead.
+
+### Root cause
+
+A release can be withdrawn when a problem is found in it, or retired. Some
+older releases come with a `dn` that has no `dn use` or `dn downgrade`, so
+`dn use` asks for `--force` before switching to them.
+
+### Fix
+
+Run the command the message names; when `dn use` refuses, nothing was
+changed. After switching to a release whose `dn` lacks these commands, come
+back by running the install command again (Getting started, step 1).
+
+---
+
 ## "The method 'showMediaPicker' isn't defined" after upgrading
 
 ### Symptom
@@ -372,11 +415,11 @@ platforms; nothing else to run.
 
 ### Symptom
 
-Work a tap queues takes effect a few frames later than it should: the code after an `await` in `onTap`, a `Future.microtask`, a `Completer` completed in the callback, a stream event or an `addPostFrameCallback`.
+Work a tap queues takes effect a few frames later than it should: the code after an `await` in `onTap`, a `Future.microtask`, a `Completer` completed in the callback or a stream event.
 
 ### Root cause
 
-Gesture callbacks run synchronously inside the platform's own event, not as an event of the Dart event loop. The work an `await`, a `Completer`, a stream or `addPostFrameCallback` queues (a microtask) runs only after such an event, and before 1.4.0 the next one could be a few frames away.
+Gesture callbacks run synchronously inside the platform's own event, not as an event of the Dart event loop. The work an `await`, a `Completer` or a stream queues (a microtask) runs only after such an event, and before 1.4.0 the next one could be a few frames away.
 
 ### Fix
 
@@ -396,6 +439,32 @@ onTap: () => Future.microtask(() => setState(() { ... })),
 
 // ✓ fires promptly after the current event
 onTap: () => Timer.run(() => setState(() { ... })),
+```
+
+---
+
+## A badge or decoration past a Stack's edge is cut off
+
+### Symptom
+
+A child placed past a `Stack`'s edge with `Positioned`, such as a badge at `top: -8` or a dot that straddles a border, is cut where the `Stack` ends.
+
+### Root cause
+
+A `Stack` clips as Flutter's does: with its default `clipBehavior`, `Clip.hardEdge`, it cuts its children at its edges while a `Positioned` child reaches past it. Before 1.5.0 a `Stack` clipped only when you passed `clipBehavior: Clip.hardEdge`.
+
+### Fix
+
+Let the children draw outside the `Stack`, as you would in Flutter:
+
+```dart
+Stack(
+  clipBehavior: Clip.none,
+  children: [
+    avatar,
+    Positioned(top: -8, right: -8, child: badge),
+  ],
+)
 ```
 
 ---

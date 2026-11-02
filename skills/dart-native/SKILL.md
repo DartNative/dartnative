@@ -68,7 +68,6 @@ one produces a characteristic symptom, never a crash:
 |---|---|
 | `DartNativePluginRegistrant.registerAll()` | white screen (no bindings — nothing can render); a missing plugin symbol → that plugin's calls fail |
 | `registerSkiaFactories()` | `CanvasSurface`/Skia painting renders nothing |
-| `DartNativeFontRegistrant.registerAll()` | custom fonts fall back to system font; icon fonts render `?` |
 | `SystemChrome.defaultStyle` | screens inherit device-default chrome (e.g. wrong status-bar icon color on the first frame) |
 
 The full startup anatomy (the playground's main.dart is the canonical
@@ -85,15 +84,18 @@ void main() {
                         // the navigator restores this on pop
   registerSkiaFactories();                  // ONLY with dartnative_skia:
                         // enables CanvasSurface / Skia-backed painting
-  DartNativeFontRegistrant.registerAll();   // ONLY with custom fonts
-                        // (pubspec assets/fonts): registers them with the
-                        // platform so fontFamily/IconData resolve (iOS)
   runApp(const HomeScreen());
 }
 ```
 
 Plugin-specific initializers (e.g. `Firebase.initializeApp()`,
 `Sqlite.ensureInitialized()`) also live here, after `registerAll()`.
+
+Custom fonts need no line here: declare them under `flutter: fonts:` in
+pubspec.yaml, as in Flutter, and use them by family name
+(`TextStyle(fontFamily: ...)`, `IconData(..., fontFamily: ...)`). The app
+loads them itself, on iOS when it starts and on Android when a family is
+first used.
 
 ## The catalog, by porting relevance
 
@@ -124,10 +126,19 @@ consult it for any param-level question).
   `SliverToBoxAdapter`, `SliverPadding`, `SliverFillRemaining`,
   `SliverAppBar`; `NestedScrollView` with a `SliverAppBar` header that
   collapses natively; `TabBar` / `TabBarView` with `TabController` or
-  `DefaultTabController`, as in Flutter. **`ListView.builder` has
-  Flutter's API but not its laziness: all items are built eagerly.** For a long or data-driven list
-  use `FastList` (native cell recycling, rows built as they near the
-  viewport), and `FastGrid` for a grid; see below.
+  `DefaultTabController`, as in Flutter. **`ListView.builder`,
+  `ListView.separated` and `GridView.builder` are lazy, as in Flutter**:
+  items are built as they near the screen and let go once they are more
+  than `cacheExtent` off it (250 points unless set), on the platform's own
+  list and grid, the ones `FastList` and `FastGrid` use, so a long,
+  data-driven list keeps its Flutter code and scrolls smoothly at any
+  `itemCount`. An item's `State` does not outlive it off screen: keep what
+  must survive in the model. `GridView.extent`, or a
+  `SliverGridDelegateWithMaxCrossAxisExtent`, takes as many columns as fit
+  the grid's width. A `ListView` or `GridView` of `children`, and one that
+  shrink-wraps or never scrolls, builds every item, as Flutter lays those
+  out whole. A grid cell's content fills the cell, as in Flutter. Reach for
+  `FastList` / `FastGrid` for what only they offer; see below.
 - **Images**: `Image.network` (cached), `Image.asset`, `CircleAvatar`.
 - **Animation — the full suite**: `AnimationController` (+ both ticker
   mixins), `CurvedAnimation`, `AnimatedBuilder`/`AnimatedWidget`,
@@ -165,8 +176,18 @@ consult it for any param-level question).
   `textScaleFactor`), `SystemChrome` (orientations, overlay style,
   `defaultStyle`, status/navigation bar colors), `dartnative_intl` for
   l10n.
+- **Background work**: `compute` (it runs on `runInBackground`, which
+  costs the UI thread less than `Isolate.run`). Where Flutter code calls
+  `Isolate.run(() => work(x))`, write `runInBackground(() => work(x))`:
+  same rules, less work on the UI thread.
 
-Layout parity is engineered: layouts land where Flutter puts them.
+Layout parity is engineered: layouts land where Flutter puts them. That
+includes a `Row`'s rule: a text in a Row stays on one line and runs past
+the row's end, unless it sits in an `Expanded` or `Flexible`, so write the
+`Expanded` you would write in Flutter. `Flexible` keeps Flutter's loose fit.
+A text that wraps takes the whole width it is given, as in Flutter: give a
+chat bubble's text `textWidthBasis: TextWidthBasis.longestLine` so the
+bubble ends at its longest line.
 
 ### Different on purpose — adopt the DartNative form
 
@@ -234,8 +255,11 @@ only for SkSL shaders (`RuntimeEffect`) and other GPU work.
 
 **DartNative additions worth adopting during a port**: `FastList` /
 `FastGrid` / `MasonryFastGrid` (native cell recycling; `itemCount` +
-`itemBuilder`, `keepAliveCount` windowing, `onScroll`,
-`FastListController.scrollToItem`) for long feeds; `PageView` /
+`itemBuilder`; built content held only for a window around the screen,
+250 points by default, sized with `cacheExtent` in points or
+`keepAliveCount` in items; `recycleItems` to reuse the rows the window lets
+go; `onScroll`; `FastListController.scrollToItem`; `onReorder`) for long
+feeds that need those options; `PageView` /
 `PageController` on the platform's own paging, or `FastList(pagingEnabled:
 true)` for a full-screen feed that also windows with `keepAliveCount`
 (`viewportFraction` other than 1 is not supported: a peeking carousel is a

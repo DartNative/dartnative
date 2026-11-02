@@ -236,7 +236,11 @@ class _VideoFeedDemoState extends State<VideoFeedDemo> {
       brightness: Brightness.dark,
       backgroundColor: Colors.black,
       // The bar floats over the video: a clear surface, and the feed runs
-      // the full height behind it.
+      // the full height behind it. A soft fade under the bar, since from
+      // iOS 27 the system's default is a hard edge under a titled bar.
+      ios: const ScaffoldIOSConfig(
+        scrollEdgeEffectStyle: ScrollEdgeEffectStyle.soft,
+      ),
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,

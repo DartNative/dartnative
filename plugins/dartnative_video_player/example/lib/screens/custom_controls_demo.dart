@@ -394,6 +394,8 @@ class _CustomControlsDemoState extends State<CustomControlsDemo> {
                       height: 44,
                       color: const Color(0x00000000), // transparent hit area
                       child: Stack(
+                        // The scrubber dot straddles the video's edge.
+                        clipBehavior: Clip.none,
                         children: [
                           // Background track at the very bottom of the
                           // 44-px hit area (flush with the video's edge).

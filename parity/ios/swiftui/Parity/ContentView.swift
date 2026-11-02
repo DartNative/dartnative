@@ -52,6 +52,8 @@ struct ContentView: View {
                         Spacer().frame(height: 12)
                         TextField("Hint", text: $hint).textFieldStyle(.roundedBorder)
                         Spacer().frame(height: 12)
+                        SearchTextField(placeholder: "Search")
+                        Spacer().frame(height: 12)
                         TextField("Plain EditText", text: $plain)
                         Spacer().frame(height: 12)
                         Picker("", selection: $segment) {
@@ -157,5 +159,28 @@ struct ContentView: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+/// Apple's search field, the one UISearchBar and .searchable draw, at its
+/// defaults, as tall as a search bar makes it.
+struct SearchTextField: UIViewRepresentable {
+    let placeholder: String
+    /// The field's height inside a real UISearchBar (44 pt on iOS 26).
+    static let height: CGFloat = {
+        let bar = UISearchBar(frame: CGRect(x: 0, y: 0, width: 375, height: 100))
+        bar.sizeToFit()
+        bar.layoutIfNeeded()
+        return bar.searchTextField.bounds.height
+    }()
+    func makeUIView(context: Context) -> UISearchTextField {
+        let f = UISearchTextField()
+        f.placeholder = placeholder
+        return f
+    }
+    func updateUIView(_ uiView: UISearchTextField, context: Context) {}
+    func sizeThatFits(_ proposal: ProposedViewSize, uiView: UISearchTextField, context: Context) -> CGSize? {
+        CGSize(width: proposal.width ?? uiView.intrinsicContentSize.width,
+               height: max(uiView.intrinsicContentSize.height, Self.height))
     }
 }

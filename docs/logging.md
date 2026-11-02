@@ -168,8 +168,7 @@ Future<void> main() async {
       dnLog('[boot] plugins registered');
 
       registerSkiaFactories();
-      DartNativeFontRegistrant.registerAll();
-      dnLog('[boot] skia + fonts registered');
+      dnLog('[boot] skia registered');
 
       await AppKeys.load(); // bundled config
       dnLog('[boot] config loaded');

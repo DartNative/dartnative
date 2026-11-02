@@ -54,6 +54,12 @@ class _CacheDemoState extends State<CacheDemo> {
   int _requestId = 0;
   Timer? _prewarmTimer;
 
+  // The video on screen before the last switch, disposed by the prewarm
+  // timer. A switch before the timer fires disposes it, or takes it back
+  // when it goes back to that video.
+  VideoPlayerController? _retiring;
+  int _retiringIndex = -1;
+
   // ── Silent precache state ─────────────────────────────────────────────────
   // Disk-precache status per URL index. "Loaded by player" (blue) is NOT
   // stored here — it's derived live in _isHeldByPlayer — so this map only
@@ -96,6 +102,7 @@ class _CacheDemoState extends State<CacheDemo> {
   @override
   void dispose() {
     _prewarmTimer?.cancel();
+    _retiring?.dispose();
     _activeController?.dispose();
     _nextController?.dispose();
     _prevController?.dispose();
@@ -150,6 +157,18 @@ class _CacheDemoState extends State<CacheDemo> {
     _nextController = null;
     _prevController?.dispose();
     _prevController = null;
+  }
+
+  VideoPlayerController? _takeRetiring(int index) {
+    if (_retiringIndex != index) return null;
+    final controller = _retiring;
+    _retiring = null;
+    return controller;
+  }
+
+  void _disposeRetiring() {
+    _retiring?.dispose();
+    _retiring = null;
   }
 
   // ── Play with initialized-event fallback ──────────────────────────────────
@@ -211,8 +230,11 @@ class _CacheDemoState extends State<CacheDemo> {
     if (_nextController != null) {
       newController = _nextController;
       _nextController = null;
+    } else {
+      newController = _takeRetiring(_currentIndex + 1);
     }
     _disposePrewarmed();
+    _disposeRetiring();
 
     newController ??= _createController(
       _urls[_currentIndex + 1],
@@ -234,8 +256,10 @@ class _CacheDemoState extends State<CacheDemo> {
 
     // Staggered prewarm: NEXT immediately, PREV after 400ms.
     _prewarmAdjacent(nextOnly: true);
+    _retiring = oldActive;
+    _retiringIndex = _currentIndex - 1;
     _prewarmTimer = Timer(const Duration(milliseconds: 400), () {
-      oldActive?.dispose();
+      _disposeRetiring();
       _prewarmAdjacent();
       // Repaint so the newly prewarmed PREV controller lights up blue.
       if (mounted) setState(() {});
@@ -253,8 +277,11 @@ class _CacheDemoState extends State<CacheDemo> {
     if (_prevController != null) {
       newController = _prevController;
       _prevController = null;
+    } else {
+      newController = _takeRetiring(_currentIndex - 1);
     }
     _disposePrewarmed();
+    _disposeRetiring();
 
     newController ??= _createController(
       _urls[_currentIndex - 1],
@@ -275,8 +302,10 @@ class _CacheDemoState extends State<CacheDemo> {
     _playController(_activeController!);
 
     _prewarmAdjacent(prevOnly: true);
+    _retiring = oldActive;
+    _retiringIndex = _currentIndex + 1;
     _prewarmTimer = Timer(const Duration(milliseconds: 400), () {
-      oldActive?.dispose();
+      _disposeRetiring();
       _prewarmAdjacent();
       // Repaint so the newly prewarmed NEXT controller lights up blue.
       if (mounted) setState(() {});
@@ -288,13 +317,12 @@ class _CacheDemoState extends State<CacheDemo> {
   // ── Background precaching ─────────────────────────────────────────────────
 
   Set<String> _activePlayerUrls() {
-    final urls = <String>{};
-    if (_currentIndex >= 0 && _currentIndex < _urls.length) {
-      urls.add(_urls[_currentIndex]);
-    }
-    if (_currentIndex + 1 < _urls.length) urls.add(_urls[_currentIndex + 1]);
-    if (_currentIndex - 1 >= 0) urls.add(_urls[_currentIndex - 1]);
-    return urls;
+    // Only the videos a live player holds; a neighbour with no player yet
+    // is pre-cached like the rest.
+    return {
+      for (int i = 0; i < _urls.length; i++)
+        if (_isHeldByPlayer(i)) _urls[i],
+    };
   }
 
   Future<void> _precacheAll() async {
@@ -313,10 +341,12 @@ class _CacheDemoState extends State<CacheDemo> {
 
       for (final i in urlsToCache) {
         setState(() => _urlStates[i] = _UrlCacheState.inProgress);
+        // Enough of each clip for its first frame: a 720p clip needs
+        // about 1 MB.
         VideoCache.preCache(
           _urls[i],
           cacheKey: _urls[i],
-          preCacheSize: 400 * 1024,
+          preCacheSize: 1536 * 1024,
         );
         // Small delay between precaches to avoid contention.
         await Future.delayed(const Duration(milliseconds: 500));

@@ -66,14 +66,16 @@ DartNative provides Flutter-compatible scroll widgets plus a native **Fast famil
 
 | Widget | Backed by | Best for |
 |--------|-----------|----------|
-| `ListView` / `ListView.builder` | `UIScrollView` + Yoga (all cells live) | Short, static lists (< ~50 items) |
-| `FastList` | `UITableView` / `RecyclerView` recycling | Long or image-heavy lists |
-| `FastGrid` | `UICollectionView` / `RecyclerView` + `GridLayoutManager` | Long uniform grids |
+| `ListView` (a list of `children`) | `UIScrollView` / `ScrollView` (all items live) | Short, static lists (< ~50 items) |
+| `ListView.builder` / `ListView.separated` | `UICollectionView` / `RecyclerView` recycling, lazy | Lists of any length, with Flutter's API |
+| `FastList` | `UICollectionView` / `RecyclerView` recycling | Long or image-heavy lists that need its own options |
+| `GridView.builder` | `UICollectionView` / `RecyclerView` recycling, lazy | Grids of any length, with Flutter's API |
+| `FastGrid` | `UICollectionView` / `RecyclerView` + `GridLayoutManager` | Long uniform grids that need its own options |
 | `MasonryFastGrid` | staggered collection / layout manager | Pinterest-style variable-height grids |
 
 ### FastList — real recycling
 
-`FastList` is a real `UITableView` / `RecyclerView`: cells recycle as they scroll off-screen, scrolling stays smooth at any length, and index jumps are exact. The item builder runs for the rows that fill the first screen, for a margin beyond them right after the first frame, then for each row as the scroll brings it near, so the mount costs the same at any `itemCount`. By default every built cell is held for the widget's lifetime; set **`keepAliveCount`** and only a sliding window around the viewport holds content, independent of `itemCount`. Pair it with `Image.cacheWidth`/`cacheHeight` (decode at cell size) for image lists. Add **`recycleItems: true`** and the rows the window lets go are reused for the rows that scroll in, as the platform reuses its cells. On Android, rows built ahead of the viewport wait in the window with their drawing already done, so the frame that scrolls a row in only puts it in place.
+`FastList` is a real `UICollectionView` / `RecyclerView`: cells recycle as they scroll off-screen, only the rows on screen are laid out, scrolling stays smooth at any length, and index jumps are exact. The item builder runs for the rows that fill the first screen, for a margin beyond them right after the first frame, then for each row as the scroll brings it near, so the mount costs the same at any `itemCount`. Only a sliding window around the viewport holds content, independent of `itemCount`: 250 points on each side by default, as Flutter's `cacheExtent`, or **`keepAliveCount`** rows. Pair it with `Image.cacheWidth`/`cacheHeight` (decode at cell size) for image lists. Add **`recycleItems: true`** and the rows the window lets go are reused for the rows that scroll in, as the platform reuses its cells. On Android, rows built ahead of the viewport wait in the window with their drawing already done, so the frame that scrolls a row in only puts it in place.
 
 **Programmatic scrolling:**
 
@@ -96,7 +98,7 @@ controller.jumpToItem(0);
 
 ### FastGrid & MasonryFastGrid
 
-The same model in two dimensions: `FastGrid` for uniform grids, `MasonryFastGrid` for variable-height, Pinterest-style ones. Both are real recycling collection views with the same memory model and the same `keepAliveCount`, driven by a `FastGridController`.
+The same model in two dimensions: `FastGrid` for uniform grids, `MasonryFastGrid` for variable-height, Pinterest-style ones. Both are real recycling collection views with the same memory model and the same window (250 points by default, `cacheExtent` or `keepAliveCount` to size it), driven by a `FastGridController`. `GridView.builder` runs on the same grid.
 
 ---
 
@@ -351,7 +353,7 @@ either project, no benchmark required:
 3. **Synchronous input.** A tap calls straight into Dart on the main thread in
    the same run-loop turn — touch, state change and view update in one frame.
 4. **Scrolling never enters the language runtime.** `FastList` is a real
-   `UITableView` / `RecyclerView`; React Native's list virtualization is
+   `UICollectionView` / `RecyclerView`; React Native's list virtualization is
    JavaScript-driven, so a fast fling can outrun it.
 
 **Where we're even:** real native views, the same Yoga engine (no

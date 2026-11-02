@@ -454,6 +454,7 @@ class _ImageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: kTileBg,
         borderRadius: BorderRadius.circular(12),
@@ -519,6 +520,7 @@ class _BoxFitComparison extends StatelessWidget {
                 const SizedBox(height: 6),
                 Container(
                   height: 150,
+                  clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(
                     color: kRowBg,
                     borderRadius: BorderRadius.circular(12),

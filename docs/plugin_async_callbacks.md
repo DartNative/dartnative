@@ -220,11 +220,23 @@ object MyPluginBridge {
 #include <dlfcn.h>
 #include <jni.h>
 
-// Reads the framework's restart counter from the core library.
+// Reads the framework's restart counter from the core library. That library
+// is loaded with System.loadLibrary, which keeps its symbols out of
+// dlsym(RTLD_DEFAULT) for apps targeting API 23 and up, so look it up by name.
+using GenFn = uint64_t (*)();
+static GenFn resolveIsolateGen() {
+    GenFn fn = nullptr;
+    if (void* core = dlopen("libdartnative_android.so", RTLD_NOW | RTLD_NOLOAD)) {
+        fn = (GenFn)dlsym(core, "DN_IsolateGen");
+        dlclose(core);
+    }
+    if (!fn) fn = (GenFn)dlsym(RTLD_DEFAULT, "DN_IsolateGen");
+    return fn;
+}
+
 extern "C" JNIEXPORT jlong JNICALL
 Java_com_example_MyPluginBridge_nativeIsolateGen(JNIEnv*, jobject) {
-    using GenFn = uint64_t (*)();
-    static GenFn fn = (GenFn)dlsym(RTLD_DEFAULT, "DN_IsolateGen");
+    static GenFn fn = resolveIsolateGen();
     return fn ? (jlong)fn() : 0;
 }
 
@@ -242,7 +254,10 @@ Java_com_example_MyPluginBridge_nativeDeliver(
 > Android also offers `DNViewRegistry.registerResetHook { … }` — hooks that run
 > when the **new** session starts. Use those for resource cleanup (dispose
 > players, cancel downloads), **not** as the crash guard: they run too late.
-> The generation check above is the crash guard.
+> The generation check above is the crash guard. A hook runs inside the new
+> session's `runApp`, when that session's `main()` may already have made
+> objects of its own: dispose only what an ended session left (store the
+> generation with each object and compare), never everything.
 
 ### The three rules that make it safe
 

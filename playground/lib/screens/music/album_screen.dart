@@ -49,6 +49,7 @@ class _AlbumHeader extends StatelessWidget {
           Container(
             width: 300,
             height: 300,
+            clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
             ),
@@ -181,6 +182,7 @@ class _SongRow extends StatelessWidget {
             Container(
               width: 44,
               height: 44,
+              clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
               ),

@@ -1233,6 +1233,29 @@ dependencies:
 Export the public API and declare your `loadSymbols()` in the
 `dartnative.registrant` block ([§11](#11-plugin-registration-in-app-main)).
 
+Your plugin's dependencies are written as in an app: by name and version,
+from dartpub.dev or pub.dev (which registry a line uses:
+[getting_started.md, §3](getting_started.md#3-create-your-own-project)).
+
+- **Each dependency's registry is written for you.** In the pubspec it
+  publishes, `dn plugin build` names dartpub.dev for each dependency your
+  plugin takes from there, so apps resolve it from the right place. When
+  needed, for example after you edit `pubspec.yaml`, it resolves your plugin
+  first, as `dn pub get` does, and says so. Your own `pubspec.yaml` is not
+  changed.
+- **The example app** takes the plugin by `path: ../` and needs nothing
+  special.
+- **An app that takes your package by `git:`** reads its pubspec as it is.
+  If apps may use it that way, write its dartpub.dev dependencies with their
+  registry:
+
+  ```yaml
+  dependencies:
+    some_plugin:
+      hosted: https://dartpub.dev
+      version: ^0.1.0
+  ```
+
 ### Plugin podspec (iOS)
 
 ```ruby

@@ -1,4 +1,3 @@
-import 'dart:io' show Platform;
 import 'dart:async' show runZonedGuarded;
 
 import 'package:dartnative/dartnative.dart';
@@ -66,12 +65,6 @@ void main() {
       // Pre-warm SQLite FFI linkage so all panels can open databases
       // immediately without lazy-init overhead.
       Sqlite.ensureInitialized();
-      if (Platform.isIOS) {
-        // Register pubspec-declared fonts (assets/fonts/*.ttf|.otf) with UIKit
-        // so `IconData(0xXXXX, fontFamily: 'CustomFamily')` and
-        // `TextStyle(fontFamily: 'CustomFamily')` resolve correctly.
-        DartNativeFontRegistrant.registerAll();
-      }
       // Firebase loads symbols + initializes the default app from the
       // platform config (GoogleService-Info.plist / google-services.json),
       // then installs the FCM delegate. Done here so the token is ready

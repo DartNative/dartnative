@@ -9,14 +9,28 @@ DARTNATIVE FRAMEWORK LICENSE
    "Software" means the DartNative framework, including its source code,
    binaries, and tooling, which are the exclusive property of Licensor.
    "Licensee" means the holder of a valid license token obtained through
+   https://dartpub.dev and, for a Standard or Pro plan, the Organization
+   on whose behalf it is held.
+   "Plan" means the Community, Standard or Pro subscription held on
    https://dartpub.dev.
+   "Organization" means the company or other legal entity on whose behalf
+   a Standard or Pro plan is held, together with its employees and the
+   contractors working for it. A Community plan covers one individual
+   shipping their own applications.
+   "Team Members" means the persons the holder of a Standard or Pro plan
+   lists as members of its team on https://dartpub.dev, within the number
+   of persons the Plan includes.
+   "Credentials" means license tokens, the keys issued for a team's
+   builds, and the sign-in tokens issued by https://dartpub.dev.
    "First-Party Plugins" means Licensor's plugins distributed through
    https://dartpub.dev.
 
 2. LICENSE GRANT
    A valid license token grants Licensee a limited, non-exclusive,
    non-transferable, non-sublicensable right to:
-   (a) use the Software to build and deploy applications;
+   (a) use the Software to build and deploy applications: on a Community
+       plan, the individual's own applications; on a Standard or Pro plan,
+       the Organization's applications, built by its Team Members;
    (b) access the Software via the DartNative private package registry while
        the subscription is active; and
    (c) Continuity for Shipped Applications: applications built and
@@ -33,10 +47,19 @@ DARTNATIVE FRAMEWORK LICENSE
        the Software;
    (b) reverse-engineer, decompile, or disassemble the Software;
    (c) remove or obscure any proprietary notices;
-   (d) share license tokens with third parties; or
+   (d) share Credentials with anyone, except that the keys issued for a
+       team's builds are used by its Team Members through
+       https://dartpub.dev; a sign-in token is personal to the person who
+       created it;
    (e) develop, build, or deploy applications with the Software after
        subscription expiry or token revocation. This does not limit the
-       Continuity for Shipped Applications in Section 2(c).
+       Continuity for Shipped Applications in Section 2(c);
+   (f) register application identifiers (bundle identifiers or
+       application ids) that Licensee does not ship, or register them to
+       keep them from others; Licensor may release an identifier so
+       registered; or
+   (g) list as Team Members persons who do not work for the Organization,
+       or use one Plan for several unrelated organizations.
 
 4. SUNSET COMMITMENT
    4.1 Discontinuation. The Software shall be deemed "Discontinued" upon the

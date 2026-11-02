@@ -280,6 +280,7 @@ class _Photo extends StatelessWidget {
           child: Container(
             width: _photoWidth,
             height: item.photoHeight,
+            clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               color: _photoFill,
               borderRadius: BorderRadius.circular(18),

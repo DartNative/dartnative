@@ -236,6 +236,7 @@ class SpLyricsCard extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: Container(
         height: kSpLyricsCardHeight,
+        clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: kSpLyricsRed,
           borderRadius: BorderRadius.circular(kSpCardRadius),

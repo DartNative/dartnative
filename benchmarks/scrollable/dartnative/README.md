@@ -66,9 +66,6 @@ every other launch.
 Each of these is written the way a DartNative developer would write it;
 none of them changes how much work a card costs.
 
-- **The card's width is given explicitly.** In Flutter, a `Stack` child in a
-  `SizedBox(width: double.infinity)` takes the full width; DartNative's
-  `Stack` does not stretch it, so the card is given its column's width.
 - **The footer's top line is a 1-point view.** The example uses a top border;
   DartNative's `Container` draws borders on all four sides or none.
 - **The shadow.** On Android the example's card has `elevation: 4`, the

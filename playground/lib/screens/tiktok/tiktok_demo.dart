@@ -1043,7 +1043,11 @@ class _Placeholder extends StatelessWidget {
         children: [
           Icon(icon, size: 44, color: const Color(0x66FFFFFF)),
           const SizedBox(height: 12),
-          Text(text, style: const TextStyle(color: Color(0x99FFFFFF), fontSize: 15)),
+          Text(
+            text,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Color(0x99FFFFFF), fontSize: 15),
+          ),
         ],
       ),
     ),

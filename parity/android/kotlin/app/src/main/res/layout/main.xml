@@ -29,6 +29,9 @@
                 <com.google.android.material.textfield.TextInputLayout style="@style/Widget.Material3.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="Hint">
                     <com.google.android.material.textfield.TextInputEditText android:layout_width="match_parent" android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout style="@style/Widget.Material3.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="Search" app:startIconDrawable="@drawable/ic_search">
+                    <com.google.android.material.textfield.TextInputEditText android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                </com.google.android.material.textfield.TextInputLayout>
                 <EditText android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="Plain EditText" android:inputType="text"/>
                 <com.google.android.material.button.MaterialButtonToggleGroup android:id="@+id/segments" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" app:singleSelection="true" app:checkedButton="@+id/seg1">
                     <com.google.android.material.button.MaterialButton android:id="@+id/seg1" style="?attr/materialButtonOutlinedStyle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="One"/>

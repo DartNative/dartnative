@@ -19,17 +19,22 @@ It takes about 20 minutes, most of it build time.
 - **The `dn` command** installed, and a phone or emulator: a real iPhone
   (release builds do not run on the iOS Simulator), or an Android phone or
   emulator. See the getting started guide in the docs folder.
-- **Your licence key**, configured once:
+- **Your licence key**, configured once, and your dartpub.dev sign-in:
 
   ```sh
   dn config --license-key dnk_...
+  dn login
   ```
 
-  Code push needs your own account: `dn release` and `dn patch` register
-  what they build with the update service under it, and a phone can only
-  download a fix after the daily licence check your key allows. This app
-  is not covered by the free demo licence; every build you make carries
-  the key you configured.
+  Code push works under your own account, in two halves. Every build you
+  make carries the licence key you configured, and a phone downloads a fix
+  only after the daily licence check that key allows. Sending a release or
+  a fix uses your sign-in instead: the key travels inside every app you
+  ship, so it is never what publishes anything. `dn login` opens
+  dartpub.dev in the browser; sign in with the GitHub account that holds
+  your DartNative plan. If you skip it, the first `dn release` asks you to
+  sign in. If your `dn` has no `dn login`, run `dn upgrade` first. This app
+  is not covered by the free demo licence.
 - **Change the app id to one of your own**, on both platforms, before you
   run `dn release`. An app id belongs to the first account that ships it,
   so the id this tutorial comes with cannot work for everyone who tries
@@ -106,8 +111,10 @@ the file itself says; the second is machine-local and already listed in
   this release asks about fixes. `dn release` also adds it to the app's
   assets in `pubspec.yaml`, so the installed app carries it.
 - `.dn_code_push/`: the recorded release, and on Android the release app
-  itself. Every fix is the difference from exactly this, so only this
-  machine can send fixes for this release.
+  itself. Every fix is the difference from exactly this. It stays on this
+  machine: `dn release` also sends the update service what a later fix
+  needs, so a fix for this release can be sent from any machine where you
+  are signed in.
 
 ## Step 3: Put the release on the phone
 
@@ -298,8 +305,12 @@ like adding a class.
 
 ## If something does not look right
 
-- **"The update service does not recognise this licence key"**: run
-  `dn config --license-key` again with the key from your account.
+- **`dn` says the GitHub account you signed in with has no DartNative
+  plan**: you chose another GitHub account than the one that holds your
+  plan. Run `dn login` again and choose that one.
+- **"Update dn, then run dn login."**: the `dn` you ran still publishes
+  with the licence key, which the update service no longer accepts.
+  Update `dn` and sign in.
 - **A line says the app's id belongs to another DartNative account**: the
   id this tutorial comes with was left in place (the yellow card is then at
   the top of the screen), or you used an id someone else already released.
@@ -313,21 +324,25 @@ like adding a class.
   the button: the app on the phone and the tool that built the fix come
   from different DartNative builds. Update the SDK, make a new release, and
   start again from step 2.
-- **"This app was released with a different DartNative than you have
-  now"** from `dn patch`: the SDK changed since the release. Make a new
-  release.
+- **"It was released with DartNative 1.3.0"** from `dn patch`: you have
+  another DartNative release than the one the app was released with. To
+  build fixes for that release, switch back with the command it names
+  (`dn use 1.3.0`); or make a new release. When that release is no longer
+  available, only a new release works. (A `dn` from before `dn use` says
+  "This app was released with a different DartNative than you have now":
+  make a new release.)
 - **`adb install` fails with a signature message**: a debug build is
   installed. `adb uninstall <your application id>` first.
-- **Taking a fix down**: every fix you sent has a
-  `.dn_code_push/patches/<platform>/1.0.0+1/<n>/server.json` with its
-  `patch_id`. One request with your licence key withdraws it. Phones that
-  already have it remove it at their next start, and the start after that
-  runs the newest fix you have not withdrawn, or the release as shipped:
+- **Taking a fix down**: a fix that turns out wrong can be withdrawn by
+  its number:
 
   ```sh
-  curl -X POST -H "Authorization: Bearer dnk_..." \
-    https://api.dartpub.dev/v1/code-push/patches/<patch_id>/withdraw
+  dn withdraw ios 2     # or:  dn withdraw android 2
   ```
+
+  Phones that already have fix 2 remove it at their next start, and the
+  start after that runs the newest fix you have not withdrawn, or the
+  release as shipped.
 
 This walkthrough was written on a Mac. On Windows the Android commands are
 expected to work the same way, but that has not been walked yet.

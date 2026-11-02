@@ -167,6 +167,7 @@ class _DeviceOrientationDemoState extends State<DeviceOrientationDemo> {
                   const SizedBox(height: 8),
                   Text(
                     'Index: ${_current.index} · changes since open: $_changeCount',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: kTextSecondary,
                       fontSize: 13,

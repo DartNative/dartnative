@@ -25,6 +25,9 @@ Both take the bytes as they arrive (`response.bodyBytes`, a file's bytes),
 so there is no `String` to make first: that step alone is a large part of
 what `jsonDecode(response.body)` costs.
 
+`jsonDecodeInBackground` runs on `runInBackground`, which you can use for
+any other work: see [Work in the background](background.md).
+
 ---
 
 ## The same result as `jsonDecode`

@@ -144,6 +144,7 @@ class SettingsScreen extends StatelessWidget {
       body: const Center(
         child: Text(
           'Reached via Navigator.pushNamed(context, \'/settings\')',
+          textAlign: TextAlign.center,
           style: TextStyle(color: Color(0xFF6B6B70), fontSize: 14),
         ),
       ),
@@ -182,6 +183,7 @@ class ComposeScreen extends StatelessWidget {
       body: const Center(
         child: Text(
           'Presented with RouteTransition.slideFromBottom.',
+          textAlign: TextAlign.center,
           style: TextStyle(color: Color(0xFF6B6B70), fontSize: 14),
         ),
       ),

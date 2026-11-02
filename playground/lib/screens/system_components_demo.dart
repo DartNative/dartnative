@@ -1338,6 +1338,7 @@ class _SystemComponentsDemoState extends State<SystemComponentsDemo> {
                   SizedBox(height: 12),
                   Text(
                     'Tap ▶ to fill the ring over 10s · tap ✕ to cancel',
+                    textAlign: TextAlign.center,
                     style: TextStyle(color: kTextSecondary, fontSize: 12),
                   ),
                   SizedBox(height: 22),
@@ -1487,6 +1488,7 @@ class _M3ProgressShowcase extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           'Wavy bar at 60% — with the M3 track gap and stop dot',
+          textAlign: TextAlign.center,
           style: TextStyle(color: kTextSecondary, fontSize: 12),
         ),
         const SizedBox(height: 16),
@@ -1858,6 +1860,7 @@ class _DemoSheetContentState extends State<_DemoSheetContent> {
             Text(
               'This is a fully native UISheetPresentationController sheet hosting dartnative widgets. '
               'Grab handle, spring physics, and swipe-to-dismiss are all provided by UIKit.',
+              textAlign: TextAlign.center,
               style:
                   TextStyle(color: kTextSecondary, fontSize: 14, height: 1.4),
             ),
@@ -2041,6 +2044,7 @@ class _DemoOverlayContentState extends State<_DemoOverlayContent> {
             Text(
               'This overlay uses VC containment — not modal presentation. '
               'The screen behind is visible. Tap outside the card to dismiss.',
+              textAlign: TextAlign.center,
               style:
                   TextStyle(color: kTextSecondary, fontSize: 14, height: 1.4),
             ),

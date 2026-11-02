@@ -1384,7 +1384,12 @@ class _Bubble extends StatelessWidget {
     if (message.typing) {
       content = _TypingDots(color: gpt.text);
     } else if (sticker == null) {
-      content = Text(message.text, style: textStyle);
+      // longestLine: a wrapped message's bubble ends at its longest line.
+      content = Text(
+        message.text,
+        style: textStyle,
+        textWidthBasis: TextWidthBasis.longestLine,
+      );
     } else {
       final stickerBox = SizedBox(
         width: _kStickerBubble,
@@ -1409,7 +1414,11 @@ class _Bubble extends StatelessWidget {
               children: [
                 stickerBox,
                 const SizedBox(height: 8),
-                Text(message.text, style: textStyle),
+                Text(
+                  message.text,
+                  style: textStyle,
+                  textWidthBasis: TextWidthBasis.longestLine,
+                ),
               ],
             );
     }

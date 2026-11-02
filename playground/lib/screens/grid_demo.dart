@@ -381,6 +381,8 @@ class _GridDemoState extends State<GridDemo> {
           crossAxisSpacing: 8,
           childAspectRatio: 1.0,
           physics: const NeverScrollableScrollPhysics(),
+          // Inside the page's list: the safe area is that list's.
+          padding: EdgeInsets.zero,
           children: [
             for (var i = 0; i < 9; i++)
               _GridTile(
@@ -408,6 +410,7 @@ class _GridDemoState extends State<GridDemo> {
           crossAxisSpacing: 12,
           childAspectRatio: 16 / 9,
           physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.zero,
           children: [
             for (var i = 0; i < 6; i++)
               _GridTile(
@@ -441,6 +444,7 @@ class _GridDemoState extends State<GridDemo> {
           ),
           itemCount: 20,
           physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.zero,
           itemBuilder: (_, i) => _GridTile(
               color: _tileColors[i % _tileColors.length], label: '#$i'),
         ),
@@ -463,6 +467,7 @@ class _GridDemoState extends State<GridDemo> {
           crossAxisSpacing: 8,
           childAspectRatio: 1.5,
           physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.zero,
           children: [
             for (var i = 0; i < 7; i++)
               _GridTile(

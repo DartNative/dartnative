@@ -237,6 +237,14 @@ class _ParityScreenState extends State<ParityScreen> {
               ),
               const SizedBox(height: 12),
               TextField(
+                prefixIcon: Icons.search,
+                decoration: const InputDecoration(
+                  labelText: 'Search',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
                 focusNode: _plainFocus,
                 decoration: const InputDecoration(hintText: 'Plain EditText'),
               ),

@@ -95,8 +95,10 @@ Framework panel if it ever leaks.
 
 The licence check runs inside `runApp`, from a token already on the device, in
 a few milliseconds and never waiting on the network, so it does not slow your
-app's launch. If your subscription ends, the apps you have already shipped keep
-running for their users; a lapse only stops new builds.
+app's launch. It sends the app's id, the DartNative plugins it uses and a
+one-way code of the install: nothing personal and no device identifier. If your
+subscription ends, the apps you have already shipped keep running for their
+users; a lapse only stops new builds.
 
 **Activate and run:**
 
@@ -133,9 +135,52 @@ line into `pubspec.yaml` and gets the packages; `dn pub remove <name>` takes it
 out again. Listing a package in `pubspec.yaml` and running `dn pub get` works
 too.
 
+Packages from dartpub.dev and from pub.dev are written the same way, by name
+and version. For a package your app does not use yet, `dn` picks the
+registry:
+
+| The name is on | `dn` takes |
+| --- | --- |
+| dartpub.dev only | dartpub.dev's package |
+| pub.dev only | pub.dev's package |
+| both | dartpub.dev's package, and tells you once that pub.dev has one too |
+
+To take the other one, name its registry. `dn pub add
+"some_package:{hosted: https://pub.dev}"` writes the line in this form:
+
+```yaml
+dependencies:
+  some_package:
+    hosted: https://pub.dev
+    version: ^2.0.0
+```
+
+`hosted: https://dartpub.dev` works the same way in the other direction. A
+package already in `pubspec.lock` stays with the registry it came from, so
+your app never switches packages by itself. If dartpub.dev cannot be reached,
+packages it does not have still come from pub.dev; only a dartpub.dev package
+waits until it is back. A package page at `https://dartpub.dev/packages/<name>`
+opens the right page for either registry. If `dn pub get` says it cannot find
+a dartpub.dev package on pub.dev, your `dn` is older than this: run
+`dn upgrade`.
+
 Besides `pubspec.lock`, `dn pub get` writes `dn_plugins.lock` with the versions
-of the DartNative plugins your app uses; commit both. When a newer framework
-build is available, `dn` tells you, and `dn upgrade` installs it.
+of the DartNative plugins your app uses and the DartNative release it was
+built with; commit both. `pubspec.lock` is also what keeps each package on
+the registry it came from, on every machine and in CI.
+
+When a new DartNative release is out, `dn` tells you, and `dn upgrade`
+installs it. `dn downgrade` goes back to the release you used before,
+`dn releases` lists them all, and `dn use 1.4.0` switches to that one. After a
+switch, run `dn pub get` in each app. These commands came with a newer `dn`:
+if yours does not have them, run the install command from step 1 again.
+
+### Teams (Standard and Pro)
+
+Standard and Pro plans let you share your plan with your team: everyone you
+add builds your apps under your plan, each with their own sign-in.
+[Teams](teams.md) covers setting it up, who can send CodePush fixes, CI, and
+someone leaving.
 
 ---
 
@@ -216,6 +261,7 @@ complete, runnable app.
 - [Debugging & logging](logging.md) — native log bridge, `DartNativeLogger`, file persistence
 - [Localization](localization.md) — ARB files, the generated `S` class, switching language at runtime
 - [JSON](json.md) — decoding JSON from bytes, faster than `jsonDecode`, in the background
+- [Work in the background](background.md) — `compute` and `runInBackground`: background work at less cost to the UI thread than `Isolate.run`
 - [Playground](../playground/) — working demo app to build and explore
 - [Writing your own plugin](plugin_development.md) — plugins are ordinary Dart packages with FFI/JNI native sides; if your native code calls Dart back, see [async callbacks](plugin_async_callbacks.md)
 - [Code push](../tutorials/code_push/) — send a fix directly to phones, without a release to App Store and Google Play

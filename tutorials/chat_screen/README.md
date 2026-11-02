@@ -20,7 +20,7 @@ bindings, run the screen.
 
 The demo is written with the Flutter widget API — if you know Flutter, every
 line reads as expected; the difference is that each widget drives the
-platform's real view (`FastList` → `UITableView`/`RecyclerView` with native
+platform's real view (`FastList` → `UICollectionView`/`RecyclerView` with native
 cell recycling, `TextField` → `UITextField`, the keyboard animation → the
 system's own compositor transaction). A `ListMode` switch at the top of the
 screen file swaps the same chat between `ListView`, `ListView.builder`,

@@ -27,9 +27,7 @@ Future<void> main() async {
       // loads every plugin's FFI symbols. Missing this shows as a white
       // screen with no error.
       DartNativePluginRegistrant.registerAll();
-      // Registers pubspec declared fonts with the OS. No-op on Android.
-      DartNativeFontRegistrant.registerAll();
-      dnLog('main: [boot] plugins and fonts registered');
+      dnLog('main: [boot] plugins registered');
 
       // Every pushable screen, registered by name. Two reasons:
       // 1. Navigator.pushNamed(context, '/notes') works anywhere.

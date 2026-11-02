@@ -112,6 +112,26 @@ class ShowcaseTab extends StatelessWidget {
             ),
           ),
           ShowcaseCard(
+            gradient: const [Color(0xFF0A84FF), Color(0xFF5E5CE6)],
+            icon: CupertinoIcons.bubble_left_bubble_right_fill,
+            title: 'Chat Screen',
+            // The keyboard follows the finger down on iOS only.
+            pitch: Platform.isIOS
+                ? 'Native list scrolling, rubber-band physics, and an input '
+                    'bar that rides the keyboard: drag the messages down and '
+                    'the keyboard follows your finger.'
+                : 'Native list scrolling, rubber-band physics, and a '
+                    'keyboard-attached input bar.',
+            tags: const ['UITableView', 'RecyclerView', 'no Skia'],
+            onTap: (ctx) => Navigator.push(
+              ctx,
+              PageRoute(
+                builder: (_) => const ChatScreenDemo(),
+                settings: '/chat',
+              ),
+            ),
+          ),
+          ShowcaseCard(
             gradient: const [Color(0xFF30D158), Color(0xFF0A84FF)],
             icon: CupertinoIcons.photo_on_rectangle,
             title: 'ChatGPT Picker',
@@ -175,21 +195,6 @@ class ShowcaseTab extends StatelessWidget {
                 ),
               ),
             ),
-          ShowcaseCard(
-            gradient: const [Color(0xFF0A84FF), Color(0xFF5E5CE6)],
-            icon: CupertinoIcons.bubble_left_bubble_right_fill,
-            title: 'Chat Screen',
-            pitch: 'Native list scrolling, rubber-band physics, and a '
-                'keyboard-attached input bar.',
-            tags: const ['UITableView', 'RecyclerView', 'no Skia'],
-            onTap: (ctx) => Navigator.push(
-              ctx,
-              PageRoute(
-                builder: (_) => const ChatScreenDemo(),
-                settings: '/chat',
-              ),
-            ),
-          ),
           ShowcaseCard(
             gradient: const [Color(0xFFBF5AF2), Color(0xFFFF375F)],
             icon: CupertinoIcons.rectangle_stack_fill,

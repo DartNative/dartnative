@@ -1,14 +1,13 @@
-// HitTestBehavior demo — validates opaque vs translucent.
+// HitTestBehavior demo — opaque vs translucent, as in Flutter.
 //
-// Two offset containers: RED (left/top) and BLUE (right/bottom).
-// The overlapping area tests gesture absorption vs forwarding.
+// Two offset areas: RED (left/top) counts taps; BLUE (right/bottom), in
+// front, counts long presses and has no onTap. BLUE's colour sits under an
+// IgnorePointer, so its detector's child draws nothing for the touch.
 //
-// opaque       → BLUE absorbs taps on its area. RED only gets taps on its
-//                non-overlapping region.
-// translucent  → BLUE fires its own callback AND natively forwards the tap
-//                to overlapping siblings drawn beneath it (RED) whose bounds
-//                contain the touch point. Tap on the overlapping area
-//                increments BOTH counters — no `passThrough` Dart API needed.
+// opaque       → BLUE takes every touch in its box: a tap on the overlap
+//                reaches nothing.
+// translucent  → the touch also reaches what is behind BLUE: a tap on the
+//                overlap counts on RED, a long press still counts on BLUE.
 
 import 'package:dartnative/dartnative.dart';
 import 'home/demo_ui.dart';
@@ -20,11 +19,11 @@ class HitTestDemo extends StatefulWidget {
 }
 
 class _HitTestDemoState extends State<HitTestDemo> {
-  int _topTapCount = 0;
-  int _bottomTapCount = 0;
+  int _blueLongPressCount = 0;
+  int _redTapCount = 0;
   bool _translucent = false;
 
-  void _bottomOnTap() => setState(() => _bottomTapCount++);
+  void _redOnTap() => setState(() => _redTapCount++);
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +49,8 @@ class _HitTestDemoState extends State<HitTestDemo> {
                 selected: !_translucent,
                 onTap: () => setState(() {
                   _translucent = false;
-                  _topTapCount = 0;
-                  _bottomTapCount = 0;
+                  _blueLongPressCount = 0;
+                  _redTapCount = 0;
                 }),
               ),
               const SizedBox(width: 10),
@@ -60,8 +59,8 @@ class _HitTestDemoState extends State<HitTestDemo> {
                 selected: _translucent,
                 onTap: () => setState(() {
                   _translucent = true;
-                  _topTapCount = 0;
-                  _bottomTapCount = 0;
+                  _blueLongPressCount = 0;
+                  _redTapCount = 0;
                 }),
               ),
             ],
@@ -69,8 +68,8 @@ class _HitTestDemoState extends State<HitTestDemo> {
           const SizedBox(height: 6),
           Text(
             _translucent
-                ? 'Tap BLUE → BLUE + RED both increment'
-                : 'Tap BLUE → only BLUE increments',
+                ? 'Tap the overlap → RED counts'
+                : 'Tap the overlap → nothing counts',
             style: TextStyle(
               color: _translucent
                   ? const Color(0xFF34C759)
@@ -85,13 +84,13 @@ class _HitTestDemoState extends State<HitTestDemo> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _Counter(
-                  count: _bottomTapCount,
-                  label: 'RED',
+                  count: _redTapCount,
+                  label: 'RED taps',
                   color: const Color(0xFFEF5350)),
               const SizedBox(width: 24),
               _Counter(
-                  count: _topTapCount,
-                  label: 'BLUE',
+                  count: _blueLongPressCount,
+                  label: 'BLUE long presses',
                   color: const Color(0xFF44AAFF)),
             ],
           ),
@@ -109,18 +108,20 @@ class _HitTestDemoState extends State<HitTestDemo> {
                   width: 200,
                   height: 200,
                   child: GestureDetector(
-                    onTap: _bottomOnTap,
+                    onTap: _redOnTap,
                     child: Container(
                       decoration: BoxDecoration(
                         color: const Color(0xFFEF5350),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.white24, width: 2),
                       ),
-                      child: _OverlayLabel(text: 'RED', count: _bottomTapCount),
+                      child: _OverlayLabel(text: 'RED', count: _redTapCount),
                     ),
                   ),
                 ),
-                // BLUE — right/bottom portion visible, overlaps RED in middle
+                // BLUE — right/bottom portion visible, overlaps RED in middle.
+                // Its colour ignores the pointer: the detector's child draws
+                // nothing for the touch, so its behaviour decides.
                 Positioned(
                   left: 70,
                   top: 70,
@@ -130,14 +131,17 @@ class _HitTestDemoState extends State<HitTestDemo> {
                     behavior: _translucent
                         ? HitTestBehavior.translucent
                         : HitTestBehavior.opaque,
-                    onTap: () => setState(() => _topTapCount++),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF44AAFF),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.white54, width: 3),
+                    onLongPress: () => setState(() => _blueLongPressCount++),
+                    child: IgnorePointer(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xCC44AAFF),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.white54, width: 3),
+                        ),
+                        child: _OverlayLabel(
+                            text: 'BLUE', count: _blueLongPressCount),
                       ),
-                      child: _OverlayLabel(text: 'BLUE', count: _topTapCount),
                     ),
                   ),
                 ),
@@ -146,7 +150,8 @@ class _HitTestDemoState extends State<HitTestDemo> {
           ),
           const SizedBox(height: 12),
           Text(
-            'Tap the BLUE area.  Red (left/top corner) is always tappable.',
+            'Tap where BLUE covers RED, then long-press BLUE.',
+            textAlign: TextAlign.center,
             style: const TextStyle(
                 color: Color(0xFF666666),
                 fontSize: 12,
@@ -156,9 +161,9 @@ class _HitTestDemoState extends State<HitTestDemo> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Text(
-              'HitTestBehavior.translucent on the top view fires its own '
-              'callback AND forwards the tap to overlapping siblings drawn '
-              'beneath it whose bounds contain the touch point.',
+              'BLUE handles only long presses. Opaque keeps every touch in '
+              'its box; translucent lets a tap it does not handle reach RED '
+              'behind it, as in Flutter.',
               textAlign: TextAlign.center,
               style: const TextStyle(
                   color: Color(0xFF555555),

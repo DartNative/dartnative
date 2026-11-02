@@ -103,11 +103,11 @@ void main() {
       `Scaffold` handle chrome natively).
 - [ ] Add the OTHER registrations the app needs (after `registerAll()`;
       see the dart-native skill's startup anatomy): `registerSkiaFactories()`
-      if `dartnative_skia` is used (`CanvasSurface`),
-      `DartNativeFontRegistrant.registerAll()` if the app ships custom fonts
-      (replaces Flutter's automatic font bundling), plugin initializers
+      if `dartnative_skia` is used (`CanvasSurface`), plugin initializers
       (`Firebase.initializeApp()`, `Sqlite.ensureInitialized()`, …), and an
-      app-wide `SystemChrome.defaultStyle` for the chrome baseline.
+      app-wide `SystemChrome.defaultStyle` for the chrome baseline. Custom
+      fonts need nothing: the `flutter: fonts:` block of pubspec.yaml carries
+      over as it is, and the app loads those fonts itself.
 
 ## 3. Per-file Dart migration
 
@@ -133,6 +133,7 @@ Then apply the known diffs proactively — don't wait for the analyzer:
 | `context.watch<T>()` / `ref.watch(p)` | `store.field.watch(context)` (see the dart-native skill, State) |
 | `ExcludeSemantics` | Remove — native accessibility applies |
 | `rootBundle.load(...)` | `loadAssetBytes('assets/...')` — sync, returns `Uint8List?` |
+| `Isolate.run(() => work(x))` | `runInBackground(() => work(x))` — same rules, less work on the UI thread; `compute` ports unchanged and already runs on it |
 
 Keep `Platform.isIOS`/`isAndroid` checks — DartNative is cross-platform and
 they work as expected. Code that reads the iOS version to choose between
@@ -156,7 +157,9 @@ a widget differs on purpose — bars, text fields, sheets — adopt the
 DartNative form rather than recreating the Flutter one. Then bank the free
 upgrades: check the keyboard on input screens (`Scaffold.bottomInputBar`
 for chat-style bars), declare `brightness: Brightness.dark` on
-dark-by-colors screens, consider `FastList` for very long feeds.
+dark-by-colors screens. `ListView.builder` and `GridView.builder` are
+already lazy, as in Flutter; consider `FastList` for very long feeds that
+want its extras (`keepAliveCount`, `recycleItems`, reordering, paging).
 
 ## 5. Failure modes → fixes
 

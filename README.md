@@ -91,7 +91,7 @@ React Native moves closer to the platform by using real native views, but introd
 
 DartNative takes a different approach:
 
-- **Real native views.** UILabel, UITextField, UIScrollView, UITableView — not redrawn pixels.
+- **Real native views.** UILabel, UITextField, UIScrollView, UICollectionView — not redrawn pixels.
 - **Single thread.** All Dart code runs on the platform's main thread. setState → diff → UIKit in one synchronous call stack. Zero thread hops.
 - **Dart AOT.** No JIT. No warmup. No GC pauses from recompilation. Full speed from first frame.
 - **Flutter-compatible API.** Column, Row, Text, Container, ListView, Navigator — if you know Flutter, you already know this framework. Most code compiles with zero changes.
@@ -143,7 +143,7 @@ DartNative is an independent product of Presence Network Inc.
 
 | Platform | Status | Layout engine | List recycling | GPU canvas |
 |---|---|---|---|---|
-| iOS | Production-ready | Yoga | UITableView / UICollectionView | Skia Graphite + Metal |
+| iOS | Production-ready | Yoga | UICollectionView | Skia Graphite + Metal |
 | Android | Production-ready | Yoga + Android Views | RecyclerView | Skia Graphite + Vulkan |
 
 ---

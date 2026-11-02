@@ -126,6 +126,11 @@ VideoDataSource.network(
 );
 ```
 
+With the cache on, a video downloaded whole plays from the phone after
+that. On iOS, when a player leaves a video before the whole file is in,
+what it downloaded stays in memory while the app runs, so the next player
+of that video shows its first frame at once.
+
 **Start fast in a feed**
 
 ```dart

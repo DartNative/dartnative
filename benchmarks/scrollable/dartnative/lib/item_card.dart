@@ -55,8 +55,7 @@ class ItemCard extends StatefulWidget {
   final CardData data;
 
   /// The width the card is drawn at: its column's width less the 12-point
-  /// padding on each side. Given explicitly because DartNative's Stack does
-  /// not stretch its child to the width as Flutter's does.
+  /// padding on each side.
   final double width;
 
   /// The benchmark's advanced mode: one to forty sentences, a short card
@@ -124,6 +123,7 @@ class _ItemCardState extends State<ItemCard> {
                       width: 40,
                       height: 40,
                       margin: const EdgeInsets.only(right: 12),
+                      clipBehavior: Clip.antiAlias,
                       decoration: const BoxDecoration(shape: BoxShape.circle),
                       child: Image.network(d.avatarUrl, fit: BoxFit.cover),
                     ),
@@ -244,6 +244,7 @@ class _ImageRail extends StatelessWidget {
             child: Container(
               width: _side,
               height: _side,
+              clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
                 color: _divider,
                 borderRadius: BorderRadius.circular(8),

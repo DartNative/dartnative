@@ -24,7 +24,7 @@ enum ListMode {
   /// Standard [ListView] with static children.
   listView,
 
-  /// [ListView.builder] — lazy builder API (items are eagerly expanded for this release).
+  /// [ListView.builder] — rows built as they near the screen, on the platform's list.
   listViewBuilder,
 
   /// [CustomScrollView] with a single [SliverList.builder].
@@ -33,7 +33,7 @@ enum ListMode {
   /// [CustomScrollView] with a [SliverToBoxAdapter] header + [SliverList.builder].
   customScrollViewMixed,
 
-  /// [FastList] — dartnative's own high-performance list backed by UITableView (iOS)
+  /// [FastList] — dartnative's own high-performance list backed by UICollectionView (iOS)
   /// and RecyclerView (Android). Provides O(1) cell recycling and direct
   /// [FastListController.jumpToItem] / [scrollToItem] via native NSIndexPath APIs.
   fastList,
@@ -132,19 +132,19 @@ class _ChatScreenDemoState extends State<ChatScreenDemo> {
   // ── Scroll-to-bottom FAB ──────────────────────────────────────────────────
 
   /// ScrollView family: native scroll events update [_scrollController]; read
-  /// the live offset and toggle the FAB. (No-op for FastList, which never
-  /// attaches to [_scrollController] — it feeds [_updateFab] via onScroll.)
+  /// the live offset and toggle the FAB. A reversed list's offset counts from
+  /// its start, the newest message, as in Flutter. (No-op for FastList, which
+  /// never attaches to [_scrollController] — it feeds [_updateFab] via
+  /// onScroll.)
   void _onScroll() {
     if (!_scrollController.hasClients) return;
-    final pos = _scrollController.position;
-    _updateFab(pos.pixels, pos.maxScrollExtent);
+    _updateFab(_scrollController.position.pixels);
   }
 
-  /// Shared FAB toggle. Reverse lists put the newest message at [maxExtent]
-  /// (bottom) on BOTH families, so the same "how far up from newest" test works
-  /// for ScrollView lists and FastList alike.
-  void _updateFab(double offset, double maxExtent) {
-    final show = (maxExtent - offset) > _kFabZone;
+  /// Shared FAB toggle: shown once the list is more than [_kFabZone] away
+  /// from the newest message.
+  void _updateFab(double fromNewest) {
+    final show = fromNewest > _kFabZone;
     if (_showFab.value != show) _showFab.value = show;
   }
 
@@ -152,20 +152,9 @@ class _ChatScreenDemoState extends State<ChatScreenDemo> {
   void _scrollToBottom() {
     if (_activeListMode == ListMode.fastList) {
       _fastListController.scrollToBottom();
-    } else if (_activeListMode == ListMode.customScrollViewSliverList ||
-        _activeListMode == ListMode.customScrollViewMixed) {
-      // CustomScrollView has no native scrollToBottom wiring (only ListView
-      // does); animate the ScrollController to the bottom instead.
-      if (_scrollController.hasClients) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeOut,
-        );
-      }
     } else {
-      // listView / listViewBuilder — resets userScrolled + native bottom snap,
-      // re-enabling the reverse-list auto-anchor.
+      // The ListView and CustomScrollView modes — resets userScrolled +
+      // native bottom snap, re-enabling the reverse-list auto-anchor.
       _listController.scrollToBottom();
     }
   }
@@ -374,9 +363,8 @@ class _ChatScreenDemoState extends State<ChatScreenDemo> {
   // ── ListMode.listViewBuilder ────────────────────────────────────────────────
 
   Widget _buildListViewBuilder() {
-    // listController wires ListController.jumpToItem / animateToItem to
-    // UIScrollView.setContentOffset via FFI — equivalent to super_sliver_list's
-    // ListController but backed by native UIScrollView instead of Flutter sliver.
+    // listController scrolls to a message by index (jumpToItem /
+    // animateToItem), on the same native list FastList uses.
     return ListView.builder(
       controller: _scrollController,
       listController: _listController,
@@ -405,12 +393,14 @@ class _ChatScreenDemoState extends State<ChatScreenDemo> {
       controller: _fastListController,
       reverse: true,
       // Rows are built as they near the viewport, so itemCount is the real
-      // message count, never a cap or a padding; memory follows the rows
-      // scrolled past, not the count.
+      // message count, never a cap or a padding; only the rows near the
+      // screen hold their content, whatever the count.
       itemCount: _messages.length,
       // FastList has no ScrollController; drive the FAB from onScroll instead.
       onScroll: (offset, maxExtent, viewport, dragging) =>
-          _updateFab(offset, maxExtent),
+          // FastList's offset runs from the top: the newest message, at the
+          // bottom of a reversed list, is at maxExtent.
+          _updateFab(maxExtent - offset),
       itemBuilder: (_, i) => _ChatBubble(
         message: _messages[i],
         messageNumber: _messages.length - i,
@@ -457,15 +447,6 @@ class _ChatScreenDemoState extends State<ChatScreenDemo> {
       listController: _listController,
       reverse: true,
       slivers: [
-        SliverToBoxAdapter(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Text(
-              '⬆ SliverToBoxAdapter header — mixed sliver demo',
-              style: TextStyle(color: kTextSecondary, fontSize: 12),
-            ),
-          ),
-        ),
         SliverPadding(
           padding: const EdgeInsets.only(
             left: 16,
@@ -479,6 +460,17 @@ class _ChatScreenDemoState extends State<ChatScreenDemo> {
               message: _messages[i],
               messageNumber: _messages.length - i,
               isHighlighted: _messages[i].id == _highlightedMessageId,
+            ),
+          ),
+        ),
+        // Last: a reversed view puts its first sliver at the bottom, so the
+        // header at the end shows above the oldest message.
+        SliverToBoxAdapter(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Text(
+              '⬆ SliverToBoxAdapter header — mixed sliver demo',
+              style: TextStyle(color: kTextSecondary, fontSize: 12),
             ),
           ),
         ),
@@ -524,10 +516,12 @@ class _ChatBubble extends StatelessWidget {
           ),
         ),
         // Text → UILabel. CoreText rendering, Dynamic Type, correct baseline.
+        // longestLine: a wrapped message's bubble ends at its longest line.
         child: Text(
           messageNumber != null
               ? '$messageNumber. ${message.text}'
               : message.text,
+          textWidthBasis: TextWidthBasis.longestLine,
           style: TextStyle(
             // White on the blue bubbles (sent/highlight); themed on incoming.
             color: message.isMe || isHighlighted
