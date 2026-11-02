@@ -3,6 +3,211 @@
 <!-- Generated file: edits here are overwritten on the next release.
      The changelog is maintained at https://dartnative.com/changelog -->
 
+## Teams, and improved Flutter parity for layout and the widget model
+
+1.5.0 (2026-11-02)
+
+Standard and Pro plans now include Teams: share your plan with the people
+who build your apps, each with their own sign-in. Sharing your plan with
+your team makes DartNative cost almost nothing per person, even on a paid
+plan. This release also further improves Flutter parity, in layout and in
+the widget model, so you can code in DartNative as you would in Flutter.
+It also fixes sheets on Android (#77, #78), keeps the app's state when Android
+switches between light and dark (#79), and keeps a text field's selection
+in step with its controller (#80, #81).
+
+**How to update.** Run `dn upgrade`. This release runs on the same engine
+as 1.4.0. `dn downgrade` takes you back to the release you used before,
+such as 1.4.0, and `dn use <release>` switches to any release that
+`dn releases` lists. If your `dn` is older than these commands, or older
+than Teams, `dn upgrade` prints the install command for your system: run
+it, then run `dn upgrade` again.
+
+**Code push.** This release is a new framework build on the same engine.
+After you update, the fixes you send reach only apps released with this
+version. Make a new release of your app before you send fixes.
+
+**Changes that can affect your code:**
+
+- A `Text` in a `Row` keeps its line instead of wrapping at the Row's end,
+  as in Flutter. Put it in an `Expanded` or a `Flexible` to let it wrap.
+- A `Text` that wraps is as wide as the room it is given, as in Flutter. It
+  used to be as wide as its longest line, so chat bubbles get wider.
+  `textWidthBasis: TextWidthBasis.longestLine` keeps the old width.
+- A `Positioned` child that reaches past its `Stack` is cut at the Stack's
+  edges, as in Flutter. It used to show whole. `clipBehavior: Clip.none` on
+  the Stack lets it draw outside.
+- A `Container` or a `Card` with rounded corners no longer cuts its child
+  at the corners, as in Flutter. `clipBehavior: Clip.antiAlias` or a
+  `ClipRRect` keeps the cut.
+- A `ListView` or `GridView` with no `padding` now keeps clear of the
+  system bars at the top and bottom of the screen when nothing above it
+  does, as in Flutter. Pass `padding: EdgeInsets.zero` to keep the old
+  layout.
+- `ListView.builder`, `ListView.separated`, `GridView.builder` and a
+  `CustomScrollView` of list and grid slivers build items on demand, as in
+  Flutter. An item more than 250
+  points off screen is now let go, and its State starts over when it comes
+  back. To keep it, use `AutomaticKeepAliveClientMixin` or raise
+  `cacheExtent`. `FastList`, `FastGrid` and `MasonryFastGrid` now let go of
+  rows the same way by default; they used to keep every row they built.
+- In a scroll view with `reverse: true`, a `ScrollController`'s offset
+  counts from the bottom, so `jumpTo(0)` goes to the newest item, and a
+  `CustomScrollView` puts its first sliver at the bottom, as in Flutter.
+- A one-line `TextField` with no `textInputAction` shows Done and closes
+  the keyboard, as in Flutter. On Android it used to move to the next
+  field: set `textInputAction: TextInputAction.next` for that.
+- A translucent `GestureDetector` that handles a tap no longer passes the
+  same tap to the widget behind it, as in Flutter. A tap it does not handle
+  still goes through.
+- `Offset.distance` is the length, as in Flutter. It used to be the squared
+  length, which is now `distanceSquared`.
+- With Android's Remove animations setting on, an `AnimationController`
+  runs at 5% of its duration, as in Flutter.
+  `animationBehavior: AnimationBehavior.preserve` keeps the full length.
+
+### Teams
+
+Standard and Pro plans now include Teams. Everyone you add builds your
+apps under your plan, each with their own `dn login`, so nobody shares a
+key, and they don't need a plan of their own.
+
+- **Set it up** on dartpub.dev in Settings → Team: create the team, add
+  members by their GitHub username (up to 3 people on Standard, you
+  included, and any number on Pro), then name the team in your project's
+  `pubspec.yaml` under `dartnative:` as `team: <name>`. Every build of that
+  project, by you or any member, uses your plan.
+- **CodePush stays in your hands.** Only you and the members you allow can
+  make a release, send a fix or take one back.
+- **CI builds as a person**, with an Apps token one of you creates in
+  Settings → API, never with a shared key.
+- **When someone leaves**, their builds stop using your plan. Nothing else
+  changes, and your published apps keep working.
+
+Teams needs the latest `dn`: an older one stops on the `team:` line. The
+[Teams page](https://dartnative.com/docs/getting-started/teams/) has every
+step.
+
+### Flutter parity
+
+- **The widget model, as in Flutter.** Ten widgets that dropped their child
+  now show it: `Listener`, `AbsorbPointer`, `AnnotatedRegion`,
+  `FittedBox`, `Flex`, `Focus`, `FocusScope`, `FractionallySizedBox`,
+  `IntrinsicHeight` and `IntrinsicWidth`. Keyed children of a `Column`,
+  `Row`, `ListView`, `Wrap` or `Stack` keep their State when one is added,
+  removed or moved. Lists build their items on demand, with Flutter's
+  keep-alive (`AutomaticKeepAliveClientMixin`, `KeepAlive`,
+  `addAutomaticKeepAlives`) and `cacheExtent` on `ListView` and the grids.
+  `NotificationListener` hears scroll start, update, end and user scroll
+  notifications in Flutter's order, from every scroll view and from
+  `FastList`, `FastGrid` and `MasonryFastGrid`. The `BuildContext` ancestor
+  lookups, such as `findAncestorStateOfType`, are there too, and a colour
+  or text style set back to `null` returns to the default.
+- **Layout, as in Flutter.** `ConstrainedBox` applies its constraints;
+  they were ignored. A `Stack` of only `Positioned` children, or with a
+  childless `Container` covering it, fills its room. A horizontal
+  `SingleChildScrollView` in a `Column` is as tall as its content. A grid
+  cell's content fills the cell. `Wrap.runAlignment` and
+  `SliverFillRemaining` work as in Flutter. Text, `Stack` and `Container`
+  follow Flutter's layout too, as the changes above describe.
+
+### New
+
+- **`Matrix4` and transforms.** `Transform(transform:)` takes any
+  `Matrix4`, skew and perspective included, and `Container` takes
+  `transform`. On Android, skew and perspective need Android 10 or later.
+- **`compute`, as in Flutter, with less work on the UI thread** (1.5x less
+  on Android and 1.6x less on iPhone in our measurements). It runs on
+  `runInBackground`, which now comes with
+  `package:dartnative/dartnative.dart`: where Flutter code calls
+  `Isolate.run`, call `runInBackground` for the same gain. The new page
+  Work in the background shows how.
+- **Search fields like the platform's own.** A one-line `TextField` whose
+  `prefixIcon` is `Icons.search` is Apple's search field on iPhone, clear
+  button included. On Android the icon sits in Material's place in the
+  field.
+- **Accessibility settings.** `MediaQuery` has `disableAnimations`,
+  `accessibleNavigation`, `boldText`, `highContrast` and `invertColors`,
+  kept current while the app runs.
+- **Smaller additions from Flutter:** `GridView.extent`;
+  `FocusNode.nextFocus()` and `previousFocus()`;
+  `FocusScope.of(context).unfocus()`;
+  `WidgetsFlutterBinding.ensureInitialized()`;
+  `SchedulerBinding.instance.currentFrameTimeStamp`; the rest of `Offset`;
+  `textWidthBasis`; `clipBehavior` on `Container`, `Card` and
+  `AnimatedContainer`; `BackButton(onPressed:, color:, style:)`;
+  `Transform.flip`; and `const TextSpan`.
+
+### Performance
+
+- **Long lists scroll more smoothly**, on iPhone also with tens of
+  thousands of rows.
+- **Animations that call `setState` on each tick** show each step a frame
+  sooner, as in Flutter.
+
+### Plugins
+
+To get a new plugin version, raise its constraint in `pubspec.yaml` or run
+`dn pub upgrade`.
+
+- **`dartnative_video_player` 1.3.2.** On iPhone, a video you open again
+  starts at once, and a pre-cached one shows its first frame without
+  waiting for the network. On Android, a player made in `main()` before
+  `runApp` keeps playing after a hot restart. It also has the Android fix
+  below.
+- **`dartnative_notifications` 1.0.3.** A tap on a notification, or an
+  answer to a permission request, that comes during a hot restart no
+  longer reaches the code the restart replaced. On Android, a second
+  permission request while the system dialog is open waits for the user's
+  answer instead of answering no.
+- **`dartnative_audio` 1.0.2, `dartnative_camera` 1.0.3,
+  `dartnative_compressor` 1.0.1, `dartnative_image_crop` 1.0.1,
+  `dartnative_media_picker` 1.1.2 and `dartnative_share` 1.0.4.** On
+  Android, a hot restart while the plugin is at work is safe: a result
+  that arrives during the restart no longer reaches the code it replaced.
+
+### Fixed
+
+- **Scrolling.** A `ScrollController` knows its extents before any scroll.
+  A jump to the end of a long list lands there in one movement. A controller
+  or `onScroll` given after a list first appears now works. On iPhone, a
+  status bar tap in a long list draws every row on the way up, and a hard
+  flick to the newest message of a chat no longer bumps at the end. On
+  Android, a list inside a scroll view scrolls its own rows.
+- **Gestures, as in Flutter.** `onTapDown` waits 100 ms where a scroll or
+  another gesture could take the touch, and a quick swipe reports no tap.
+  With `onDoubleTap`, a double tap no longer also runs `onTap`. A
+  translucent detector with only a drag lets taps reach the widget behind
+  it. On iPhone, a widget at opacity 0 still takes taps. A widget moved by
+  a transform takes taps where it is drawn.
+- **Text fields and the keyboard.** A `TextField`'s selection and its
+  controller stay in step (#80, #81). Next moves to the next text field
+  and keeps the keyboard up on both platforms. On iPhone, dragging the
+  keyboard down in a chat feels native: the messages ride with it and keep
+  gliding when you let go. On Android, a screen with a dropdown lower down
+  no longer opens scrolled to it. A selectable `Text` is as wide as
+  Flutter's `SelectableText`.
+- **Sheets on Android.** An adaptive sheet keeps its height when its
+  content changes, and a `Scaffold` inside a sheet no longer covers the
+  screen behind it. On both platforms, a sheet sized to its content shows
+  a `SingleChildScrollView` inside it (#77). Dragging down at the top of a
+  list in a sheet shrinks the sheet instead of closing it, and dragging up
+  grows it before the list scrolls (#78). A short pull down on a sheet at
+  half height returns it.
+- **Android.** Switching between light and dark keeps the app's state
+  (#79). An `ElevatedButton` casts its shadow, a shadow with no blur is
+  drawn, and a shadow under `Opacity` fades with the box. Text buttons in
+  the app bar are in capitals and the bar's text colour, as in Material,
+  not blue. Status bar icons stay readable on a page with no app bar.
+  `FastGrid` applies its spacing and padding. An alert closed with Back
+  completes its Future, with -1.
+- **Other fixes.** A status bar style a screen sets ends when the screen
+  closes. `SystemChrome`, `Clipboard` and `TextPainter` work in `main()`
+  before `runApp`. Fonts in `pubspec.yaml` load with no registration call.
+  An iOS build after you delete the `build` folder works again.
+
+---
+
 ## Faster JSON from the server to your app, an HTTP plugin, Flutter layout parity and performance improvements
 
 1.4.0 (2026-10-22)
