@@ -1,23 +1,21 @@
 # dartnative_hive
 
-[Hive](https://pub.dev/packages/hive_ce) for DartNative — a fast, pure-Dart key–value
-database with a one-line native init. Same API on iOS and Android.
+Hive for DartNative: the key-value database written in Dart, with writes many times
+faster than Hive in a Flutter app, and the same API on iOS and Android.
 
 ## Why you'll like it
 
-- **Pure-Dart speed** — Hive (community edition), no platform channels.
-- **One-line init** — `Hive.initDartNative(docsDir)` and you're set.
-- **The full Hive API** — the code of hive_ce 2.20.1, ported into this package and behaving
-  the same: boxes, type adapters, lazy boxes, keys in sorted order, box events. hive_ce's own
-  tests pass on it.
-- **Fast, safe writes** — boxes are stored in memory-mapped files, a mechanism built into
-  iOS and Android. A `put` hands the value to the operating system before it returns, so
-  nothing is lost if the app crashes or is killed.
+- **Very fast writes**: on an iPhone, 13 to 57 times faster than Hive in a Flutter app on
+  Hive's own benchmark. A small value takes under a microsecond.
+- **Safe writes**: boxes are stored in memory-mapped files, a mechanism built into iOS and
+  Android, so nothing is lost if the app crashes or is killed.
+- **The Hive you know**: boxes, type adapters, lazy boxes, encrypted boxes, box events and
+  keys in sorted order work as they do in any Hive app.
 
 ## Highlights
 
-- **`Hive.initDartNative(docsDirPath, {subDir, mmap})`** — point Hive at a storage directory.
-- **`Hive.openBox(name)`** + **`box.put` / `box.get` / `box.delete`** — the usual Hive API.
+- **`Hive.initDartNative(documentsPath, {subDir, mmap})`**: point Hive at a storage directory.
+- **`Hive.openBox(name)`** and **`box.put` / `box.get` / `box.delete`**: the usual Hive API.
 
 ## Install
 
@@ -89,24 +87,24 @@ storage.
 
 Reads are a lookup in memory.
 
-On hive_ce's own benchmark, 1,000 awaited `box.add` calls of a ten-field object take
-1.61 ms on an iPhone 16 Pro, against 22.8 ms for hive_ce in a Flutter app on the same
+On Hive's own benchmark, 1,000 awaited `box.add` calls of a ten-field object take
+1.61 ms on an iPhone 16 Pro, against 22.8 ms for Hive in a Flutter app on the same
 phone; 100,000 take 0.17 s against 2.34 s.
 
-![hive_ce's benchmark on an iPhone 16 Pro: dartnative_hive is 13 to 57 times faster than hive_ce in a Flutter app, from 10 to 100,000 writes](https://github.com/user-attachments/assets/87e1bd8c-85d3-4c99-843d-5d5095051e2e)
+![Hive's benchmark on an iPhone 16 Pro: dartnative_hive is 13 to 57 times faster than Hive in a Flutter app, from 10 to 100,000 writes](https://github.com/user-attachments/assets/87e1bd8c-85d3-4c99-843d-5d5095051e2e)
 
 Writes and reads of a short string, on 1 key and on 1000 keys, on the same phone:
 
 ![Writes and reads on an iPhone 16 Pro: writes 44 times faster on 1 key and 15 times faster on 1000 keys; reads about the same, a lookup in memory in both](https://github.com/user-attachments/assets/30d884b0-5249-41ea-9e73-9c460ceaea83)
 
-A mid-range Android phone shows gains of the same size, measured against hive_ce's own
-file storage on that phone: 16 to 97 times faster on hive_ce's benchmark, and 23 to 49 times
+A mid-range Android phone shows gains of the same size, measured against Hive's standard
+file storage on that phone: 16 to 97 times faster on Hive's benchmark, and 23 to 49 times
 faster on awaited writes of a short string.
 
 The example's
 [`benchmarks/`](https://github.com/DartNative/dartnative/tree/main/plugins/dartnative_hive/example/benchmarks) folder has every number and how it was measured.
 
-To use hive_ce's own file storage instead, where a `put` is safe once its future
+To use Hive's standard file storage instead, where a `put` is safe once its future
 completes, pass `mmap: false`:
 
 ```dart
@@ -119,7 +117,7 @@ example's Benchmark screen times writes and reads in both modes on your own devi
 ## Example
 
 The [`example/`](https://github.com/DartNative/dartnative/tree/main/plugins/dartnative_hive/example) app opens a box and round-trips a value, and its Benchmark
-screen times every kind of write and read in both modes — borrow from it freely.
+screen times every kind of write and read in both modes. Borrow from it freely.
 
 Run it:
 
@@ -134,8 +132,8 @@ underlying SDK CLI) for run/build/pub commands.
 
 ## Credits & license
 
-Built on the source of [`hive_ce`](https://pub.dev/packages/hive_ce), the community
-edition of Hive, ported into this package; its licence is in `THIRD_PARTY_NOTICES`.
+Built on the source code of Hive's community edition
+([hive_ce](https://pub.dev/packages/hive_ce)); its licence is in `THIRD_PARTY_NOTICES`.
 
 First-party DartNative plugin, free to use in any DartNative app. Distributed
 through [dartpub.dev](https://dartpub.dev); report issues on the plugin's page.
