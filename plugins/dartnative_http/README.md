@@ -72,7 +72,7 @@ iOS and Android.
 
 ```yaml
 dependencies:
-  dartnative_http: ^1.0.0   # from dartpub.dev
+  dartnative_http: ^1.1.0   # from dartpub.dev
 ```
 
 ```bash

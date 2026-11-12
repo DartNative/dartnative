@@ -14,13 +14,17 @@
 // - the publisher's icon is an Image.network, in place of
 //   package:http_image_provider;
 // - the screen keeps the platform's defaults: no theme, no text colours or
-//   weights, and the bar places its title where the platform does.
+//   weights, the phone's light or dark mode, and the bar places its title
+//   where the platform does;
+// - a bar button opens a WebSocket screen (web_socket_demo.dart).
 
 import 'dart:convert';
 
 import 'package:dartnative/dartnative.dart';
 import 'package:dartnative_http/http.dart';
 import 'package:http/http.dart';
+
+import 'web_socket_demo.dart';
 
 /// Searches pub.dev's package names as you type and shows each package's
 /// publisher, likes and downloads. Every request goes through one
@@ -168,9 +172,18 @@ class _SearchPageState extends State<SearchPage> {
     }
 
     return Scaffold(
-      brightness: Brightness.light,
-      backgroundColor: const Color(0xFFFFFFFF),
-      appBar: AppBar(title: const Text('Dart Package Search')),
+      appBar: AppBar(
+        title: const Text('Dart Package Search'),
+        actions: [
+          BarButtonItem(
+            title: 'WebSocket',
+            onPressed: () => Navigator.push(
+              context,
+              PageRoute(builder: (_) => const WebSocketDemoPage()),
+            ),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -206,11 +219,6 @@ class PackageList extends StatelessWidget {
     super.key,
   });
 
-  // Rows are built as they come near the screen, and a row more than 250
-  // points away from it is released, as in Flutter's ListView. So a card
-  // fetches its package's details just before it is seen, and the requests
-  // and the memory follow the screen, not the length of the list. A row that
-  // scrolls back in fetches again.
   @override
   Widget build(BuildContext context) => FastList(
         itemCount: packageNames.length,

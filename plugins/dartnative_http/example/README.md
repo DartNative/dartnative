@@ -6,6 +6,9 @@ package's publisher, likes and downloads. Every request goes through one
 `NativeHttpClient`, so it runs on NSURLSession on iPhone and OkHttp on
 Android.
 
+The **WebSocket** button in the top bar opens a second screen: it connects
+to a public echo server, and every message you send comes back.
+
 ## Run it
 
 ```sh
@@ -20,4 +23,6 @@ The example is an official demo: free to run, no license setup.
 - `lib/http_demo.dart`: the screens and the requests, adapted from
   [`flutter_http_example`](https://github.com/dart-lang/http/tree/master/pkgs/flutter_http_example)
   in dart-lang/http, with one `NativeHttpClient` for the whole app.
+- `lib/web_socket_demo.dart`: the WebSocket screen, with one
+  `NativeWebSocket`.
 - `lib/main.dart`: starts the app.
