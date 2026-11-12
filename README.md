@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/dn-banner.jpg" width="100%" alt="DartNative — real native apps, written in Dart" />
+  <img src="docs/assets/dartnative-banner.jpg" width="100%" alt="DartNative" />
 </p>
 
 # DartNative
