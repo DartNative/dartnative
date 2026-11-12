@@ -3,6 +3,144 @@
 <!-- Generated file: edits here are overwritten on the next release.
      The changelog is maintained at https://dartnative.com/changelog -->
 
+## Sign-in that follows users to a new Android phone, and closer Flutter layout
+
+1.6.0 (2026-11-12)
+
+Your app can now keep users signed in when they move to a new Android
+phone, with the new `dartnative_passkeys` plugin. Google Play requires this
+from April 2027 for apps that offer sign-in. This release also brings
+layout closer to Flutter, keeps plugins working in Dart that runs with the
+app closed, and fixes hot restart after `compute()` (#82) and Android
+builds with packages that have build hooks (#83).
+
+**How to update.** Run `dn upgrade`. This release runs on the same engine
+as 1.5.0. `dn downgrade` takes you back to the release you used before,
+such as 1.5.0, and `dn use <release>` switches to any release that
+`dn releases` lists. The Android build fix (#83) is in the newest `dn`: if
+yours is older, `dn upgrade` prints the install command for your system.
+Run it, then run `dn upgrade` again.
+
+**Code push.** This release is a new framework build on the same engine.
+After you update, the fixes you send reach only apps released with this
+version. Make a new release of your app before you send fixes.
+
+**Changes that can affect your code:**
+
+- A `Scaffold`'s body is laid out as in Flutter: content that does not
+  take the width, such as a `Column` of texts and buttons, sits at the
+  start of the screen, as wide as it is. It used to be centred. Wrap it in
+  a `Center` to keep it centred. Lists, a `Center`, a `Row` and a `Column`
+  that stretches its children fill the width as before.
+- A `Column` inside a column that does not stretch its children, a
+  `Center` or an aligned `Container` is as wide as its widest child, as in
+  Flutter. It used to take the whole width. A child that takes the whole
+  width, such as a `Row`, a text field or a list, still makes it as wide
+  as its room.
+- A `Row` inside another `Row`, outside an `Expanded`, is as wide as its
+  content, as in Flutter. It used to take the outer row's free space.
+- In a `Row` with `CrossAxisAlignment.stretch`, every child is as tall as
+  the row, even one with a height of its own, as in Flutter. The same holds
+  in a horizontal `ListView`.
+- A `SizedBox`, `Container` or `Image` with a width of its own inside a
+  vertical `ListView` or `ListView.builder`, or in a `Column` that
+  stretches its children, takes that parent's width, as in Flutter.
+- With `dartnative_background` 1.0.3, call `TaskManager().initialize` at
+  every start of your app, in `main`.
+
+### New
+
+- **Sign-in on a new Android phone.** `dartnative_passkeys` saves a restore
+  key after sign-in. On the new phone, your app reads it and signs the user
+  back in without a prompt. `dartnative_supabase` 1.0.1 adds the matching
+  server side for apps that sign in with Supabase. The
+  [zero-tap sign-in tutorial](https://dartnative.com/tutorials/zero-tap-sign-in/)
+  goes from the signing keys to the first restore.
+- **Plugins that run Dart with the app closed.** A home screen widget's
+  button, a background task or a push message can run Dart while the app
+  is closed. Plugins that do this now hand the work to the app when it is
+  running, and end their run cleanly otherwise. Plugin authors can do the
+  same: the
+  [plugin callbacks guide](https://github.com/DartNative/dartnative/blob/main/docs/plugin_async_callbacks.md)
+  shows how.
+
+### Plugins
+
+To get a new plugin version, raise its constraint in `pubspec.yaml` or run
+`dn pub upgrade`.
+
+- **`dartnative_passkeys` 0.1.0**, new: sign-in on a new Android phone, as
+  above. Android only.
+- **`dartnative_camera` 1.1.0** reads QR codes and barcodes while the
+  preview, photos and the flash keep working. `startCodeScan(onCode: …)`
+  calls your app once for each new code, with its text, format and place
+  on screen. On Android, `FlashMode.torch` now works.
+- **`dartnative_background` 1.0.3.** A task that arrives while the app runs
+  now runs inside the app. A task that ran out of time no longer gives the
+  next task its result. Call `TaskManager().initialize` at every start.
+- **`dartnative_firebase` 1.0.2.** On Android, a background message that
+  arrives while the app runs is handled inside the app. Notification taps
+  and the answer to the permission request arrive with no code in your
+  app's activity, each tap once.
+- **`dartnative_notifications` 1.0.4.** A tap on a notification that
+  opened the app is reported once.
+- **`dartnative_supabase` 1.0.1** moves to `supabase` 2.16.5, with the
+  passkey API (`client.auth.passkey`).
+- **`dartnative_lottie` 1.3.4.** On iPhone, a list that scrolls under
+  stickers drawn with `RenderCache.raster` runs at the screen's full rate,
+  up to 120 frames a second; it was held at 60. A result that arrives after
+  a hot restart, or after a background run has ended, no longer stops the
+  app.
+- **`dartnative_onnxruntime` 1.6.6, `dartnative_social_sign_in` 1.0.2 and
+  `dartnative_url_launcher` 1.0.1.** A result that arrives after a hot
+  restart, or after a background run has ended, no longer stops the app.
+- **`dartnative_supertonic_tts` 1.0.1.** Eleven more Italian words are
+  stressed right.
+
+### Fixed
+
+- **Hot restart after `compute()`.** Hot restart always finishes after
+  `compute()` or `runInBackground` were used. Before, it could stop at
+  "Performing hot restart..." and only quitting `dn run` helped (#82). Hot
+  restart also no longer waits on a background isolate that ends during
+  the restart.
+- **Android builds with build hooks.** An app that uses a package with a
+  build hook, such as `sqlite3`, builds every time. Before, only the first
+  build after `dn clean` worked, and every later `dn build apk` or `dn run`
+  stopped with a Gradle error about `mergeDebugJniLibFolders` (#83).
+- **Dart run with the app closed.** An app no longer stops after a home
+  screen widget's button, a background task or a push message ran Dart
+  with the app closed and used another plugin there. While the app runs,
+  that work now runs in the app itself.
+- **Android.** Plugins keep answering after Android rebuilds the app's
+  screen while the app keeps running: after Back on the first screen and
+  reopening the app, or when Android reclaims the screen in the
+  background. Before, every plugin call and event stopped for the rest of
+  the app's life. A notification or a home screen widget that opened the
+  app is reported once. Before, reopening the app from its icon or from
+  the recent apps reported the same tap again.
+- **Pictures.** A picture given both a `width` and a `height` is that size.
+  A picture inside a `ClipRRect` in a list keeps its proportions when the
+  screen rebuilds, and an `AspectRatio` around it sets its box. A picture
+  as wide as a box of a fixed height is centred in it. A picture with no
+  size of its own fills a box of a fixed size through a `Padding`, a
+  `ColoredBox` or a `GestureDetector`. On iPhone, a picture with
+  `BoxFit.cover`, `fill` or `none` and no height takes its proportions at
+  the width it is given.
+- **Layout.** Children that fill a `Wrap`'s run exactly share it on every
+  screen; on many Android phones they each started a run of their own. A
+  `Row` inside an `IntrinsicHeight`, in a `Column` that centres its
+  children, takes the whole width, so its `Expanded` children show. A
+  `Row`, and a `Column` that stretches its children, take the whole width
+  under a `Center` or in a `Stack` and keep it after a rebuild. In an
+  `IntrinsicWidth`, a column that stretches makes every child as wide as
+  the widest. A `SingleChildScrollView` hands on the width it is given, and
+  a list that changes its scroll direction resizes its items at once. On
+  iPhone, a `Row` that stretches its children inside an `IntrinsicHeight`
+  in a list gets shorter again when its content does.
+
+---
+
 ## Teams, and improved Flutter parity for layout and the widget model
 
 1.5.0 (2026-11-02)
