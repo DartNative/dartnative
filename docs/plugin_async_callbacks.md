@@ -257,7 +257,10 @@ Java_com_example_MyPluginBridge_nativeDeliver(
 > The generation check above is the crash guard. A hook runs inside the new
 > session's `runApp`, when that session's `main()` may already have made
 > objects of its own: dispose only what an ended session left (store the
-> generation with each object and compare), never everything.
+> generation with each object and compare), never everything. When Android
+> rebuilds the screen while the app keeps running (the activity recreated in
+> the same process), the session goes on: the generation stays and no hook
+> runs.
 
 ### The three rules that make it safe
 
@@ -438,6 +441,48 @@ hot restart mid-operation** before relying on it.
 
 ---
 
+## Dart run without the app
+
+Some plugins run Dart while the app's Dart is not running: a home screen
+widget's button, a background task, a push message handled with the app
+closed. They start an engine of their own and run a Dart entry point in it.
+That Dart runs on the main thread like the app's, so what it hands another
+plugin lands in the same process-wide store the app uses, and dies with the
+engine.
+
+**A plugin that follows this page needs nothing more.** Code in such a run
+may use any plugin. When the run ends and the app's Dart has still not
+started, the framework does to the stores what a hot restart does, while the
+run's isolate is still alive: Android moves the isolate generation and runs
+the plugins' reset hooks (`DNViewRegistry.registerResetHook`), iOS zeroes
+every slot registered with `DNRegisterAsyncDispatcherSlot`, and both drop the
+framework's pending callbacks. A plugin that skips the patterns here stops
+the app after such a run, as it does after a hot restart.
+
+**A plugin that runs Dart without the app goes through the framework**, so
+the run never shares the plugins with the app's Dart, and its end clears
+what it left:
+
+| Step | Android: `com.dartnative.DNRunsWithoutApp` | iOS: C symbols, by `dlsym` |
+|---|---|---|
+| The app's Dart runs: hand it the work instead of starting an engine | `appRunning()` | `DNRunsWithoutAppIsAppRunning()` returns 1 |
+| Before the engine starts Dart | `begin()`, main thread | `DNRunsWithoutAppBegin()` |
+| The run's Dart is done: in place of destroying the engine | `end(engine)`, main thread | `DNRunsWithoutAppEnd(Unmanaged.passRetained(engine).toOpaque())` |
+
+Call `end` from a task of its own on the main thread (a posted runnable, a
+main-queue block), never from inside a call the run's Dart made: the engine
+may be destroyed before `end` returns.
+
+The framework destroys the engine at the end, or keeps it when the app's
+Dart started during the run (the app may already hold the run's pointers).
+To hand work to the app's Dart, the app's isolate hands native an entry from
+`main()`: a `NativeCallable.listener` kept with the isolate generation on
+Android, or in a registered slot on iOS. Native calls it on the main thread,
+and waits a few seconds for it when the work arrives as the app starts.
+`dartnative_background` (`TaskManager.initialize`) works this way.
+
+---
+
 ## ⛔ Things that look like fixes but are not
 
 - **"I'll use one global `Pointer.fromFunction` — its address is stable."**
@@ -464,6 +509,8 @@ hot restart mid-operation** before relying on it.
       runs on the **main thread**. The raw address is never copied anywhere.
 - [ ] Errors travel inside the payload string; streams route by token.
 - [ ] Worker isolate? → native port, or keep delivery inside the worker.
+- [ ] Your plugin runs Dart without the app? → `DNRunsWithoutApp`: the app's
+      Dart first, `begin`/`end` around an engine of your own.
 - [ ] **Test it**: start an operation (play a stream, kick off a download),
       press capital `R` mid-flight (lowercase `r` is hot *reload* and does not
       reproduce the problem), confirm there is no crash — and that the plugin

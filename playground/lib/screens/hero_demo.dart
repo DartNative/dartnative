@@ -48,16 +48,18 @@ class _HeroDemoState extends State<HeroDemo> {
       body: Container(
         color: kHomeBg,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              'Tap the avatar to open a story viewer.',
-              style: TextStyle(color: kTextSecondary, fontSize: 15),
-            ),
-            const SizedBox(height: 32),
-            _AvatarTile(_tile),
-          ],
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Tap the avatar to open a story viewer.',
+                style: TextStyle(color: kTextSecondary, fontSize: 15),
+              ),
+              const SizedBox(height: 32),
+              _AvatarTile(_tile),
+            ],
+          ),
         ),
       ),
     );

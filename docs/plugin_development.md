@@ -616,8 +616,13 @@ Intents and permission results reach plugins through `DNActivityEvents`
 (same package): `DartNativeActivity` forwards the launch intent, every new
 intent (a notification tap, a link) and every permission result. The last
 intent replays to a listener added after it, so a plugin that starts on its
-first call from Dart still receives the intent that launched the app. Keep
-the listener to remove it:
+first call from Dart still receives the intent that launched the app. The
+launch intent goes out only when it is new: not when Android restores the
+activity from saved state (the app reopened after Android closed it in the
+background), and not when the app is reopened from the recent apps. Both
+carry the intent the app first opened with, already delivered, so a plugin
+can treat every intent it receives as a new tap. Keep the listener to remove
+it:
 
 ```kotlin
 private val onIntent: (Intent) -> Unit = { handleIntent(it) }
@@ -627,7 +632,10 @@ DNActivityEvents.removeIntentListener(onIntent)  // when done
 ```
 
 `addPermissionResultListener` and `removePermissionResultListener` work the
-same way.
+same way. Intents and results are passed on on the main thread. A listener
+may be added from any thread, but the intent that replays to it then runs on
+that thread, so add it on the main thread (post to it from a service's
+worker thread).
 
 ## 5. Calling Dart from native — callback safety
 
@@ -652,10 +660,12 @@ the app dies instantly:
 error: Callback invoked after it has been deleted.   → SIGABRT
 ```
 
-This happens on iOS and Android alike, and it is debug-only (release apps
-never hot-restart) — but it kills every debugging session, so it is a
-must-fix. The framework cannot intercept the call for you; instead it gives
-you two small patterns that make the crash impossible.
+This happens on iOS and Android alike. Hot restart is debug-only, but a
+release app meets the same end when a plugin runs Dart with the app closed
+(a home screen widget's button, a background task, a push message): the
+pointers that Dart handed out die with its engine. So it is a must-fix. The
+framework cannot intercept the call for you; instead it gives you two small
+patterns that make the crash impossible.
 
 ### Pick your pattern — one question
 
@@ -736,6 +746,22 @@ Full recipe with complete copy-paste snippets (Dart + Swift + Kotlin/C++),
 payload/error conventions, and the alternatives (polling; native ports — the
 latter required for worker isolates):
 **[plugin_async_callbacks.md](plugin_async_callbacks.md)**.
+
+### Dart that runs without the app
+
+Some Dart runs while the app's Dart does not: a home screen widget's button,
+a background task, a push message handled with the app closed. A plugin that
+follows the two patterns above needs nothing more to be used there: when
+such a run ends, the framework clears what it left in every plugin, as a hot
+restart does.
+
+A plugin that starts such Dart itself, in an engine of its own, goes through
+the framework: it hands the work to the app's Dart when that runs, and
+otherwise calls `begin` before its engine starts and `end` in place of
+destroying it (Android `DNRunsWithoutApp`, iOS `DNRunsWithoutApp*` by
+`dlsym`). The calls and their rules:
+[plugin_async_callbacks.md, "Dart run without the app"](plugin_async_callbacks.md#dart-run-without-the-app).
+`dartnative_background` works this way.
 
 ---
 

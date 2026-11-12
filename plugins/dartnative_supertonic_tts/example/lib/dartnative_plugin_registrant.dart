@@ -28,12 +28,6 @@ abstract final class DartNativePluginRegistrant {
   /// Registers the platform bindings and loads every DartNative plugin's
   /// FFI symbols. Call once as the first line of `main()`, before `runApp`.
   static void registerAll() {
-    // The licence the build injected: the compiled demo/trial token, or the
-    // subscriber key from `dn config --license-key`. `dn` puts one of them in
-    // the build's defines, and this file is the only place that can read them
-    // — the framework's own `fromEnvironment` was frozen when the SDK was
-    // compiled. Without this an app with a perfectly valid licence shows the
-    // licence screen. `dn create` generates these lines for your own projects.
     const dnLicenseToken = String.fromEnvironment('DART_NATIVE_LICENSE_TOKEN');
     if (dnLicenseToken.isNotEmpty) {
       DartNativeLicense.instance.provideToken(dnLicenseToken);
@@ -46,7 +40,14 @@ abstract final class DartNativePluginRegistrant {
     if (dnTrialEnded) {
       DartNativeLicense.instance.noteTrialEnded();
     }
-
+    DartNativeLicense.instance.reportPluginUsage(const <String>[
+      'dartnative_audio',
+      'dartnative_onnxruntime',
+      'dartnative_path_provider',
+      'dartnative_skia',
+      'dartnative_splash',
+      'dartnative_supertonic_tts',
+    ]);
     registerNativeBindings(
       Platform.isAndroid
           ? AndroidNativeBindings.instance

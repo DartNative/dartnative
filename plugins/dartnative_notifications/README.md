@@ -96,7 +96,8 @@ from the plugin manifest); the runtime prompt comes from `requestPermission()`.
 
 Notification **taps are delivered automatically** — the plugin watches the Activity lifecycle
 (`Application.ActivityLifecycleCallbacks`) and reads the tap `Intent` itself, so you no longer
-forward `handleIntent`. A few small things remain:
+forward `handleIntent`. Each tap is delivered once: reopening the app later, from its icon or the
+recent apps, does not report it again. A few small things remain:
 
 1. **`setIntent(intent)` in `onNewIntent`.** Automatic with `DartNativeActivity` — the base class
    already does it. Only a CUSTOM activity (not extending `DartNativeActivity`) needs the standard

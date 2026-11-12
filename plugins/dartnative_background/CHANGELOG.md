@@ -1,3 +1,16 @@
+## 1.0.3
+
+* A task that arrives while the app runs now runs inside the app, instead of
+  in a second copy of Dart beside it. Plugins the task used no longer stop
+  the app afterwards, and the app keeps receiving their events. Call
+  `initialize` at every start of the app, from `main()`.
+* A task that runs out of time and finishes after the next task has started
+  no longer gives the next task its result; the next task waits for its own.
+* Android: two tasks that become due together run one after the other; before,
+  the second could take the first's place and the first never ran.
+* iOS: a background task whose handler returns false is reported to the
+  system as failed; before, it was always reported as done.
+
 ## 1.0.2
 
 * iOS: simulator builds work again with Xcode 26. 1.0.1's native library was

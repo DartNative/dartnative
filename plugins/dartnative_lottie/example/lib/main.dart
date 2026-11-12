@@ -74,58 +74,60 @@ class _AppState extends State<_App> {
       ),
       body: Container(
         color: const Color(0xFFFFFFFF),
-        child: Column(
-          children: [
-            const SizedBox(height: 40),
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(height: 40),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Button(
-                title: 'Controls Demo',
-                variant: ButtonVariant.filled,
-                onPressed: () => Navigator.push(
-                  context,
-                  PageRoute(builder: (_) => const LottieControlsDemo()),
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 14,
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Button(
-                title: 'Sticker Grid Demo (URL)',
-                variant: ButtonVariant.filled,
-                onPressed: () => Navigator.push(
-                  context,
-                  PageRoute(builder: (_) => const LottieGridDemo()),
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 14,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Button(
+                  title: 'Controls Demo',
+                  variant: ButtonVariant.filled,
+                  onPressed: () => Navigator.push(
+                    context,
+                    PageRoute(builder: (_) => const LottieControlsDemo()),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 14,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Button(
-                title: 'Sticker Grid Demo (Assets)',
-                variant: ButtonVariant.filled,
-                onPressed: () => Navigator.push(
-                  context,
-                  PageRoute(builder: (_) => const LottieAssetsGridDemo()),
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 14,
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Button(
+                  title: 'Sticker Grid Demo (URL)',
+                  variant: ButtonVariant.filled,
+                  onPressed: () => Navigator.push(
+                    context,
+                    PageRoute(builder: (_) => const LottieGridDemo()),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 14,
+                  ),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Button(
+                  title: 'Sticker Grid Demo (Assets)',
+                  variant: ButtonVariant.filled,
+                  onPressed: () => Navigator.push(
+                    context,
+                    PageRoute(builder: (_) => const LottieAssetsGridDemo()),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 14,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

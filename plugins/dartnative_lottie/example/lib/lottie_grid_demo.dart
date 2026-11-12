@@ -87,6 +87,9 @@ class _LottieGridDemoState extends State<LottieGridDemo> {
             loop: true,
             autoplay: true,
             fit: LottieFit.contain,
+            // Many small animations on one screen: rendered frames, drawn off
+            // the main thread and cached, instead of a live view per cell.
+            renderCache: RenderCache.raster,
             placeholder: _shimmer,
           ),
         ),

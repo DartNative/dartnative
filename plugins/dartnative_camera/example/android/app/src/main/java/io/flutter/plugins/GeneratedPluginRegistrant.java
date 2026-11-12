@@ -40,5 +40,10 @@ public final class GeneratedPluginRegistrant {
     } catch (Exception e) {
       Log.e(TAG, "Error registering plugin dartnative_image_crop, com.dartnative.imagecrop.DartNativeImageCropPlugin", e);
     }
+    try {
+      flutterEngine.getPlugins().add(new com.dartnative.url_launcher.DartNativeUrlLauncherPlugin());
+    } catch (Exception e) {
+      Log.e(TAG, "Error registering plugin dartnative_url_launcher, com.dartnative.url_launcher.DartNativeUrlLauncherPlugin", e);
+    }
   }
 }

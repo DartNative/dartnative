@@ -7,6 +7,7 @@
 //   • dartnative_audio
 //   • dartnative_compressor
 //   • dartnative_image_crop
+//   • dartnative_url_launcher
 
 import 'dart:io' show Platform;
 
@@ -17,6 +18,7 @@ import 'package:dartnative_audio/dartnative_audio.dart';
 import 'package:dartnative_camera/dartnative_camera.dart';
 import 'package:dartnative_compressor/dartnative_compressor.dart';
 import 'package:dartnative_image_crop/dartnative_image_crop.dart';
+import 'package:dartnative_url_launcher/dartnative_url_launcher.dart';
 
 abstract final class DartNativePluginRegistrant {
   /// Call once at the top of `main()`, before `runApp`.
@@ -49,5 +51,6 @@ abstract final class DartNativePluginRegistrant {
     CameraFfiBindings.loadSymbols();
     CompressorFFIBindings.loadSymbols();
     ImageCropFFIBindings.loadSymbols();
+    UrlLauncherFFIBindings.loadSymbols();
   }
 }

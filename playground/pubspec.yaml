@@ -21,9 +21,9 @@ dependencies:
   dartnative_path_provider: ^1.0.0
   dartnative_system: ^1.0.1
   dartnative_connectivity: ^1.0.1
-  dartnative_social_sign_in: ^1.0.0
-  dartnative_firebase: ^1.0.1
-  dartnative_notifications: ^1.0.3
+  dartnative_social_sign_in: ^1.0.2
+  dartnative_firebase: ^1.0.2
+  dartnative_notifications: ^1.0.4
   dartnative_media_picker: ^1.1.2
   # ── Media tab plugins ─────────────────────────────────────────────────────
   dartnative_video_player: ^1.3.2
@@ -31,14 +31,16 @@ dependencies:
   dartnative_share: ^1.0.4
   dartnative_audio: ^1.0.2
   dartnative_permissions: ^1.0.1
-  dartnative_camera: ^1.0.3
-  # Camera example extras: shutter/rec sound cues, photo aspect-crop, video thumb.
+  dartnative_camera: ^1.1.0
+  # Camera example extras: shutter/rec sound cues, photo aspect-crop, video thumb,
+  # opening a scanned link.
   dartnative_image_crop: ^1.0.1
   dartnative_compressor: ^1.0.1
+  dartnative_url_launcher: ^1.0.1
   # SuperTonic on-device TTS (pulls dartnative_onnxruntime transitively).
-  dartnative_supertonic_tts: ^1.0.0
+  dartnative_supertonic_tts: ^1.0.1
   # Lottie via Skottie (requires the skia `full` or `lottie` variant — see above).
-  dartnative_lottie: ^1.3.2
+  dartnative_lottie: ^1.3.4
   dartnative_splash: ^1.0.2
 
 dev_dependencies:

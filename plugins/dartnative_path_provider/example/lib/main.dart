@@ -31,14 +31,16 @@ class PathScreen extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            children: [
-              _entry('Documents', docs),
-              const SizedBox(height: 18),
-              _entry('Support', support),
-              const SizedBox(height: 18),
-              _entry('Temporary', tmp),
-            ],
+          child: Center(
+            child: Column(
+              children: [
+                _entry('Documents', docs),
+                const SizedBox(height: 18),
+                _entry('Support', support),
+                const SizedBox(height: 18),
+                _entry('Temporary', tmp),
+              ],
+            ),
           ),
         ),
       ),

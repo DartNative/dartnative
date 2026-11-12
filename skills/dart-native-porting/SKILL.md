@@ -53,6 +53,7 @@ dependencies:
       | `video_player` | `dartnative_video_player` |
       | `audioplayers` / `just_audio` | `dartnative_audio` |
       | `camera` | `dartnative_camera` |
+      | `mobile_scanner` | `dartnative_camera` (`startCodeScan`) |
       | `image_picker` | `dartnative_media_picker` |
       | `flutter_svg` | `dartnative_svg` |
       | `lottie` | `dartnative_lottie` |
@@ -66,6 +67,7 @@ dependencies:
       | `firebase_core` / `firebase_messaging` | `dartnative_firebase` |
       | `flutter_local_notifications` | `dartnative_notifications` |
       | `sign_in_with_apple` / `google_sign_in` | `dartnative_social_sign_in` |
+      | `passkeys` (restore credentials only) | `dartnative_passkeys` |
       | `supabase_flutter` | `dartnative_supabase` |
       | `in_app_purchase` / `purchases_flutter` | `dartnative_revenuecat` |
       | `google_maps_flutter` | `dartnative_google_maps` |

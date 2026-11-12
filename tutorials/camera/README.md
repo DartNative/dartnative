@@ -6,7 +6,9 @@ a full photo + video camera on the real AVFoundation / CameraX pipelines via
 pinch-to-zoom, flash, flip, aspect-ratio selector, photo capture with
 aspect crop (`dartnative_image_crop`), video recording with a REC timer and
 frame-0 thumbnail (`dartnative_compressor`), sound cues (`dartnative_audio`),
-and capture straight to the gallery.
+capture straight to the gallery, and a Scan mode that reads QR codes and
+barcodes: a link opens in the browser (`dartnative_url_launcher`), any other
+code shows its text in an alert.
 
 Platform setup before running:
 - **iOS**: `Info.plist` needs `NSCameraUsageDescription`,
@@ -30,9 +32,7 @@ dn pub get
 dn run
 ```
 
-The screen — [`lib/screens/media/camera_demo.dart`](lib/screens/media/camera_demo.dart)
-— is a byte-identical copy of the playground's camera demo
-(`lib/screens/home/demo_ui.dart` is the playground's shared UI kit, also
-verbatim); [`lib/main.dart`](lib/main.dart) is just a thin launcher. Updates
-are literal file copies from the playground. Verified against dartnative
-`^1.0.0`.
+The screen, [`lib/screens/media/camera_demo.dart`](lib/screens/media/camera_demo.dart),
+is a byte-identical copy of the playground's camera demo, and
+[`lib/main.dart`](lib/main.dart) opens the app on it. Updates are literal
+file copies from the playground. Verified against dartnative `^1.0.0`.

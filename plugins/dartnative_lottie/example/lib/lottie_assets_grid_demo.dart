@@ -89,6 +89,9 @@ class _LottieAssetsGridDemoState extends State<LottieAssetsGridDemo> {
                 loop: true,
                 autoplay: true,
                 fit: LottieFit.contain,
+                // Many small animations on one screen: rendered frames, drawn off
+                // the main thread and cached, instead of a live view per cell.
+                renderCache: RenderCache.raster,
               ),
             )
           : ListView(
@@ -113,6 +116,7 @@ class _LottieAssetsGridDemoState extends State<LottieAssetsGridDemo> {
                         loop: true,
                         autoplay: true,
                         fit: LottieFit.contain,
+                        renderCache: RenderCache.raster,
                       ),
                   ],
                 ),

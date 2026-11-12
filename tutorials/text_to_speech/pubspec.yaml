@@ -12,9 +12,9 @@ dependencies:
   dartnative: ^1.0.0
   dartnative_ios: ^1.0.0
   dartnative_android: ^1.0.0
-  dartnative_supertonic_tts: ^1.0.0
+  dartnative_supertonic_tts: ^1.0.1
   dartnative_audio: ^1.0.2
-  dartnative_onnxruntime: ^1.6.5
+  dartnative_onnxruntime: ^1.6.6
   dartnative_path_provider: ^1.0.0
 
 dev_dependencies:

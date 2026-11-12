@@ -24,7 +24,7 @@ iOS (`BGTaskScheduler`) and Android (`WorkManager`), all over FFI — no `Method
 
 ```yaml
 dependencies:
-  dartnative_background: ^1.0.1   # from dartpub.dev
+  dartnative_background: ^1.0.3   # from dartpub.dev
 ```
 
 ```bash
@@ -34,7 +34,7 @@ dn pub get
 ```dart
 import 'package:dartnative_background/dartnative_background.dart';
 
-// Top-level + @pragma so the OS can run it in the headless isolate.
+// Top-level + @pragma so the OS can run it without the app.
 @pragma('vm:entry-point')
 void callbackDispatcher() {
   TaskManager().executeTask((taskName, inputData) async {
@@ -45,9 +45,16 @@ void callbackDispatcher() {
 
 void main() {
   DartNativePluginRegistrant.registerAll();
+  TaskManager().initialize(callbackDispatcher);
   runApp(const MyApp());
 }
 ```
+
+While the app runs, a task runs inside it, beside the app's state; with the
+app closed, it runs in Dart started for the task alone, where `main()` has
+not run. Write the dispatcher for both: load there the plugins the task uses
+(loading twice is harmless). Call `initialize` at every start of the app, as
+above: that is what lets a task reach the running app.
 
 ## Quick look
 

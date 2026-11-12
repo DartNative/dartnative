@@ -10,6 +10,9 @@
 //   • Camera enumeration runs on first build — the first camera is opened
 //     automatically. Flip toggles front ↔ back.
 //   • Photo mode: shutter takes a JPEG, thumbnail updates.
+//   • Scan mode: reads codes through the same camera and frames them on
+//     the preview. A link opens in the browser; any other code shows its
+//     text in a system alert.
 //   • Video mode: tap shutter to start, tap again to stop. Last MP4 path
 //     shows under the bottom bar.
 //
@@ -25,6 +28,7 @@ import 'package:dartnative_audio/dartnative_audio.dart';
 import 'package:dartnative_camera/dartnative_camera.dart';
 import 'package:dartnative_compressor/dartnative_compressor.dart';
 import 'package:dartnative_image_crop/dartnative_image_crop.dart';
+import 'package:dartnative_url_launcher/dartnative_url_launcher.dart';
 
 /// Shared fill for the Photo|Video segmented track and the round thumb / flip
 /// buttons.
@@ -39,7 +43,7 @@ String _ts() {
   return '$h:$m:$s.$ms';
 }
 
-enum _Mode { photo, video }
+enum _Mode { photo, video, scan }
 
 /// Display aspect ratio for the preview (visual clip — the underlying preview
 /// stream stays whatever the SDK chose; we just letterbox / pillarbox in the
@@ -91,6 +95,10 @@ class _CameraDemoState extends State<CameraDemo> {
 
   _Mode _mode = _Mode.photo;
   FlashMode _flash = FlashMode.off;
+
+  /// The codes in view while in scan mode.
+  List<ScannedCode> _codes = const [];
+  StreamSubscription<List<ScannedCode>>? _scanSubscription;
   _AspectRatio _aspect = _AspectRatio.ratio16_9;
 
   // One persistent AudioPlayer per clip so playback latency is just `play()`
@@ -128,7 +136,7 @@ class _CameraDemoState extends State<CameraDemo> {
   late final VoidCallback _flipCameraStable = _flipCamera;
   late final VoidCallback _toggleFlashStable = _toggleFlash;
   late final ValueChanged<int> _onModeChangedStable =
-      (i) => _setMode(i == 0 ? _Mode.photo : _Mode.video);
+      (i) => _setMode(_Mode.values[i]);
   late final VoidCallback _onBackStable = _onBack;
 
   @override
@@ -214,6 +222,7 @@ class _CameraDemoState extends State<CameraDemo> {
         _controller = c;
         _activeIndex = index;
       });
+      if (_mode == _Mode.scan) await _startScan();
       // Pre-warm the Recorder for the currently selected aspect so the very
       // first shutter tap in video mode doesn't pay the rebind cost. (For
       // newly-opened cameras the Recorder was built with VideoAspectRatio
@@ -266,18 +275,70 @@ class _CameraDemoState extends State<CameraDemo> {
   void _toggleFlash() {
     final c = _controller;
     if (c == null) return;
+    // Scan mode offers the torch alone, for reading a code in the dark.
     final next = switch (_flash) {
+      FlashMode.torch => FlashMode.off,
+      _ when _mode == _Mode.scan => FlashMode.torch,
       FlashMode.off => FlashMode.always,
       FlashMode.always => FlashMode.auto,
       FlashMode.auto => FlashMode.off,
-      FlashMode.torch => FlashMode.off,
     };
     setState(() => _flash = next);
     c.setFlashMode(next);
   }
 
+  Future<void> _startScan() async {
+    final c = _controller;
+    if (c == null) return;
+    // A new camera starts with nothing in view; drop the last one's frames.
+    if (mounted && _codes.isNotEmpty) setState(() => _codes = const []);
+    final codes = await c.startCodeScan(
+      formats: CodeFormat.all,
+      onCode: _onCode,
+    );
+    await _scanSubscription?.cancel();
+    _scanSubscription = codes.listen((found) {
+      if (mounted) setState(() => _codes = found);
+    });
+  }
+
+  /// The demo accepts web links: one opens in the browser. Any other code,
+  /// or a link that cannot open, shows its text in a system alert.
+  Future<void> _onCode(ScannedCode code) async {
+    // Uri lower-cases the scheme and host and escapes spaces, which the
+    // platforms need to recognise the link.
+    final uri = Uri.tryParse(code.value);
+    final link = uri != null &&
+            (uri.isScheme('http') || uri.isScheme('https')) &&
+            uri.host.isNotEmpty
+        ? uri.toString()
+        : null;
+    if (link != null && await DartNativeUrlLauncher.launch(link)) return;
+    if (!mounted) return;
+    await showAlert(
+      context: context,
+      title: code.format == CodeFormat.qr ? 'QR code' : 'Barcode',
+      message: code.value,
+    );
+  }
+
+  Future<void> _stopScan() async {
+    await _scanSubscription?.cancel();
+    _scanSubscription = null;
+    await _controller?.stopCodeScan();
+    // The torch belongs to scan mode here; photos use the flash.
+    if (_flash == FlashMode.torch) {
+      _flash = FlashMode.off;
+      _controller?.setFlashMode(FlashMode.off);
+    }
+    if (mounted) setState(() => _codes = const []);
+  }
+
   void _setMode(_Mode m) {
     if (_controller?.isRecordingVideo == true) return;
+    if (m == _mode) return;
+    if (_mode == _Mode.scan) unawaited(_stopScan());
+    if (m == _Mode.scan) unawaited(_startScan());
     if (m == _Mode.video) {
       // Request mic permission before recording.
       unawaited(DartNativeCamera.requestMicrophonePermission());
@@ -529,6 +590,7 @@ class _CameraDemoState extends State<CameraDemo> {
     SystemChrome.setPreferredOrientations(DeviceOrientation.values);
     DeviceOrientationListener.currentNotifier.removeListener(_onOrientation);
     _recordingTicker?.cancel();
+    _scanSubscription?.cancel();
     _shutterPlayer.dispose();
     _startRecPlayer.dispose();
     _stopRecPlayer.dispose();
@@ -589,6 +651,8 @@ class _CameraDemoState extends State<CameraDemo> {
           children: [
             if (_controller != null)
               _buildPreviewSurface(previewBottom, previewHeight),
+            if (_mode == _Mode.scan)
+              _buildScanOverlay(mq.width, previewBottom, previewHeight),
 
             // ── Top bar: REC (left) • aspect ratio (centered) • flash (right) ─
             Positioned(
@@ -612,12 +676,15 @@ class _CameraDemoState extends State<CameraDemo> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        _TopRoundButton(
-                          icon: CupertinoIcons.chevron_back,
-                          onTap: _onBackStable,
-                        ),
+                        // Shown only when there is a screen to go back to.
+                        if (Navigator.canPop(context))
+                          _TopRoundButton(
+                            icon: CupertinoIcons.chevron_back,
+                            onTap: _onBackStable,
+                          ),
                         if (_controller?.isRecordingVideo == true) ...[
-                          const SizedBox(width: 10),
+                          if (Navigator.canPop(context))
+                            const SizedBox(width: 10),
                           Container(
                             height: 24,
                             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -654,24 +721,25 @@ class _CameraDemoState extends State<CameraDemo> {
             ),
 
             // ── Shutter — centered over the preview, above the controls row ──
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: shutterBottom,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _ShutterButton(
-                    mode: _mode,
-                    isRecording: _controller?.isRecordingVideo ?? false,
-                    busy: _busy,
-                    onTap: _onShutterStable,
-                  ),
-                ],
+            if (_mode != _Mode.scan)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: shutterBottom,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _ShutterButton(
+                      mode: _mode,
+                      isRecording: _controller?.isRecordingVideo ?? false,
+                      busy: _busy,
+                      onTap: _onShutterStable,
+                    ),
+                  ],
+                ),
               ),
-            ),
 
-            // ── Bottom bar controls: thumb • Photo|Video • flip ──────────────
+            // ── Bottom bar controls: thumb • Photo|Video|Scan • flip ─────────
             Positioned(
               left: 24,
               right: 24,
@@ -682,11 +750,11 @@ class _CameraDemoState extends State<CameraDemo> {
                 children: [
                   _ThumbBox(path: _lastPhotoPath, onTap: _openGalleryStable),
                   SizedBox(
-                    width: 190,
+                    width: 230,
                     height: 44,
                     child: SegmentedControl(
-                      segments: const ['Photo', 'Video'],
-                      selectedIndex: _mode == _Mode.photo ? 0 : 1,
+                      segments: const ['Photo', 'Video', 'Scan'],
+                      selectedIndex: _mode.index,
                       onValueChanged: _onModeChangedStable,
                       backgroundColor: _kControlFill,
                       indicatorColor: const Color(0xFFFFEB3B),
@@ -725,6 +793,42 @@ class _CameraDemoState extends State<CameraDemo> {
               ),
           ],
         ),
+      ),
+    );
+  }
+
+  /// Frames each code on the preview.
+  /// `corners` come from 0 to 1 across the preview, so they scale to any size.
+  Widget _buildScanOverlay(
+    double previewWidth,
+    double previewBottom,
+    double previewHeight,
+  ) {
+    return Positioned(
+      bottom: previewBottom,
+      left: 0,
+      right: 0,
+      height: previewHeight,
+      child: Stack(
+        children: [
+          for (final code in _codes)
+            if (code.bounds case final bounds?)
+              Positioned(
+                left: bounds.left * previewWidth,
+                top: bounds.top * previewHeight,
+                width: bounds.width * previewWidth,
+                height: bounds.height * previewHeight,
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: const Color(0xFFFFEB3B),
+                      width: 3,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+        ],
       ),
     );
   }

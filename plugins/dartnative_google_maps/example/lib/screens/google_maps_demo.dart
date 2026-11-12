@@ -83,6 +83,7 @@ class _GoogleMapsDemoState extends State<GoogleMapsDemo> {
         backgroundColor: Colors.transparent,
       ),
       body: Stack(
+        fit: StackFit.expand,
         children: [
           // Map fills the entire screen
           Positioned.fill(

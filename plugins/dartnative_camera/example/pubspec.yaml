@@ -11,7 +11,7 @@ dependencies:
   dartnative_ios: ^1.0.0
   dartnative_android: ^1.0.0
   dartnative_skia: ^1.0.0
-  dartnative_camera: ^1.0.3
+  dartnative_camera: ^1.1.0
   # Used only by the example to play the camera-shutter / start-rec / stop-rec
   # sound effects (assets/audios/camera/*.mp3).
   dartnative_audio: ^1.0.0
@@ -21,6 +21,8 @@ dependencies:
   # Used to extract a frame-0 JPEG thumbnail from the recorded MP4 so the
   # gallery thumb on the shutter row updates after a video save.
   dartnative_compressor: ^1.0.0
+  # Opens a scanned link in the browser.
+  dartnative_url_launcher: ^1.0.0
   dartnative_splash: ^1.0.0
 
 dev_dependencies:
