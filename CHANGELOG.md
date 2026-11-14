@@ -3,6 +3,50 @@
 <!-- Generated file: edits here are overwritten on the next release.
      The changelog is maintained at https://dartnative.com/changelog -->
 
+## Performance improvements, fixes and names for UI tests
+
+1.7.0 (2026-11-14)
+
+This release brings performance improvements on iPhone and Android, a
+few fixes, and `Semantics(identifier:)`, as in Flutter. It also runs on a
+new engine.
+
+**How to update.** Run `dn upgrade`. This release runs on a new engine, and
+`dn upgrade` brings it, with a new `dn`, in one step. If it prints an
+install command instead, your `dn` is older: run that command, then run
+`dn upgrade` again. `dn downgrade` takes you back to the release you used
+before, such as 1.6.0, and `dn use <release>` switches to any release that
+`dn releases` lists.
+
+**Code push.** After you update, the fixes you send reach only apps
+released with 1.7.0. Make a new release of your app before you send fixes.
+To send a fix to an app you released with 1.6.0, run `dn use 1.6.0` first;
+`dn` tells you when you forget.
+
+### New
+
+- **Names for UI tests.** `Semantics(identifier: 'checkout')` gives an
+  element the name XCUITest finds it by on iPhone, and UI Automator by its
+  resource-id on Android, as in Flutter. Screen readers never read it.
+
+### Plugins
+
+To get a new plugin version, raise its constraint in `pubspec.yaml` or run
+`dn pub upgrade`.
+
+- **`dartnative_http` 1.1.1.** Faster requests on iPhone.
+
+### Fixed
+
+- **License messages.** They no longer read as if a paid plan were
+  needed: the Community license is free.
+- **Horizontal lists.** `ListView.builder` builds only the items that show.
+- **Android.** The bottom bar follows a change of the phone's navigation
+  mode, and lists and sliders keep their accessibility support under a
+  `Semantics`.
+
+---
+
 ## Sign-in that follows users to a new Android phone, and closer Flutter layout
 
 1.6.0 (2026-11-12)
