@@ -1,0 +1,9 @@
+{
+  "name": "Everbloom",
+  "id": "dev.whiskerrs.shopbench.nsh",
+  "version": "1.0.0",
+  "build": 1,
+  "rust": ".",
+  "root": "App",
+  "appearance": "light"
+}

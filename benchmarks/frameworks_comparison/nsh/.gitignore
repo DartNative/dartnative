@@ -1,0 +1,6 @@
+.nsh/
+target/
+build/
+ios/rust/target/
+ios/Everbloom.xcodeproj/xcuserdata/
+ios/Everbloom.xcodeproj/project.xcworkspace/xcuserdata/

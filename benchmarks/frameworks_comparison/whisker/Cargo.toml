@@ -1,0 +1,40 @@
+[workspace]
+members = [".", "shop-native"]
+resolver = "2"
+
+[package]
+name = "everbloom"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[lib]
+crate-type = ["rlib"]
+
+[[bin]]
+name = "whisker-config"
+path = "whisker.rs"
+required-features = ["whisker-config"]
+test = false
+bench = false
+
+[features]
+whisker-config = ["whisker-cng/generate"]
+
+[dependencies]
+whisker = "0.17"
+whisker-cng = { version = "0.17.0", default-features = false }
+whisker-router = "0.14"
+whisker-image = "0.14"
+whisker-svg = "0.14"
+whisker-input = "0.14"
+whisker-safe-area = "0.14"
+whisker-web-browser = "0.14"
+whisker-keyboard = "0.14"
+shop-native = { path = "shop-native" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[profile.release]
+lto = true
+codegen-units = 1

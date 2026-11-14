@@ -1,0 +1,8 @@
+# rust-analyzer project configuration (committed: shared by the whole
+# team, editor-agnostic). Formats on save with `whisker fmt`, a rustfmt
+# drop-in that ALSO formats `render!` / `css!` macro bodies — which plain
+# rustfmt skips — while still honoring your `rustfmt.toml`.
+#
+# Requires the `whisker` CLI on PATH (`cargo install whisker-cli`).
+[rustfmt]
+overrideCommand = ["whisker", "fmt", "--stdin"]

@@ -1383,7 +1383,7 @@ setting in the same shape, named after the feature rather than the iOS version.
 | `FilledButton` / `FilledButton.tonal` | ✅ | A `Button(variant: ButtonVariant.filled)`, or `tinted` for `.tonal` |
 | `IconButton` | ✅ | 48×48 minimum hit target (Flutter `kMinInteractiveDimension` parity); `tooltip` names the button, as `Tooltip` does. VoiceOver and TalkBack read it as a button, named by its `tooltip` or its icon's `semanticLabel`, and dimmed without `onPressed`. On Android a press draws the platform's ripple, the circle a toolbar's icons draw under the finger |
 | `Tooltip` | ✅ | A text that names its child, on the platform's own tooltip: `message`, or `richMessage` shown as plain text, and `excludeFromSemantics`. On Android (8 and later) the system tooltip shows on a long-press, and when a mouse pointer rests on the child. On iPhone and iPad the system tooltip shows when a trackpad or mouse pointer rests on the child; a long-press on the touch screen shows nothing, as in iOS apps, except with an accessibility text size, where it shows the text enlarged, as the system bars do. VoiceOver and TalkBack read the text: as the child's name when it shows no text of its own, such as an icon, and after its text otherwise. If your design needs a bubble on every long-press on iPhone too, build your own from `GestureDetector` and a `Stack`, as you would in Flutter |
-| `Semantics` | ✅ | Describes its child to VoiceOver and TalkBack, as in Flutter: `label`, `value`, `hint`, `button`, `header`, `image`, `selected`, `enabled`, `excludeSemantics`, `onTap`, `onLongPress`, `onTapHint` and `onLongPressHint`, and `link` on iPhone. The child becomes one element, read as its label followed by the text it shows (unless `excludeSemantics`), then its value and hint; text that changes inside it is read as it is now. A double tap runs `onTap`, or taps the child, so a `GestureDetector` inside works as it does for a finger. `onLongPressHint` names the long press: on iPhone an action in VoiceOver's actions list, on Android TalkBack's "double-tap and hold to …". `onTapHint` is TalkBack's "double-tap to …"; VoiceOver has no such hint |
+| `Semantics` | ✅ | Describes its child to VoiceOver and TalkBack, as in Flutter: `label`, `value`, `hint`, `button`, `header`, `image`, `selected`, `enabled`, `excludeSemantics`, `onTap`, `onLongPress`, `onTapHint` and `onLongPressHint`, and `link` on iPhone. `identifier` names the element for UI tests, as in Flutter: XCUITest finds it by `accessibilityIdentifier` on iPhone, UI Automator by resource-id on Android. Screen readers never read it, and a `Semantics` with only an `identifier` changes nothing they read: a list keeps its rows, and a `Semantics` inside or around it keeps its description. A hidden element (`ExcludeSemantics`) has no name. The child becomes one element, read as its label followed by the text it shows (unless `excludeSemantics`), then its value and hint; text that changes inside it is read as it is now. A double tap runs `onTap`, or taps the child, so a `GestureDetector` inside works as it does for a finger. `onLongPressHint` names the long press: on iPhone an action in VoiceOver's actions list, on Android TalkBack's "double-tap and hold to …". `onTapHint` is TalkBack's "double-tap to …"; VoiceOver has no such hint |
 | `MergeSemantics` | ✅ | Reads its child as one element: the text and the roles of everything in it, so a row of a label and a switch is one stop that reads the switch's state, and a double tap toggles the switch |
 | `ExcludeSemantics` | ✅ | Hides its child from VoiceOver and TalkBack, for a decoration or text another element already reads; `excluding: false` shows it |
 | `NativeButton` | ✅ | `UIButton.Configuration` — filled, tinted, gray, bordered, plain. For new DN code, prefer `Button` directly. |
@@ -1947,10 +1947,11 @@ dartnative is **closed-source**, distributed as compiled artifacts — **not** a
 registry. The framework ships as compiled binaries via the `dn` CLI; plugins as
 prebuilt binaries via **dartpub.dev** (`dn pub get`).
 
-**Free to try, subscribe to ship.** Run the official demos and plugin examples free to
-evaluate the framework. Shipping your own apps needs a developer subscription
-([dartpub.dev](https://dartpub.dev)) — see
-[pricing](https://dartnative.com/#pricing).
+**Free to try, and free to start shipping.** Run the official demos and plugin examples
+free to evaluate the framework. To build and ship your own apps, get a license at
+[dartpub.dev](https://dartpub.dev/framework). The Community license is free and
+lets you build and ship your apps at no cost.
+[Pricing](https://dartnative.com/#pricing) lists what each plan covers.
 
 See [Getting Started](getting_started.md) to set up a project. The Zero engine is
 fetched from our CDN by the `dn` CLI — not pub.dev; only ordinary

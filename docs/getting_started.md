@@ -86,9 +86,10 @@ those two capabilities there, which does need the paid program.
 
 ## 3. Create your own project
 
-To build and ship **your own** apps, subscribe at
-[dartpub.dev](https://dartpub.dev/framework) — see
-[pricing](https://dartnative.com/#pricing) for current plans. Then copy your
+To build and ship **your own** apps, get a license at
+[dartpub.dev](https://dartpub.dev/framework). The Community license is free and
+lets you build and ship your apps at no cost.
+[Pricing](https://dartnative.com/#pricing) lists what each plan covers. Then copy your
 **license key** (`dnk_…`) from the Framework panel. Run the `dn config` command once — then
 `dn run` just works as usual. Keep the key private, and regenerate it on the
 Framework panel if it ever leaks.
@@ -97,7 +98,7 @@ The licence check runs inside `runApp`, from a token already on the device, in
 a few milliseconds and never waiting on the network, so it does not slow your
 app's launch. It sends the app's id, the DartNative plugins it uses and a
 one-way code of the install: nothing personal and no device identifier. If your
-subscription ends, the apps you have already shipped keep running for their
+license ends, the apps you have already shipped keep running for their
 users; a lapse only stops new builds.
 
 **Activate and run:**

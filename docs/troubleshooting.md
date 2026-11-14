@@ -90,8 +90,10 @@ app (your own bundle id) without an active license key.
 
 ### Fix
 
-Subscribe at [dartpub.dev/framework](https://dartpub.dev/framework), copy your
-license key (`dnk_…`), and run the config command once — after that `dn run`
+Get a license at [dartpub.dev/framework](https://dartpub.dev/framework). The
+Community license is free and lets you build and ship your apps at no cost;
+[pricing](https://dartnative.com/#pricing) lists what each plan covers. Copy your
+license key (`dnk_…`) and run the config command once — after that `dn run`
 just works:
 
 ```bash
@@ -102,7 +104,7 @@ dn run -d <device-id>
 ### "This build did not carry a DartNative license key"
 
 This one means the build that made the app had no license key in it, even
-though your subscription may be fine. Check three things: that
+though your license may be fine. Check three things: that
 `dn config --list` shows a `license-key`; that `main()` calls
 `DartNativePluginRegistrant.registerAll()` before `runApp`; and that your
 command line or IDE does not pass an empty `--dart-define=DN_LICENSE_KEY=`

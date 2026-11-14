@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>App launch</title>
+<style>
+  :root {
+    --bg: #121316;
+    --rule: #2a2c31;
+    --text: #f2f3f5;
+    --muted: #9aa0a8;
+    --blue: #5b8def;
+    --green: #4fc18c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 2000px; height: 980px; background: var(--bg); }
+  .foot { white-space: nowrap; display: inline-block; }
+  body {
+    font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--text);
+    padding: 90px 100px 0 100px;
+  }
+  .head { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 34px; border-bottom: 2px solid var(--rule); }
+  .title { font-size: 34px; color: var(--muted); }
+  .legend { display: flex; gap: 34px; font-size: 27px; color: var(--text); }
+  .legend span { display: inline-flex; align-items: center; gap: 12px; }
+  .sw { width: 17px; height: 17px; border-radius: 3px; display: inline-block; }
+  .group { font-size: 24px; color: var(--muted); letter-spacing: 0.2px; padding: 26px 0 6px 0; }
+  .group b { color: var(--text); font-weight: 600; }
+  .row { display: flex; align-items: center; height: 95px; border-bottom: 2px solid var(--rule); }
+  .name { width: 333px; font-size: 42px; font-weight: 700; }
+  .bars { display: flex; gap: 4px; height: 50px; }
+  .bar { height: 50px; border-radius: 4px; }
+  .b { background: var(--blue); }
+  .g { background: var(--green); }
+  .total { font-size: 44px; font-weight: 700; margin-left: 26px; }
+  .total sup { font-size: 26px; font-weight: 600; color: var(--muted); margin-left: 2px; }
+  .struck { font-size: 30px; color: var(--muted); margin-left: 20px; text-decoration: line-through; text-decoration-thickness: 2px; }
+  .ff { font-size: 27px; color: var(--muted); margin-left: 24px; }
+  .foot { font-size: 23px; line-height: 1.5; color: var(--muted); padding-top: 24px; }
+  .foot sup { font-size: 16px; line-height: 0; }
+</style>
+</head>
+<body>
+  <div class="head">
+    <div class="title">App launch (ms, median)</div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--blue)"></i>Launch → first frame</span>
+      <span><i class="sw" style="background:var(--green)"></i>→ Home content on screen</span>
+    </div>
+  </div>
+  <div id="rows"></div>
+  <div class="foot">
+    Measured by us on an iPhone 16 Pro with the benchmark's own tools: each app installed alone, 10 launches each.<br>
+    <sup>1</sup> These apps write the benchmark's Home content line before their content is on the screen. Their bar ends when the app<br>
+    &nbsp;&nbsp;&nbsp;sends Home's content to the screen, from iOS's own record of the launches; the struck number is the benchmark's.<br>
+    <sup>2</sup> Measured again, 10 launches each. Flutter's bar adds the 8.7 ms gap measured then to its first run, whose Wi-Fi was faster.<br>
+    Benchmark and method: github.com/whiskerrs/benchmarks
+  </div>
+<script>
+  const PX = 4.5; // px per ms
+  // [name, first frame, Home content on screen, benchmark's number when it differs, mark]
+  const rows = [
+    ['DartNative', 67.1, 136.4, null, ''],
+    ['Native Shell', 69.4, 138.0, 134.1, '1'],
+    ['Whisker', 101.9, 151.1, 117.7, '1'],
+    ['React Native', 77.3, 173.4, 162.4, '1,2'],
+    ['Flutter', 100.9, 180.2, 171.5, '1,2'],
+  ];
+  const host = document.getElementById('rows');
+  const g = document.createElement('div');
+  g.className = 'group';
+  g.innerHTML = '<b>iPhone 16 Pro</b> · the five apps, measured by us';
+  host.appendChild(g);
+  const f = (v) => v.toFixed(1);
+  for (const [name, ff, total, theirs, mark] of rows) {
+    const r = document.createElement('div');
+    r.className = 'row';
+    r.innerHTML =
+      `<div class="name">${name}</div>` +
+      `<div class="bars"><div class="bar b" style="width:${ff * PX}px"></div>` +
+      `<div class="bar g" style="width:${(total - ff) * PX - 4}px"></div></div>` +
+      `<div class="total">${f(total)}${mark ? `<sup>${mark}</sup>` : ''}</div>` +
+      (theirs != null ? `<div class="struck">${f(theirs)}</div>` : '') +
+      `<div class="ff">first frame ${f(ff)}</div>`;
+    host.appendChild(r);
+  }
+  // The card is as wide as its longest row: the legend and the rules end
+  // a little after the row's last word. The width is kept on <html> as
+  // data-w, for the screenshot's window size.
+  const SIDE = 100, AFTER = 34;
+  let right = 0;
+  for (const el of document.querySelectorAll('.row > :last-child, .foot, .head .title')) {
+    right = Math.max(right, el.getBoundingClientRect().right);
+  }
+  const legend = document.querySelector('.legend').getBoundingClientRect().width;
+  const title = document.querySelector('.head .title').getBoundingClientRect().width;
+  right = Math.max(right + AFTER, SIDE + title + 60 + legend);
+  const W = Math.ceil(right + SIDE);
+  document.documentElement.style.width = document.body.style.width = W + 'px';
+  document.documentElement.dataset.w = W;
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+[package]
+name = "everbloom-ios"
+version = "1.0.0"
+edition = "2024"
+publish = false
+
+# Its own workspace: Xcode builds it (ios/build-rust.sh) into ../../target.
+[workspace]
+
+[lib]
+crate-type = ["staticlib"]
+path = "src/lib.rs"
+
+[dependencies]
+everbloom = { path = "../.." }
+nsh-core = { git = "https://github.com/longbridge/nsh", tag = "v0.4.0" }
+nsh-base = { git = "https://github.com/longbridge/nsh", tag = "v0.4.0" }
+
+[target.'cfg(target_os = "ios")'.dependencies]
+# Without `js`: a Rust app links no QuickJS.
+nsh-platform-ios = { git = "https://github.com/longbridge/nsh", tag = "v0.4.0", default-features = false }
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+debug = false

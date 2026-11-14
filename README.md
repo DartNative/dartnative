@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/dartnative-banner.jpg" width="100%" alt="DartNative" />
+  <img src="docs/assets/dartnative-banner-phones.png" width="100%" alt="DartNative" />
 </p>
 
 # DartNative
@@ -16,7 +16,7 @@ The result is an AOT-compiled native app that runs at full speed from the first 
 
 ## See it in action
 
-https://github.com/user-attachments/assets/89c639cf-c491-49e5-b847-0460ad8df47d
+https://github.com/user-attachments/assets/6f73fcb7-4088-44cb-8090-8db985dce778
 
 All features available at [dartnative.com](https://dartnative.com/).
 

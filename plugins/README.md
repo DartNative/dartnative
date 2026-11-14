@@ -9,8 +9,9 @@ plugin also has a runnable example. All of them are **free**.
 
 The core plugins are part of the supported DartNative product: **one team, one
 quality bar**. They ship as maintained binaries with your framework
-subscription, they're kept compatible with the current framework, and issues
-are handled right here in this repository — that's what the subscription pays for.
+license, they're kept compatible with the current framework, and issues are
+handled right here in this repository. The Community license is free and lets
+you build and ship your apps at no cost.
 We don't take PRs on the core, for the same reason a warranty means one workshop.
 
 Around that core, the **community plugin layer is fully open source** — every

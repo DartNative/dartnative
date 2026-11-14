@@ -1,0 +1,30 @@
+[package]
+name = "shop-native"
+version = "0.1.0"
+edition = "2024"
+publish = false
+description = "Everbloom app-private Whisker module: platform HTTP (URLSession / HttpURLConnection) and unified-log output, plus an Info.plist plugin."
+
+[lib]
+crate-type = ["rlib"]
+
+[package.metadata.whisker.module.platforms]
+android = { manifest = "build.gradle.kts" }
+ios = { manifest = "Package.swift" }
+
+# Applied automatically on every generation (same mechanism as whisker-router).
+[package.metadata.whisker.plugins.shop-native]
+bin = "shop-native-plugin"
+
+[[bin]]
+name = "shop-native-plugin"
+path = "bin/shop_native_plugin.rs"
+test = false
+bench = false
+doc = false
+
+[dependencies]
+whisker = "0.17"
+whisker-plugin = "0.17"
+serde = { version = "1", features = ["derive"] }
+anyhow = "1"

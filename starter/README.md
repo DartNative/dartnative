@@ -18,8 +18,11 @@ dn pub get
 dn run -d <device-id>
 ```
 
-dartnative apps require a license. Configure your key once with
-`dn config --license-key dnk_...` and `dn run` then just works. You can
+To build and ship your own apps, get a license at
+[dartpub.dev](https://dartpub.dev/framework). The Community license is free and
+lets you build and ship your apps at no cost.
+[Pricing](https://dartnative.com/#pricing) lists what each plan covers. Configure
+your key once with `dn config --license-key dnk_...`, and `dn run` then just works. You can
 also skip the configure step and pass the key on any single run:
 `dn run --dart-define=DN_LICENSE_KEY=dnk_...`. See the getting started
 guide for details.

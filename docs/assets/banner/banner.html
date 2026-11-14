@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>DartNative banner</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #09090b;
+    --text: #f5f5f7;
+    --muted: #9a9ca5;
+    --dot: #4a4c53;
+    --pink: #f2557f;
+    --yellow: #f4c53e;
+    --cyan: #22c3ec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1280px; height: 600px; background: var(--bg); overflow: hidden; }
+  body {
+    position: relative;
+    font-family: "Geist", -apple-system, "Helvetica Neue", Arial, sans-serif;
+    color: var(--text);
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  }
+  /* faint grid, fading towards the edges */
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.045) 1px, transparent 1px);
+    background-size: 44px 44px;
+    -webkit-mask-image: radial-gradient(ellipse 75% 85% at 50% 50%, #000 35%, transparent 100%);
+            mask-image: radial-gradient(ellipse 75% 85% at 50% 50%, #000 35%, transparent 100%);
+  }
+  /* soft glows in the logo's colours */
+  .glow { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.22; }
+  .glow.pink { width: 420px; height: 300px; left: -120px; top: -140px; background: var(--pink); }
+  .glow.cyan { width: 460px; height: 320px; right: -140px; bottom: -170px; background: var(--cyan); }
+  .glow.yellow { width: 260px; height: 160px; left: 46%; top: -150px; background: var(--yellow); opacity: 0.08; }
+
+  .wall {
+    position: absolute; left: 50%; top: 292px; transform: translateX(-50%);
+    display: flex; gap: 20px; align-items: flex-start;
+  }
+  .wall img { height: 390px; border-radius: 30px; display: block; }
+  .fade {
+    position: absolute; left: 0; right: 0; top: 270px; bottom: 0;
+    background: linear-gradient(to bottom, rgba(9,9,11,0.95) 0%, rgba(9,9,11,0.35) 30%, rgba(9,9,11,0.25) 60%, rgba(9,9,11,0.85) 100%),
+                linear-gradient(to right, rgba(9,9,11,0.9) 0%, rgba(9,9,11,0) 14%, rgba(9,9,11,0) 86%, rgba(9,9,11,0.9) 100%);
+  }
+  .content { z-index: 1; padding-top: 50px; }
+  .content { position: relative; display: flex; flex-direction: column; align-items: center; }
+  .brand { display: flex; align-items: center; gap: 14px; margin-bottom: 26px; }
+  .brand img { width: 46px; height: 46px; }
+  .brand span { font-size: 38px; font-weight: 700; letter-spacing: -0.6px; }
+  h1 {
+    font-size: 70px; font-weight: 800; letter-spacing: -2px; line-height: 1;
+  }
+  h1 .dart {
+    background: linear-gradient(90deg, var(--pink) 0%, var(--yellow) 50%, var(--cyan) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .tags { margin-top: 30px; font-size: 22px; font-weight: 500; color: var(--muted); letter-spacing: 0.1px; }
+  .tags i { font-style: normal; color: var(--dot); margin: 0 14px; }
+</style>
+</head>
+<body>
+  <div class="glow pink"></div>
+  <div class="glow cyan"></div>
+  <div class="wall">
+    <img src="screens/music_player.png"><img src="screens/chat.png"><img src="screens/lyrics.png"><img src="screens/photo_picker.png"><img src="screens/video_feed.png"><img src="screens/stickers.png"><img src="screens/cover_flow.png">
+  </div>
+  <div class="fade"></div>
+  <div class="content">
+    <div class="brand"><img src="dn-logo.svg" alt=""><span>dartnative</span></div>
+    <h1>Real native apps, written in Dart.</h1>
+    <div class="tags">UIKit &amp; Android views<i>·</i>Flutter widgets<i>·</i>Hot reload<i>·</i>iOS &amp; Android</div>
+  </div>
+</body>
+</html>

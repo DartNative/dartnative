@@ -1,0 +1,37 @@
+# Cargo build artifacts.
+target/
+
+# rustfmt backup files (older toolchains left these behind on a failed
+# format pass; harmless to keep ignored).
+**/*.rs.bk
+
+# Whisker-generated host projects — refreshed on every `whisker run`.
+# Includes gradle's `.gradle/` + `build/` caches and xcodebuild's
+# `xcuserdata/` / `*.xcuserstate` under here, so no need to list those
+# separately.
+gen/
+
+# Environment / secrets. Copy the pattern (e.g. `.env.example`) when
+# you need to share a template across the team without committing the
+# real values.
+.env
+.env.local
+.env.*.local
+
+# IDE / editor noise.
+.idea/
+.vscode/
+*.iml
+.vs/
+
+# OS noise.
+.DS_Store
+Thumbs.db
+
+# NOTE: `Cargo.lock` is deliberately NOT ignored. A Whisker user crate
+# is shaped like an application (compiled into the device-side dylib),
+# so the lock file is what guarantees every CI / teammate / production
+# build resolves to the same dependency tree. Commit it.
+
+# Local Xcode derived data from BUILD.md commands.
+build/

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The manifest nsh package (target android) writes for a Rust app, plus
+     cleartext HTTP (the benchmark's replay server on the local network) and
+     portrait only. android/package.sh links it into the APK. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="dev.whiskerrs.shopbench.nsh">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application android:label="Everbloom"
+        android:usesCleartextTraffic="true"
+        android:extractNativeLibs="false"
+        android:enableOnBackInvokedCallback="true"
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
+        <meta-data android:name="com.longbridge.nsh.RUST" android:value="true" />
+        <activity android:name="com.longbridge.nsh.AppActivity" android:exported="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboard|keyboardHidden|navigation|uiMode|density|fontScale|locale|layoutDirection">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
