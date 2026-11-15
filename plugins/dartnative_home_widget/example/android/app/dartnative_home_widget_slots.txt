@@ -1,0 +1,5 @@
+# Written by DartNative from pubspec.yaml: the widget each Android widget entry draws,
+# one per line in entry order (- is a free entry). Keep this file with your app: a widget
+# someone placed keeps its entry, and so its widget, across updates only through it.
+weather
+counter

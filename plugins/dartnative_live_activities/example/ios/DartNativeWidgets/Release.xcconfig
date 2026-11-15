@@ -1,0 +1,3 @@
+#include? "../Pods/Target Support Files/Pods-Runner-DartNativeWidgets/Pods-Runner-DartNativeWidgets.release.xcconfig"
+#include? "../Pods/Target Support Files/Pods-DartNativeWidgets/Pods-DartNativeWidgets.release.xcconfig"
+#include "../DartNative/Generated.xcconfig"

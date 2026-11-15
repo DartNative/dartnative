@@ -1,0 +1,57 @@
+name: live_activities_example
+description: "Example app for dartnative_live_activities: a live activity on the Dynamic Island and the lock screen on iOS, and a Live Update on Android."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.12.0-192.0.dev
+
+# Plain version deps: `dn pub get` resolves DartNative packages from your
+# installed SDK (closed resolution) — no registry setup, works offline.
+dependencies:
+  dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  # The plugin this app shows, from the folder above.
+  dartnative_live_activities: ^0.1.0
+  # Skia GPU canvas: SkSL runtime shaders and rich shaped text. Adds about
+  # 9 MB to an iPhone app; on Android the library is already in the platform
+  # binding. For shapes, paths and charts use CustomPaint, which is native
+  # and free. Uncomment here, then in lib/main.dart:
+  #
+  #   import 'package:dartnative_skia/dartnative_skia.dart';
+  #
+  #   void main() {
+  #     DartNativePluginRegistrant.registerAll();
+  #     registerSkiaFactories();          // without this a CanvasSurface throws
+  #     runApp(const HomeScreen());
+  #   }
+  #
+  # dartnative_skia: ^1.0.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  image: ^4.0.0
+  test: ^1.25.0
+
+# Which Skia binary ships with the app. Pick one; see the Skia page.
+#
+#   bare  canvas, SkSL shaders and Latin text        about 4 MB on iPhone
+#   full  bare, plus shaped text drawn inside a      about 9 MB on iPhone
+#         Skia canvas: Arabic, CJK, right-to-left
+#
+# dartnative_skia:
+#   variant: bare
+#   # variant: full
+
+dartnative:
+  assets:
+    - assets/dn-logo.png
+    - assets/ride/
+    # What each story's activity looks like: the expanded Dynamic Island on
+    # iOS, the Live Update on Android.
+    - assets/stories/ios/
+    - assets/stories/android/
+
+# Branded launch splash + app icon: add the dartnative_splash plugin from
+# dartpub.dev, then see tool/generate_app_assets.dart.

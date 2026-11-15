@@ -73,6 +73,8 @@ dependencies:
       | `google_maps_flutter` | `dartnative_google_maps` |
       | `webview_flutter` | `dartnative_webview` |
       | `flutter_native_splash` | `dartnative_splash` |
+      | `home_widget` | `dartnative_home_widget` (the widget is designed in Dart, no Swift or Kotlin) |
+      | `live_activities` | `dartnative_live_activities` |
       | `intl` codegen flows | `dartnative_intl` |
 
       More on dartpub.dev/explore (system, background, crypto, on-device

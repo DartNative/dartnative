@@ -1,0 +1,6 @@
+{
+  // VS Code runs its own "dart pub get" on a project it does not recognise as
+  // Flutter, and plain pub cannot resolve the DartNative packages (they ship
+  // with the SDK). Let "dn pub get" own dependency resolution.
+  "dart.runPubGetOnPubspecChanges": "never"
+}
