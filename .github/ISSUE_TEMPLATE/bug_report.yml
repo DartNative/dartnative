@@ -16,6 +16,8 @@ body:
 
         Before filling the form:
 
+        - Update with `dn upgrade` and check the problem is still there
+        - Read the [changelog](https://dartnative.com/changelog): a newer release may already fix it
         - Search the [existing issues](https://github.com/DartNative/dartnative/issues)
         - Check the [documentation](https://dartnative.com/docs)
 
