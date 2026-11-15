@@ -27,8 +27,8 @@ All features available at [dartnative.com](https://dartnative.com/).
 [tutorials](tutorials/), an example for every [plugin](plugins/), and the
 issue tracker. The framework itself is developed in private repositories, so
 the commits you see here are releases, not day-to-day work. DartNative ships
-continuously — fixes arrive in days, not months. To update, re-run the
-install command.
+continuously — fixes arrive in days, not months. To update, run
+`dn upgrade`.
 
 ---
 

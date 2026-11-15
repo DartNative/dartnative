@@ -53,8 +53,7 @@ dn --version
 ```
 
 The first run downloads the prebuilt engine (a few hundred MB) into
-`~/zero/bin/cache/`. Re-run the install command any time to update — your
-engine cache is kept, so updates are quick.
+`~/zero/bin/cache/`. To update later, run `dn upgrade`.
 
 ---
 
