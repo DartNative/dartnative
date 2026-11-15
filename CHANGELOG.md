@@ -3,6 +3,39 @@
 <!-- Generated file: edits here are overwritten on the next release.
      The changelog is maintained at https://dartnative.com/changelog -->
 
+## Home screen widgets and Live Activities
+
+1.8.0 (2026-11-15)
+
+This release adds two plugins: home screen widgets and Live Activities.
+
+**How to update.** Run `dn upgrade`. `dn downgrade` takes you back to
+1.7.0, and `dn use <release>` switches to any release that `dn releases`
+lists.
+
+**Code push.** After you update, the fixes you send reach only apps
+released with 1.8.0. Make a new release of your app before you send fixes.
+To send a fix to an app you released with 1.7.0, run `dn use 1.7.0` first;
+`dn` tells you when you forget.
+
+### New plugins
+
+Add a plugin to your `pubspec.yaml`, then run `dn pub get`.
+
+- **Home screen widgets** (`dartnative_home_widget: ^0.1.0`). Widgets on
+  the iOS home screen and lock screen and on the Android home screen,
+  designed in Dart. A button on a widget calls your Dart code, a tap on
+  the widget opens your app, and widgets refresh on a schedule.
+- **Live Activities** (`dartnative_live_activities: ^0.1.0`). Live
+  Activities in the Dynamic Island and on the lock screen on iOS, and Live
+  Updates on Android: a notification at the top with a chip in the status
+  bar. Your app starts, updates and ends them, and a push can update them.
+
+Each plugin's page on [dartpub.dev](https://dartpub.dev) has its setup
+and an example app.
+
+---
+
 ## Performance improvements, fixes and names for UI tests
 
 1.7.0 (2026-11-14)
