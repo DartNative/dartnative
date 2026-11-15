@@ -35,6 +35,7 @@ charging and a doctor's waiting room. This is the plugin's example app.
 
 | | Minimum | Notes |
 | --- | --- | --- |
+| DartNative | 1.8.0 | On an earlier release, run `dn upgrade` |
 | iOS | 16.1 | Buttons on the card need iOS 17; starting from a push, iOS 17.2 |
 | Android | 8.0 (API 26) | Android 16 and later promote it to a Live Update; before that it is an ongoing notification with a bar |
 

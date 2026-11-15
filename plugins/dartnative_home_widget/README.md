@@ -38,6 +38,7 @@ widget is added to the home screen. This is the plugin's example app.
 
 | | Minimum | Notes |
 | --- | --- | --- |
+| DartNative | 1.8.0 | On an earlier release, run `dn upgrade` |
 | iOS | 16.0 | Buttons need iOS 17 |
 | Android | 12 | Up to 16 widgets per app |
 
