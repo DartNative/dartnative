@@ -28,9 +28,9 @@ the same point ([README.md](README.md)).
 
 ![Writing 1,000 values: 1,000 awaited setString calls, each on its own key, 174 times faster on an iPhone 16 Pro and 714 times faster on a Xiaomi 11 Lite 5G NE](write_1000_keys.png)
 
-![Reading a value: 1,000 getString calls on one key, 1.1 times faster on both phones; both read from memory](read_one_key.png)
+![Reading a value: 1,000 getString calls on one key, 14% faster on an iPhone 16 Pro and 6% faster on a Xiaomi 11 Lite 5G NE; both read from memory](read_one_key.png)
 
-![Reading 1,000 values: 1,000 getString calls, each on its own key, 1.2 times faster on both phones; both read from memory](read_1000_keys.png)
+![Reading 1,000 values: 1,000 getString calls, each on its own key, 21% faster on an iPhone 16 Pro and 19% faster on a Xiaomi 11 Lite 5G NE; both read from memory](read_1000_keys.png)
 
 Milliseconds for 1000 operations on a string; lower is better.
 

@@ -35,14 +35,14 @@ nothing.
 
 ![Writing 1,000 values: 1,000 awaited setString calls, each on its own key, 174 times faster on an iPhone 16 Pro and 714 times faster on a Xiaomi 11 Lite 5G NE](write_1000_keys.png)
 
-![Reading a value: 1,000 getString calls on one key, 1.1 times faster on both phones; both read from memory](read_one_key.png)
+![Reading a value: 1,000 getString calls on one key, 14% faster on an iPhone 16 Pro and 6% faster on a Xiaomi 11 Lite 5G NE; both read from memory](read_one_key.png)
 
-![Reading 1,000 values: 1,000 getString calls, each on its own key, 1.2 times faster on both phones; both read from memory](read_1000_keys.png)
+![Reading 1,000 values: 1,000 getString calls, each on its own key, 21% faster on an iPhone 16 Pro and 19% faster on a Xiaomi 11 Lite 5G NE; both read from memory](read_1000_keys.png)
 
 The same results as a 29-second reel with music (also in this folder,
 [`shared_preferences_reel.mp4`](shared_preferences_reel.mp4)):
 
-https://github.com/user-attachments/assets/3bb22145-ccd9-4f76-8df3-d7072915febc
+https://github.com/user-attachments/assets/dcfa6e79-0c1d-4921-a65b-c6cf24f9dffb
 
 Milliseconds for 1000 operations on a string; lower is better.
 
@@ -159,10 +159,12 @@ python3 chart.py write_one_key.png "Write, 1 key" "Writing a value" \
 python3 chart.py write_1000_keys.png "Write, 1000 keys" "Writing 1,000 values" \
   "1,000 awaited setString calls, each on its own key." faster --footer "$F1\n$F2"
 python3 chart.py read_one_key.png "Read, 1 key" "Reading a value" \
-  "1,000 getString calls on one key. Both read from memory." faster --footer "$F1"
+  "1,000 getString calls on one key, both from memory." faster --footer "$F1"
 python3 chart.py read_1000_keys.png "Read, 1000 keys" "Reading 1,000 values" \
-  "1,000 getString calls, each on its own key. Both read from memory." faster --footer "$F1"
+  "1,000 getString calls, each on its own key, both from memory." faster --footer "$F1"
 ```
 
 Each is 1920 x 1080, in the look of the DartNative repository's other
-benchmarks.
+benchmarks. The gain is Flutter's time over DartNative's: from 2× up,
+"N× faster", as those benchmarks write it; under 2×, a percentage ("21%
+faster" for 1.21×), since "1.2× faster" reads as if it were 120%.

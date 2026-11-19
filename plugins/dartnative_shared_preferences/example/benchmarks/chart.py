@@ -13,10 +13,10 @@ Usage:
 "<row>" is the first cell of a row ("Write, 1 key", "integer"), found in
 the first table of each file whose second and third columns are
 "shared_preferences, Flutter (ms)" and "dartnative_shared_preferences (ms)".
-The gain is Flutter's value divided by DartNative's, with one decimal below
-10 ("1.1×") and none from 10 up ("218×"), followed by "<gain word>"
-("faster"). --footer adds text under the cards; a "\\n" in it starts a new
-line.
+The gain is Flutter's value divided by DartNative's, followed by "<gain
+word>" ("faster"): under 2 as a percentage ("21%" for 1.21), from 2 up as
+a multiple, with one decimal below 10 ("2.4×") and none from 10 up
+("218×"). --footer adds text under the cards; a "\\n" in it starts a new line.
 
 The PNG is 1920 x 1080. Google Chrome, run without a window from the path in
 CHROME, draws it from a page this script writes. The type is Geist where it
@@ -106,6 +106,8 @@ def shown(ms):
 
 
 def gain_text(g):
+    if g < 2:
+        return f"{(g - 1) * 100:.0f}%"
     return f"{g:.1f}×" if g < 10 else f"{g:,.0f}×"
 
 

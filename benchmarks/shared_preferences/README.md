@@ -15,15 +15,15 @@ charts and the table of every case are in the plugin example's
 
 ## Results
 
-https://github.com/user-attachments/assets/3bb22145-ccd9-4f76-8df3-d7072915febc
+https://github.com/user-attachments/assets/dcfa6e79-0c1d-4921-a65b-c6cf24f9dffb
 
 ![Writing a value: 1,000 awaited setString calls on one key take 0.395 ms against Flutter's 86.3 ms on an iPhone 16 Pro, 218 times faster, and 1.54 ms against 768 ms on a Xiaomi 11 Lite 5G NE, 499 times faster](../../plugins/dartnative_shared_preferences/example/benchmarks/write_one_key.png)
 
 ![Writing 1,000 values: 1,000 awaited setString calls, each on its own key, 174 times faster on an iPhone 16 Pro and 714 times faster on a Xiaomi 11 Lite 5G NE](../../plugins/dartnative_shared_preferences/example/benchmarks/write_1000_keys.png)
 
-![Reading a value: 1,000 getString calls on one key, 1.1 times faster on both phones; both read from memory](../../plugins/dartnative_shared_preferences/example/benchmarks/read_one_key.png)
+![Reading a value: 1,000 getString calls on one key, 14% faster on an iPhone 16 Pro and 6% faster on a Xiaomi 11 Lite 5G NE; both read from memory](../../plugins/dartnative_shared_preferences/example/benchmarks/read_one_key.png)
 
-![Reading 1,000 values: 1,000 getString calls, each on its own key, 1.2 times faster on both phones; both read from memory](../../plugins/dartnative_shared_preferences/example/benchmarks/read_1000_keys.png)
+![Reading 1,000 values: 1,000 getString calls, each on its own key, 21% faster on an iPhone 16 Pro and 19% faster on a Xiaomi 11 Lite 5G NE; both read from memory](../../plugins/dartnative_shared_preferences/example/benchmarks/read_1000_keys.png)
 
 iPhone 16 Pro (iOS 27.2.1). Milliseconds for 1000 operations on a string;
 lower is better.
