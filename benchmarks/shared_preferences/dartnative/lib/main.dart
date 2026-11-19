@@ -1,3 +1,15 @@
+// The shared_preferences benchmark, DartNative app. Runs every case of
+// lib/benchmark/, the same files as in the Flutter app with two lines changed,
+// on launch, and prints the table in one block:
+//
+//   dn run --profile                           # the table in the console
+//   dn build ios --profile                     # or: dn build apk --profile
+//
+// The table also goes to prefs_bench.txt in the app's temporary folder (tmp/
+// in its container on iOS, cache/ on Android), for a run launched without the
+// tool attached: ../tool/run_ios.sh and ../tool/run_android.sh read it there.
+//
+// The store is cleared before every round and at the end.
 import 'dart:io';
 
 import 'package:dartnative/dartnative.dart';
@@ -5,18 +17,6 @@ import 'package:dartnative/dartnative.dart';
 import 'benchmark/prefs_cases.dart';
 import 'dartnative_plugin_registrant.dart';
 
-/// Runs every case of `lib/benchmark/` on launch and prints the table in one
-/// block, ready to paste into `benchmarks/README.md` beside Flutter's:
-///
-///     dn run --profile -t lib/benchmark_main.dart
-///
-/// The table also goes to `prefs_bench.txt` in the app's temporary folder
-/// (`tmp/` in its container on iOS, `cache/` on Android), for a run launched
-/// without the tool attached; `benchmarks/shared_preferences/` at the root of
-/// the DartNative repository has scripts that do that.
-///
-/// The store is cleared before every round and at the end, so run it on a
-/// device where the example's own values do not matter.
 void main() {
   DartNativePluginRegistrant.registerAll();
   runApp(const _BenchmarkApp());

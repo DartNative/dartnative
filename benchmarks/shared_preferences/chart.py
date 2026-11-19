@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Draws a chart of the shared_preferences benchmark from the tables in
-README.md (the iPhone) and android.md (the Android phone), so the picture
-always matches the numbers. A chart shows one row of those tables: the iPhone
+results/iphone.md and results/android.md, so the picture always matches the
+numbers. A chart shows one row of those tables: the iPhone
 on the left and the Android phone on the right, each on a card with two bars,
 Flutter's and DartNative's, and the gain between them in large type. The look
 is the one of the DartNative repository's benchmarks (benchmarks/json).
 
-Usage:
-  python3 chart.py <out.png> "<row>" "<title>" "<line>" "<gain word>"
+Usage, from this folder:
+  python3 chart.py charts/<out.png> "<row>" "<title>" "<line>" "<gain word>"
       [--footer "<text>"]
 
 "<row>" is the first cell of a row ("Write, 1 key", "integer"), found in
@@ -31,8 +31,8 @@ import tempfile
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 HERE = os.path.dirname(os.path.abspath(__file__))
 # Each phone: (name shown, system shown, the file of its results).
-PHONES = [("iPhone 16 Pro", "iOS 27", "README.md"),
-          ("Xiaomi 11 Lite 5G NE", "Android 14", "android.md")]
+PHONES = [("iPhone 16 Pro", "iOS 27", "results/iphone.md"),
+          ("Xiaomi 11 Lite 5G NE", "Android 14", "results/android.md")]
 FLUTTER = "shared_preferences, Flutter (ms)"
 DARTNATIVE = "dartnative_shared_preferences (ms)"
 # The width of the longer bar, in pixels.

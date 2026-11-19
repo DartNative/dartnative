@@ -1,9 +1,9 @@
 #!/bin/bash
-# Copies the benchmark code from the plugin's example into the Flutter app,
+# Copies the benchmark code from the DartNative app into the Flutter app,
 # changing the two lines that differ: the import and the side's name.
 set -e
 HERE=$(cd "$(dirname "$0")/.." && pwd)
-SRC=$HERE/../../plugins/dartnative_shared_preferences/example/lib/benchmark
+SRC=$HERE/dartnative/lib/benchmark
 DST=$HERE/flutter/lib/benchmark
 mkdir -p "$DST"
 cp "$SRC/benchmark_runner.dart" "$SRC/benchmark_types.dart" "$DST/"

@@ -1,12 +1,13 @@
-# Benchmark on Android
+# Xiaomi 11 Lite 5G NE (Android 14): every case
 
 Flutter's `shared_preferences` in a Flutter app against
 `dartnative_shared_preferences` in a DartNative app, on the same mid-range
 Android phone, the Xiaomi 11 Lite 5G NE (Android 14), both profile builds,
-1000 operations per case, two warm-up rounds, median of seven. Measured on
-2026-11-19 with 1.1.0, whose store is the plugin's own memory-mapped
-file. Run the way the iPhone's was ([README.md](README.md)):
-the same files of `lib/benchmark/` in both apps, two lines changed;
+1000 operations per case, two warm-up rounds, median of seven. Measured
+with 1.1.0, whose store is the plugin's own memory-mapped file. Run the way the iPhone's was ([iphone.md](iphone.md)):
+the same files of [`lib/benchmark/`](../dartnative/lib/benchmark/) in
+both apps ([`../dartnative/`](../dartnative/), [`../flutter/`](../flutter/)),
+two lines changed;
 DartNative once, Flutter twice, Flutter's column the better of its two runs
 for each row. A second DartNative run was within 14% of the first at the
 median and 47% at most; the table has the first.
@@ -20,17 +21,9 @@ crashing right after loses nothing, and the store's thread writes it to
 storage within about a second; a power cut in that second can lose it.
 `reload()` syncs at once. The ratios below compare the two as each plugin
 ships; most of Flutter's time is that sync. On the iPhone both sides stop at
-the same point ([README.md](README.md)).
+the same point ([iphone.md](iphone.md)).
 
 ## Writes and reads
-
-![Writing a value: 1,000 awaited setString calls on one key take 0.395 ms against Flutter's 86.3 ms on an iPhone 16 Pro, 218 times faster, and 1.54 ms against 768 ms on a Xiaomi 11 Lite 5G NE, 499 times faster](write_one_key.png)
-
-![Writing 1,000 values: 1,000 awaited setString calls, each on its own key, 174 times faster on an iPhone 16 Pro and 714 times faster on a Xiaomi 11 Lite 5G NE](write_1000_keys.png)
-
-![Reading a value: 1,000 getString calls on one key, 14% faster on an iPhone 16 Pro and 6% faster on a Xiaomi 11 Lite 5G NE; both read from memory](read_one_key.png)
-
-![Reading 1,000 values: 1,000 getString calls, each on its own key, 21% faster on an iPhone 16 Pro and 19% faster on a Xiaomi 11 Lite 5G NE; both read from memory](read_1000_keys.png)
 
 Milliseconds for 1000 operations on a string; lower is better.
 
@@ -57,7 +50,8 @@ Milliseconds for 1000 awaited sets on one key; lower is better.
 <summary>Every case: 1000 keys, sets not awaited, the last of 1000 awaited, reads of every type</summary>
 
 Milliseconds for 1000 operations; lower is better. The durability column
-says how far each side's writes got (`lib/benchmark/benchmark_types.dart`).
+says how far each side's writes got
+([`benchmark_types.dart`](../dartnative/lib/benchmark/benchmark_types.dart)).
 
 | Case | Flutter (ms) | DartNative (ms) | DartNative | Durability, Flutter / DartNative |
 | --- | ---: | ---: | ---: | --- |
@@ -116,5 +110,5 @@ What it says:
 
 ## Redrawing the charts
 
-The charts show both phones; [README.md](README.md) has the commands that
-redraw them from the tables.
+The charts show both phones; [../README.md](../README.md) has them and
+the commands that redraw them from the tables.

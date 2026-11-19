@@ -1,0 +1,18 @@
+name: prefs_dartnative
+description: "The shared_preferences benchmark, DartNative side: dartnative_shared_preferences."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.12.0-192.0.dev
+
+# Version dependencies: `dn pub get` takes the DartNative packages from the
+# SDK you installed, and dartnative_shared_preferences from dartpub.dev.
+dependencies:
+  dartnative: ^1.0.0
+  dartnative_ios: ^1.0.0
+  dartnative_android: ^1.0.0
+  dartnative_shared_preferences: ^1.1.0
+
+dev_dependencies:
+  lints: ^6.0.0

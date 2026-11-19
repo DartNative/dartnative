@@ -10,7 +10,7 @@ in a fast memory-mapped store of its own. iOS and Android.
 - **Works from any isolate** — no platform channel, so reads and writes work outside the main isolate,
   background tasks included, and a value one of them writes is seen by every other on its next read.
 - **Fast writes** — a write takes about a microsecond, hundreds of times faster than Flutter's
-  ([iPhone](./example/benchmarks/README.md), [Android](./example/benchmarks/android.md)), and is
+  ([iPhone](https://github.com/DartNative/dartnative/blob/main/benchmarks/shared_preferences/results/iphone.md), [Android](https://github.com/DartNative/dartnative/blob/main/benchmarks/shared_preferences/results/android.md)), and is
   kept even if the app is killed right after.
 - **Fast reads** — as fast as Flutter's: each isolate reads from memory and still sees other isolates' writes.
 - **Safe counters** — `incrementInt` and the `updateX` methods change a value atomically across isolates.
@@ -130,19 +130,18 @@ on `reload()`.
 
 https://github.com/user-attachments/assets/dcfa6e79-0c1d-4921-a65b-c6cf24f9dffb
 
-![Writing a value: 1,000 awaited setString calls on one key take 0.395 ms against Flutter's 86.3 ms on an iPhone 16 Pro, 218 times faster, and 1.54 ms against 768 ms on a Xiaomi 11 Lite 5G NE, 499 times faster](./example/benchmarks/write_one_key.png)
+![Writing a value: 1,000 awaited setString calls on one key take 0.395 ms against Flutter's 86.3 ms on an iPhone 16 Pro, 218 times faster, and 1.54 ms against 768 ms on a Xiaomi 11 Lite 5G NE, 499 times faster](https://raw.githubusercontent.com/DartNative/dartnative/main/benchmarks/shared_preferences/charts/write_one_key.png)
 
-![Writing 1,000 values: 1,000 awaited setString calls, each on its own key, 174 times faster on an iPhone 16 Pro and 714 times faster on a Xiaomi 11 Lite 5G NE](./example/benchmarks/write_1000_keys.png)
+![Writing 1,000 values: 1,000 awaited setString calls, each on its own key, 174 times faster on an iPhone 16 Pro and 714 times faster on a Xiaomi 11 Lite 5G NE](https://raw.githubusercontent.com/DartNative/dartnative/main/benchmarks/shared_preferences/charts/write_1000_keys.png)
 
-![Reading a value: 1,000 getString calls on one key, 14% faster on an iPhone 16 Pro and 6% faster on a Xiaomi 11 Lite 5G NE; both read from memory](./example/benchmarks/read_one_key.png)
+![Reading a value: 1,000 getString calls on one key, 14% faster on an iPhone 16 Pro and 6% faster on a Xiaomi 11 Lite 5G NE; both read from memory](https://raw.githubusercontent.com/DartNative/dartnative/main/benchmarks/shared_preferences/charts/read_one_key.png)
 
-![Reading 1,000 values: 1,000 getString calls, each on its own key, 21% faster on an iPhone 16 Pro and 19% faster on a Xiaomi 11 Lite 5G NE; both read from memory](./example/benchmarks/read_1000_keys.png)
+![Reading 1,000 values: 1,000 getString calls, each on its own key, 21% faster on an iPhone 16 Pro and 19% faster on a Xiaomi 11 Lite 5G NE; both read from memory](https://raw.githubusercontent.com/DartNative/dartnative/main/benchmarks/shared_preferences/charts/read_1000_keys.png)
 
-The example's
-[`benchmarks/`](https://github.com/DartNative/dartnative/tree/main/plugins/dartnative_shared_preferences/example/benchmarks)
-folder has every number and how it was measured, and
-[`benchmarks/shared_preferences/`](https://github.com/DartNative/dartnative/tree/main/benchmarks/shared_preferences)
-has the Flutter app and the scripts to run both on your own phone.
+The benchmark is open source: the DartNative app and the Flutter app it was
+measured with, every number, and the scripts to run both on your own phone
+are in the DartNative repository's
+[`benchmarks/shared_preferences/`](https://github.com/DartNative/dartnative/tree/main/benchmarks/shared_preferences).
 
 ## Example
 

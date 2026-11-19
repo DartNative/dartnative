@@ -1,24 +1,26 @@
-# Benchmark
+# iPhone 16 Pro: every case
 
 Flutter's `shared_preferences` in a Flutter app against
 `dartnative_shared_preferences` in a DartNative app, on the same iPhone 16
 Pro (iOS 27.2.1), both profile builds, 1000 operations per case, two
-warm-up rounds, median of seven. Measured on 2026-11-19 with 1.1.0, whose
-store is the plugin's own memory-mapped file; Flutter's column is from the
-same day. The Android phone: [android.md](android.md).
+warm-up rounds, median of seven. Measured with 1.1.0, whose store is the
+plugin's own memory-mapped file; Flutter's column is from the same day.
+The Android phone: [android.md](android.md). The charts and the summary:
+[../README.md](../README.md).
 
 How each side runs:
 
-- **dartnative_shared_preferences**: this example,
-  `dn run --profile -t lib/benchmark_main.dart`. (For the table below the
+- **dartnative_shared_preferences**: the app in [`../dartnative/`](../dartnative/),
+  `dn run --profile`. (For the table below the
   same files ran in a scratch app that compiles the 1.1.0 facade itself,
   launched without the tool attached: the SDK's baked module was older, and
   the tool's connection to the phone dropped mid-run. It ran twice; the two
   runs were within 20% of each other on every row, and the table has the
   first.)
-- **shared_preferences, Flutter**: a new `flutter create` app with
-  `shared_preferences: ^2.5.6` (legacy `SharedPreferences` API, the one this
-  plugin mirrors), the files of `lib/benchmark/` copied in with two lines
+- **shared_preferences, Flutter**: the app in [`../flutter/`](../flutter/), a
+  `flutter create` app with `shared_preferences: ^2.5.6` (legacy
+  `SharedPreferences` API, the one the plugin mirrors), the files of
+  [`lib/benchmark/`](../dartnative/lib/benchmark/) copied in with two lines
   changed (the import, and `benchmarkSide = 'flutter'`), built with
   `flutter build ios --profile` on stock Flutter 3.41.2 and launched without
   the tool attached (the tool's USB port forwarding failed on this iOS). It
@@ -30,19 +32,6 @@ Every write stores a value that differs from the one before it:
 nothing.
 
 ## Writes and reads
-
-![Writing a value: 1,000 awaited setString calls on one key take 0.395 ms against Flutter's 86.3 ms on an iPhone 16 Pro, 218 times faster, and 1.54 ms against 768 ms on a Xiaomi 11 Lite 5G NE, 499 times faster](write_one_key.png)
-
-![Writing 1,000 values: 1,000 awaited setString calls, each on its own key, 174 times faster on an iPhone 16 Pro and 714 times faster on a Xiaomi 11 Lite 5G NE](write_1000_keys.png)
-
-![Reading a value: 1,000 getString calls on one key, 14% faster on an iPhone 16 Pro and 6% faster on a Xiaomi 11 Lite 5G NE; both read from memory](read_one_key.png)
-
-![Reading 1,000 values: 1,000 getString calls, each on its own key, 21% faster on an iPhone 16 Pro and 19% faster on a Xiaomi 11 Lite 5G NE; both read from memory](read_1000_keys.png)
-
-The same results as a 29-second reel with music (also in this folder,
-[`shared_preferences_reel.mp4`](shared_preferences_reel.mp4)):
-
-https://github.com/user-attachments/assets/dcfa6e79-0c1d-4921-a65b-c6cf24f9dffb
 
 Milliseconds for 1000 operations on a string; lower is better.
 
@@ -76,7 +65,7 @@ Milliseconds for 1000 awaited sets on one key; lower is better.
 
 Milliseconds for 1000 operations; lower is better. A ratio is given only
 where both sides' writes got equally far (see the durability column and
-`lib/benchmark/benchmark_types.dart`).
+[`benchmark_types.dart`](../dartnative/lib/benchmark/benchmark_types.dart)).
 
 | Case | Flutter (ms) | DartNative (ms) | DartNative | Durability, Flutter / DartNative |
 | --- | ---: | ---: | ---: | --- |
@@ -127,8 +116,9 @@ What it says:
   waits for `UserDefaults.set`, 74 to 112 µs on this phone. DartNative's
   appends a record to its memory-mapped store and returns: 0.13 to 0.56 µs.
   The two got equally far when they return (`mapped` and `userDefaults` in
-  `benchmark_types.dart`): the app being killed or crashing right after
-  loses neither value, and each reaches storage a little later, written by
+  [`benchmark_types.dart`](../dartnative/lib/benchmark/benchmark_types.dart)):
+  the app being killed or crashing right after loses neither value, and
+  each reaches storage a little later, written by
   the preferences daemon for Flutter and by the store's own thread, within
   about a second, for DartNative.
 - **Writes not awaited** do different work, so they get no ratio, but even
@@ -145,26 +135,8 @@ What it says:
   times slower than Flutter's (0.47 to 1.10 ms per 1000), and every write
   was a `UserDefaults.set`, as fast as Flutter's and no faster.
 
-## Redrawing the charts
+## The charts
 
-The charts are drawn from the tables of this page (the iPhone) and of
-[android.md](android.md) (the Android phone), so they cannot drift from the
-numbers. In this folder, with Google Chrome installed:
-
-```
-F1="Flutter: shared_preferences 2.5.6 in a Flutter 3.41.2 app. Profile builds, median of 7 rounds of 1,000 calls."
-F2="On Android, Flutter's set waits until the file is on storage; DartNative's survives a kill and is on storage within about a second."
-python3 chart.py write_one_key.png "Write, 1 key" "Writing a value" \
-  "1,000 awaited setString calls on one key." faster --footer "$F1\n$F2"
-python3 chart.py write_1000_keys.png "Write, 1000 keys" "Writing 1,000 values" \
-  "1,000 awaited setString calls, each on its own key." faster --footer "$F1\n$F2"
-python3 chart.py read_one_key.png "Read, 1 key" "Reading a value" \
-  "1,000 getString calls on one key, both from memory." faster --footer "$F1"
-python3 chart.py read_1000_keys.png "Read, 1000 keys" "Reading 1,000 values" \
-  "1,000 getString calls, each on its own key, both from memory." faster --footer "$F1"
-```
-
-Each is 1920 x 1080, in the look of the DartNative repository's other
-benchmarks. The gain is Flutter's time over DartNative's: from 2× up,
-"N× faster", as those benchmarks write it; under 2×, a percentage ("21%
-faster" for 1.21×), since "1.2× faster" reads as if it were 120%.
+The charts in [../README.md](../README.md) are drawn from the tables of
+this page and of [android.md](android.md) by `../chart.py`; the README
+has the commands.
