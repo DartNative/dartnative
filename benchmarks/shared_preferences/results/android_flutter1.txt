@@ -1,0 +1,58 @@
+flutter integer, set not awaited (inProcess): 52.722 ms, 52.72 us/op, range 36.62-65.87 us/op, 18967 ops/s
+flutter integer, set not awaited, 1000 keys (inProcess): 42.153 ms, 42.15 us/op, range 34.40-61.52 us/op, 23723 ops/s
+flutter double, set not awaited (inProcess): 48.164 ms, 48.16 us/op, range 33.99-52.36 us/op, 20762 ops/s
+flutter double, set not awaited, 1000 keys (inProcess): 40.881 ms, 40.88 us/op, range 36.13-57.33 us/op, 24461 ops/s
+flutter boolean, set not awaited (inProcess): 44.382 ms, 44.38 us/op, range 41.22-54.58 us/op, 22532 ops/s
+flutter boolean, set not awaited, 1000 keys (inProcess): 42.453 ms, 42.45 us/op, range 36.23-57.51 us/op, 23555 ops/s
+flutter string list, set not awaited (inProcess): 54.545 ms, 54.55 us/op, range 42.75-64.50 us/op, 18333 ops/s
+flutter string list, set not awaited, 1000 keys (inProcess): 66.369 ms, 66.37 us/op, range 45.77-73.55 us/op, 15067 ops/s
+flutter string read (read): 0.053 ms, 0.05 us/op, range 0.05-0.06 us/op, 18867925 ops/s
+flutter string read, 1000 keys (read): 0.405 ms, 0.41 us/op, range 0.40-0.43 us/op, 2469136 ops/s
+flutter integer read (read): 0.038 ms, 0.04 us/op, range 0.04-0.04 us/op, 26315789 ops/s
+flutter integer read, 1000 keys (read): 0.229 ms, 0.23 us/op, range 0.20-0.24 us/op, 4366812 ops/s
+flutter double read (read): 0.044 ms, 0.04 us/op, range 0.04-0.08 us/op, 22727273 ops/s
+flutter double read, 1000 keys (read): 0.251 ms, 0.25 us/op, range 0.23-0.34 us/op, 3984064 ops/s
+flutter boolean read (read): 0.044 ms, 0.04 us/op, range 0.04-0.05 us/op, 22727273 ops/s
+flutter boolean read, 1000 keys (read): 0.262 ms, 0.26 us/op, range 0.25-0.29 us/op, 3816794 ops/s
+flutter string list read (read): 0.278 ms, 0.28 us/op, range 0.27-0.67 us/op, 3597122 ops/s
+flutter string list read, 1000 keys (read): 0.596 ms, 0.60 us/op, range 0.56-0.65 us/op, 1677852 ops/s
+=== TABLE: every case (copy from here) ===
+| Case | Durability | flutter, Android, 1000 ops (ms) | Range per op (us) |
+| --- | --- | ---: | ---: |
+| string, every set awaited | committed | 767.617 | 753.99-839.10 |
+| string, every set awaited, 1000 keys | committed | 1650.507 | 1624.14-3161.91 |
+| string, 1000 sets, last awaited | committed | 681.666 | 674.73-713.63 |
+| integer, every set awaited | committed | 786.448 | 771.97-792.77 |
+| integer, every set awaited, 1000 keys | committed | 1599.023 | 1594.65-1610.41 |
+| integer, 1000 sets, last awaited | committed | 695.296 | 679.35-829.82 |
+| double, every set awaited | committed | 788.642 | 780.19-810.04 |
+| double, every set awaited, 1000 keys | committed | 1641.669 | 1634.68-1656.95 |
+| double, 1000 sets, last awaited | committed | 697.057 | 679.73-712.43 |
+| boolean, every set awaited | committed | 770.344 | 763.86-780.47 |
+| boolean, every set awaited, 1000 keys | committed | 1856.195 | 1789.56-1983.49 |
+| boolean, 1000 sets, last awaited | committed | 1212.875 | 1040.27-1355.05 |
+| string list, every set awaited | committed | 1416.211 | 1346.57-1595.25 |
+| string list, every set awaited, 1000 keys | committed | 2955.898 | 2898.73-2981.00 |
+| string list, 1000 sets, last awaited | committed | 1328.013 | 1059.79-1491.76 |
+| string, set not awaited | inProcess | 53.114 | 48.34-61.44 |
+| string, set not awaited, 1000 keys | inProcess | 56.551 | 51.82-59.10 |
+| integer, set not awaited | inProcess | 52.722 | 36.62-65.87 |
+| integer, set not awaited, 1000 keys | inProcess | 42.153 | 34.40-61.52 |
+| double, set not awaited | inProcess | 48.164 | 33.99-52.36 |
+| double, set not awaited, 1000 keys | inProcess | 40.881 | 36.13-57.33 |
+| boolean, set not awaited | inProcess | 44.382 | 41.22-54.58 |
+| boolean, set not awaited, 1000 keys | inProcess | 42.453 | 36.23-57.51 |
+| string list, set not awaited | inProcess | 54.545 | 42.75-64.50 |
+| string list, set not awaited, 1000 keys | inProcess | 66.369 | 45.77-73.55 |
+| string read | read | 0.053 | 0.05-0.06 |
+| string read, 1000 keys | read | 0.405 | 0.40-0.43 |
+| integer read | read | 0.038 | 0.04-0.04 |
+| integer read, 1000 keys | read | 0.229 | 0.20-0.24 |
+| double read | read | 0.044 | 0.04-0.08 |
+| double read, 1000 keys | read | 0.251 | 0.23-0.34 |
+| boolean read | read | 0.044 | 0.04-0.05 |
+| boolean read, 1000 keys | read | 0.262 | 0.25-0.29 |
+| string list read | read | 0.278 | 0.27-0.67 |
+| string list read, 1000 keys | read | 0.596 | 0.56-0.65 |
+=== TABLE: every case (copy to here) ===
+DONE: 35 rows

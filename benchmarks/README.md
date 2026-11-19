@@ -10,6 +10,7 @@ the scripts that drive and measure them, and the numbers they produced.
 | [`json/`](json/) | Fetching JSON over HTTPS and decoding it to Dart objects: DartNative against Flutter's own routes (`jsonDecode`, `compute`, `package:http` and the platform clients). |
 | [`frameworks_comparison/`](frameworks_comparison/) | The same shop app in DartNative, Flutter, React Native, Native Shell and Whisker, launched to its first frame and to its Home screen's content, measured with the tools of an independent benchmark whose own repository has every app it has built. |
 | [`hot_reload/`](hot_reload/) | Hot reload, from saving a file to the change on the screen: DartNative and Flutter, a small and a medium app, from the editor and from the terminal, on the iOS simulator with debug builds, as hot reload runs. |
+| [`shared_preferences/`](shared_preferences/) | Writing and reading values: Flutter's `shared_preferences` against `dartnative_shared_preferences`, every value type, on an iPhone and a mid-range Android phone. |
 
 Every benchmark here follows the same rules:
 

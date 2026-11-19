@@ -1,0 +1,75 @@
+dartnative string, every set awaited (mapped): 1.538 ms, 1.54 us/op, range 1.10-3.38 us/op, 650195 ops/s
+dartnative string, every set awaited, 1000 keys (mapped): 2.290 ms, 2.29 us/op, range 1.48-9.77 us/op, 436681 ops/s
+dartnative string, 1000 sets, last awaited (mapped): 0.938 ms, 0.94 us/op, range 0.90-3.91 us/op, 1066098 ops/s
+dartnative integer, every set awaited (mapped): 0.658 ms, 0.66 us/op, range 0.64-1.99 us/op, 1519757 ops/s
+dartnative integer, every set awaited, 1000 keys (mapped): 1.129 ms, 1.13 us/op, range 1.06-1.90 us/op, 885740 ops/s
+dartnative integer, 1000 sets, last awaited (mapped): 0.535 ms, 0.54 us/op, range 0.51-1.09 us/op, 1869159 ops/s
+dartnative double, every set awaited (mapped): 1.015 ms, 1.01 us/op, range 1.00-2.46 us/op, 985222 ops/s
+dartnative double, every set awaited, 1000 keys (mapped): 1.522 ms, 1.52 us/op, range 1.32-2.13 us/op, 657030 ops/s
+dartnative double, 1000 sets, last awaited (mapped): 0.765 ms, 0.77 us/op, range 0.74-1.12 us/op, 1307190 ops/s
+dartnative boolean, every set awaited (mapped): 0.560 ms, 0.56 us/op, range 0.54-0.96 us/op, 1785714 ops/s
+dartnative boolean, every set awaited, 1000 keys (mapped): 0.976 ms, 0.98 us/op, range 0.92-1.39 us/op, 1024590 ops/s
+dartnative boolean, 1000 sets, last awaited (mapped): 0.455 ms, 0.46 us/op, range 0.44-0.82 us/op, 2197802 ops/s
+dartnative string list, every set awaited (mapped): 1.280 ms, 1.28 us/op, range 1.25-1.58 us/op, 781250 ops/s
+dartnative string list, every set awaited, 1000 keys (mapped): 1.665 ms, 1.67 us/op, range 1.63-2.50 us/op, 600601 ops/s
+dartnative string list, 1000 sets, last awaited (mapped): 1.155 ms, 1.16 us/op, range 1.13-1.82 us/op, 865801 ops/s
+dartnative string, set not awaited (mapped): 0.879 ms, 0.88 us/op, range 0.80-1.21 us/op, 1137656 ops/s
+dartnative string, set not awaited, 1000 keys (mapped): 1.123 ms, 1.12 us/op, range 1.10-2.35 us/op, 890472 ops/s
+dartnative integer, set not awaited (mapped): 0.456 ms, 0.46 us/op, range 0.45-0.80 us/op, 2192982 ops/s
+dartnative integer, set not awaited, 1000 keys (mapped): 0.813 ms, 0.81 us/op, range 0.78-1.79 us/op, 1230012 ops/s
+dartnative double, set not awaited (mapped): 0.753 ms, 0.75 us/op, range 0.75-1.15 us/op, 1328021 ops/s
+dartnative double, set not awaited, 1000 keys (mapped): 1.114 ms, 1.11 us/op, range 1.08-1.58 us/op, 897666 ops/s
+dartnative boolean, set not awaited (mapped): 0.443 ms, 0.44 us/op, range 0.43-0.81 us/op, 2257336 ops/s
+dartnative boolean, set not awaited, 1000 keys (mapped): 0.839 ms, 0.84 us/op, range 0.81-1.85 us/op, 1191895 ops/s
+dartnative string list, set not awaited (mapped): 1.163 ms, 1.16 us/op, range 1.13-1.81 us/op, 859845 ops/s
+dartnative string list, set not awaited, 1000 keys (mapped): 1.524 ms, 1.52 us/op, range 1.50-2.73 us/op, 656168 ops/s
+dartnative string read (read): 0.047 ms, 0.05 us/op, range 0.05-0.05 us/op, 21276596 ops/s
+dartnative string read, 1000 keys (read): 0.338 ms, 0.34 us/op, range 0.33-0.36 us/op, 2958580 ops/s
+dartnative integer read (read): 0.040 ms, 0.04 us/op, range 0.04-0.04 us/op, 25000000 ops/s
+dartnative integer read, 1000 keys (read): 0.203 ms, 0.20 us/op, range 0.20-0.21 us/op, 4926108 ops/s
+dartnative double read (read): 0.045 ms, 0.04 us/op, range 0.04-0.05 us/op, 22222222 ops/s
+dartnative double read, 1000 keys (read): 0.248 ms, 0.25 us/op, range 0.24-0.85 us/op, 4032258 ops/s
+dartnative boolean read (read): 0.044 ms, 0.04 us/op, range 0.04-0.05 us/op, 22727273 ops/s
+dartnative boolean read, 1000 keys (read): 0.215 ms, 0.21 us/op, range 0.21-0.23 us/op, 4651163 ops/s
+dartnative string list read (read): 0.172 ms, 0.17 us/op, range 0.17-0.21 us/op, 5813953 ops/s
+dartnative string list read, 1000 keys (read): 0.667 ms, 0.67 us/op, range 0.65-2.75 us/op, 1499250 ops/s
+=== TABLE: every case (copy from here) ===
+| Case | Durability | dartnative, Android, 1000 ops (ms) | Range per op (us) |
+| --- | --- | ---: | ---: |
+| string, every set awaited | mapped | 1.538 | 1.10-3.38 |
+| string, every set awaited, 1000 keys | mapped | 2.290 | 1.48-9.77 |
+| string, 1000 sets, last awaited | mapped | 0.938 | 0.90-3.91 |
+| integer, every set awaited | mapped | 0.658 | 0.64-1.99 |
+| integer, every set awaited, 1000 keys | mapped | 1.129 | 1.06-1.90 |
+| integer, 1000 sets, last awaited | mapped | 0.535 | 0.51-1.09 |
+| double, every set awaited | mapped | 1.015 | 1.00-2.46 |
+| double, every set awaited, 1000 keys | mapped | 1.522 | 1.32-2.13 |
+| double, 1000 sets, last awaited | mapped | 0.765 | 0.74-1.12 |
+| boolean, every set awaited | mapped | 0.560 | 0.54-0.96 |
+| boolean, every set awaited, 1000 keys | mapped | 0.976 | 0.92-1.39 |
+| boolean, 1000 sets, last awaited | mapped | 0.455 | 0.44-0.82 |
+| string list, every set awaited | mapped | 1.280 | 1.25-1.58 |
+| string list, every set awaited, 1000 keys | mapped | 1.665 | 1.63-2.50 |
+| string list, 1000 sets, last awaited | mapped | 1.155 | 1.13-1.82 |
+| string, set not awaited | mapped | 0.879 | 0.80-1.21 |
+| string, set not awaited, 1000 keys | mapped | 1.123 | 1.10-2.35 |
+| integer, set not awaited | mapped | 0.456 | 0.45-0.80 |
+| integer, set not awaited, 1000 keys | mapped | 0.813 | 0.78-1.79 |
+| double, set not awaited | mapped | 0.753 | 0.75-1.15 |
+| double, set not awaited, 1000 keys | mapped | 1.114 | 1.08-1.58 |
+| boolean, set not awaited | mapped | 0.443 | 0.43-0.81 |
+| boolean, set not awaited, 1000 keys | mapped | 0.839 | 0.81-1.85 |
+| string list, set not awaited | mapped | 1.163 | 1.13-1.81 |
+| string list, set not awaited, 1000 keys | mapped | 1.524 | 1.50-2.73 |
+| string read | read | 0.047 | 0.05-0.05 |
+| string read, 1000 keys | read | 0.338 | 0.33-0.36 |
+| integer read | read | 0.040 | 0.04-0.04 |
+| integer read, 1000 keys | read | 0.203 | 0.20-0.21 |
+| double read | read | 0.045 | 0.04-0.05 |
+| double read, 1000 keys | read | 0.248 | 0.24-0.85 |
+| boolean read | read | 0.044 | 0.04-0.05 |
+| boolean read, 1000 keys | read | 0.215 | 0.21-0.23 |
+| string list read | read | 0.172 | 0.17-0.21 |
+| string list read, 1000 keys | read | 0.667 | 0.65-2.75 |
+=== TABLE: every case (copy to here) ===
+DONE: 35 rows

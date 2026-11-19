@@ -1,0 +1,38 @@
+| Case | Durability | flutter, iOS, 1000 ops (ms) | Range per op (us) |
+| --- | --- | ---: | ---: |
+| string, every set awaited | userDefaults | 86.443 | 85.25-91.34 |
+| string, every set awaited, 1000 keys | userDefaults | 102.381 | 84.26-113.97 |
+| string, 1000 sets, last awaited | userDefaults | 74.312 | 71.84-75.63 |
+| integer, every set awaited | userDefaults | 81.674 | 80.38-82.05 |
+| integer, every set awaited, 1000 keys | userDefaults | 107.612 | 87.82-121.01 |
+| integer, 1000 sets, last awaited | userDefaults | 103.983 | 103.14-106.58 |
+| double, every set awaited | userDefaults | 111.309 | 110.48-113.77 |
+| double, every set awaited, 1000 keys | userDefaults | 111.290 | 89.43-118.29 |
+| double, 1000 sets, last awaited | userDefaults | 101.818 | 98.94-103.82 |
+| boolean, every set awaited | userDefaults | 101.835 | 101.02-104.62 |
+| boolean, every set awaited, 1000 keys | userDefaults | 116.678 | 89.47-136.95 |
+| boolean, 1000 sets, last awaited | userDefaults | 73.577 | 72.78-75.11 |
+| string list, every set awaited | userDefaults | 83.778 | 83.23-85.44 |
+| string list, every set awaited, 1000 keys | userDefaults | 105.486 | 92.50-113.09 |
+| string list, 1000 sets, last awaited | userDefaults | 93.618 | 91.77-94.31 |
+| string, set not awaited | inProcess | 1.166 | 1.05-1.59 |
+| string, set not awaited, 1000 keys | inProcess | 1.259 | 1.15-1.63 |
+| integer, set not awaited | inProcess | 1.002 | 0.91-1.30 |
+| integer, set not awaited, 1000 keys | inProcess | 1.105 | 0.98-1.32 |
+| double, set not awaited | inProcess | 1.062 | 0.95-1.37 |
+| double, set not awaited, 1000 keys | inProcess | 1.138 | 1.03-1.76 |
+| boolean, set not awaited | inProcess | 1.087 | 0.90-1.17 |
+| boolean, set not awaited, 1000 keys | inProcess | 1.167 | 1.03-1.27 |
+| string list, set not awaited | inProcess | 1.234 | 1.04-4.13 |
+| string list, set not awaited, 1000 keys | inProcess | 1.420 | 1.13-1.70 |
+| string read | read | 0.016 | 0.01-0.02 |
+| string read, 1000 keys | read | 0.135 | 0.13-0.25 |
+| integer read | read | 0.012 | 0.01-0.01 |
+| integer read, 1000 keys | read | 0.079 | 0.07-0.10 |
+| double read | read | 0.014 | 0.01-0.01 |
+| double read, 1000 keys | read | 0.093 | 0.08-0.11 |
+| boolean read | read | 0.012 | 0.01-0.01 |
+| boolean read, 1000 keys | read | 0.084 | 0.07-0.10 |
+| string list read | read | 0.093 | 0.09-0.15 |
+| string list read, 1000 keys | read | 0.224 | 0.20-0.26 |
+DONE: 35 rows
