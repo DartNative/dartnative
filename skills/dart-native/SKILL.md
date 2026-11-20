@@ -45,16 +45,18 @@ void main() {
 }
 ```
 
-- Pass the root **screen** to `runApp` directly. Do **not** wrap it in
-  `App(home: ...)` — `App` only provides theme/navigator inheritance and
-  does not mount `home` natively (white screen). Use `App` only for a
-  named-`routes:` map.
+- Pass the root **screen** to `runApp`, or an `App(home: ..., theme: ...)`
+  as in Flutter: `App` mounts `home` and gives it the theme, `routes:` and
+  `builder:`.
 - Multi-screen apps register routes once: `registerRoutes({'/detail': (_) =>
   const DetailScreen()})`, then `Navigator.pushNamed(context, '/detail')`.
 - The one import is `package:dartnative/dartnative.dart`. Never import
-  `package:flutter/...` or `dart:ui` — DartNative ships its own painting
-  and geometry types, and `dart:ui` is not part of the runtime. Read the
-  device locale with `Platform.localeName` from `dart:io`.
+  `package:flutter/...` or `dart:ui`: DartNative ships its own painting
+  and geometry types. Code written with the `ui.` prefix keeps it with
+  `import 'package:dartnative/canvas.dart' as ui;` (`ui.Color`,
+  `ui.Offset`, `ui.Rect`, `ui.Path`, `ui.Canvas`, `ui.Paint`,
+  `ui.lerpDouble` and the rest). Read the device locale with
+  `Platform.localeName` from `dart:io`.
 
 **Why explicit registrations exist at all** — in Flutter the engine does
 this invisibly: plugins self-register through GeneratedPluginRegistrant +
@@ -151,7 +153,9 @@ consult it for any param-level question).
   constructor, or pass `duration:` to `animateTo()` / `animateBack()`.
 - **Theming**: `ThemeData.light()/.dark()`, `ColorScheme`, `TextTheme`
   (15 slots) — via `App(theme: ...)`. Explicit styles remain the common
-  DartNative idiom, but ported `Theme`-based code has a target.
+  DartNative idiom, but ported `Theme`-based code has a target. No
+  `ColorScheme.fromSeed`: native widgets take the platform's colours, so a
+  scheme only colours the app's own boxes.
 - **Input & focus**: `TextField` (see diffs), `FocusNode`, `Focus`,
   `FocusScope`, `TextEditingController`.
 - **Controls**: `Switch`, `Slider`, `CircularProgressIndicator`,
@@ -217,10 +221,12 @@ search app bar on Android; `title` is skipped when set),
 true — set false for self-decorated action widgets like avatars),
 `brightness` (forces the bar's glass tone; iOS 26 only).
 
-**`TextField`** — a real platform field. `InputDecoration` is
-intentionally minimal (hint, `border: InputBorder.none`, content padding);
-borders/fills come from a wrapping `Container`. Multiline growth via
-`minLines`/`maxLines` works.
+**`TextField`** — a real platform field. The field draws its own box:
+an `OutlineInputBorder` (side colour and width, one radius), `focusedBorder`
+/ `enabledBorder` / `disabledBorder`, and `filled` + `fillColor`, so no
+wrapping `Container` is needed. `labelText` floats on Android (Material's
+field); `hintText`, `contentPadding` and `InputBorder.none` work as in
+Flutter. Multiline growth via `minLines`/`maxLines` works.
 
 **`BottomNavigationBar`** — surface: `items`, `currentIndex`, `onTap`,
 `iconColor`/`selectedIconColor`, label styles, `indicatorColor`,
@@ -273,9 +279,11 @@ glass; `DynamicColor.colorScheme(brightness:)` for Material You;
 | Missing | Porting move |
 |---|---|
 | `SelectableText` | `Text(selectable: true)` — long-press to select and copy |
+| `Material` ⚠️ deprecated | Drop a transparent one around an `InkWell` (an `InkWell` needs none); one with a colour becomes `Container(color:, child: InkWell(...))`; a surface becomes a `Container` with a `BoxDecoration` and `clipBehavior`; a screen colour becomes `Scaffold(backgroundColor:)` |
+| `Ink` ⚠️ deprecated | A `Container` with the same fields |
 | `Offstage` ⚠️ | The offstage child is UNMOUNTED (state lost) — Flutter keeps it mounted. Use `IndexedStack` for state-preserving show/hide |
 | `Theme.of` inheritance beyond `App(theme:)` | Pass styles explicitly where the theme object isn't enough |
-| `InheritedWidget`/`Provider`/Riverpod | `signal<T>` + `.watch(context)`; `Provided<T>` for per-subtree values |
+| `Provider`/Riverpod (packages) | `InheritedWidget` works as in Flutter (`dependOnInheritedWidgetOfExactType`, `updateShouldNotify`); `signal<T>` + `.watch(context)`; `Provided<T>` for per-subtree values |
 | `RenderObject`/`RenderBox` layer | Doesn't exist — Yoga computes frames natively |
 | `MethodChannel` + plugins using one | FFI only: such plugins crash at launch (`Setting a message handler before the FlutterEngine has been run`). Swap for dartnative_* or FFI/pure-Dart equivalents |
 | `WidgetsFlutterBinding.ensureInitialized()` | `DartNativePluginRegistrant.registerAll()` |
@@ -354,17 +362,16 @@ Taken from the starter app; adopt them in any app you generate.
 
 ## Common mistakes
 
-1. `App(home: screen)` as root → white screen. Pass the screen to `runApp`.
-2. Missing `DartNativePluginRegistrant.registerAll()` first in `main()` →
+1. Missing `DartNativePluginRegistrant.registerAll()` first in `main()` →
    white screen, no crash.
-3. `bottomNavigationBar` used for a chat input → the keyboard covers it,
+2. `bottomNavigationBar` used for a chat input → the keyboard covers it,
    as it covers a native tab bar. Keyboard-attached bars go in
    `bottomInputBar`.
-4. A custom top bar inside `body` → the keyboard pushes it off-screen. Top
+3. A custom top bar inside `body` → the keyboard pushes it off-screen. Top
    bars belong in `Scaffold.appBar` (it's a real `UINavigationBar`, pinned
    by the OS). If you must, set `resizeToAvoidBottomInset: false`.
-5. `setState` in `initState` → not mounted yet; schedule it.
-6. Importing `package:flutter/...` or unaliased `dart:ui` → type conflicts.
+4. `setState` in `initState` → not mounted yet; schedule it.
+5. Importing `package:flutter/...` or unaliased `dart:ui` → type conflicts.
    One import: `package:dartnative/dartnative.dart`.
 
 ## Localization

@@ -27,7 +27,7 @@ manifest merge fails until it's raised.
 
 ```yaml
 dependencies:
-  dartnative_compressor: ^1.0.0   # from dartpub.dev
+  dartnative_compressor: ^1.0.2   # from dartpub.dev
 ```
 
 ```bash

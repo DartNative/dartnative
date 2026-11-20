@@ -144,41 +144,6 @@ update Xcode (which ships the Simulator runtimes).
 
 ---
 
-## White screen on launch — license valid but UI never appears
-
-### Symptom
-
-App builds, installs, and runs. The licence validates (a debug build prints
-"Licence valid" in the console; profile and release builds print nothing). No
-crash. No error card. The device shows only a blank white screen.
-
-### Root cause
-
-`App(home: MyScreen())` provides theme and navigator inheritance but
-**does not mount `home` natively**, so the screen stays white.
-
-This is distinct from the license error (dark error card) and from the
-in-place port problems below.
-
-### Fix
-
-Pass the root screen widget **directly** to `runApp()`:
-
-```dart
-// ✗ — home never reaches the native view hierarchy
-runApp(App(title: 'My App', home: const MyScreen()));
-
-// ✓
-runApp(const MyScreen());
-```
-
-`App` is only needed when using named routes. For a single root screen, omit it.
-
-> The playground (`playground/lib/main.dart`) calls `runApp(const DemosScreen())`
-> directly and is the canonical working reference.
-
----
-
 ## Build or launch problems after porting a Flutter project in place
 
 ### Symptom
@@ -201,10 +166,10 @@ Make `ios/` match a `dn create` scaffold, which is the reference for every file:
   `Runner/SceneDelegate.swift` subclasses `DartNativeSceneDelegate`, each a few
   lines. Keep the `UIApplicationSceneManifest` block in `Info.plist`; delete
   `UIMainStoryboardFile` if present.
-- Take the scaffold's `Podfile` as is: `platform :ios, '14.0'`, the SDK
+- Take the scaffold's `Podfile` as is: `platform :ios, '15.0'`, the SDK
   podhelper, `dartnative_install_all_ios_pods`. Do not add `pod` lines by hand;
   pods are discovered from `pubspec.yaml`.
-- Set `IPHONEOS_DEPLOYMENT_TARGET` to 14.0 in every configuration of
+- Set `IPHONEOS_DEPLOYMENT_TARGET` to 15.0 in every configuration of
   `project.pbxproj`.
 
 The simplest port is a fresh shell: `dn create` a new project and move `lib/`

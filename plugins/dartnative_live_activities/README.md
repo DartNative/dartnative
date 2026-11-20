@@ -43,7 +43,7 @@ charging and a doctor's waiting room. This is the plugin's example app.
 
 ```yaml
 dependencies:
-  dartnative_live_activities: ^0.1.0   # from dartpub.dev
+  dartnative_live_activities: ^0.1.1   # from dartpub.dev
 ```
 
 ```bash

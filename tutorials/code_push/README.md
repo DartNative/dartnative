@@ -296,6 +296,13 @@ anything was sent:
   cannot add one. The same goes for a plugin's native code and for the
   framework itself.
 
+One limit no refusal catches: **a fix cannot show an icon the store release
+does not draw.** A store build keeps only the icons your code uses and
+trims the rest of each icon font, which keeps the app small. A fix brings
+code, not fonts, so an icon that first appears in a fix shows as a blank
+space. Use an icon the release already shows, or ship the new one in a
+store release.
+
 And one thing a fix may do: **add a new function**. A new top-level
 function or static method in the file you change travels inside the fix,
 and a fixed function in that same file can call it; the phone keeps it

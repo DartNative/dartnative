@@ -14,7 +14,7 @@ dependencies:
   dartnative_android: ^1.0.0
   dartnative_share: ^1.0.4
   dartnative_media_picker: ^1.1.2
-  dartnative_compressor: ^1.0.1
+  dartnative_compressor: ^1.0.2
 
 dev_dependencies:
   lints: ^6.0.0

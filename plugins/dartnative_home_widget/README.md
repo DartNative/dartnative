@@ -46,7 +46,7 @@ widget is added to the home screen. This is the plugin's example app.
 
 ```yaml
 dependencies:
-  dartnative_home_widget: ^0.1.0   # from dartpub.dev
+  dartnative_home_widget: ^0.1.1   # from dartpub.dev
 ```
 
 ```bash
