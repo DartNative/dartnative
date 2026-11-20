@@ -1,3 +1,9 @@
+## 1.1.1
+
+- In an iOS app whose default file protection is Complete, the one-time copy of what earlier versions and Flutter's `shared_preferences` saved waits until the device is unlocked. While it is locked, `UserDefaults` cannot be read there, and the copy could find nothing and never run again. Until it has run, reads find nothing and writes return false, as before the first unlock after a restart. What the copy has done is recorded beside the store instead of in `UserDefaults`.
+- A long burst of writes no longer piles up old versions of the store's file on disk: at most five exist at once. In a test that writes without pause, there were up to 29 of 8 MB before.
+- The podspec says iOS 15.0, the version the iOS library is built for.
+
 ## 1.1.0
 
 - An app that shipped on Flutter and updates to its DartNative version under the same app id keeps what Flutter's `shared_preferences` saved, with each value's type.

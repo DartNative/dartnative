@@ -5,7 +5,7 @@ Flutter's `shared_preferences` in a Flutter app against
 `dartnative_shared_preferences` in a DartNative app, on the same phones,
 both profile builds, with the same benchmark code.
 
-**Status: measured on 2026-11-19** with `dartnative_shared_preferences`
+**Status: measured** with `dartnative_shared_preferences`
 1.1.0 and `shared_preferences` 2.5.6 on Flutter 3.41.2. Everything is in
 this folder: the two apps, the scripts that run them, every case on each
 phone ([`results/iphone.md`](results/iphone.md),
