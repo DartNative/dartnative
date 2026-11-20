@@ -3,6 +3,86 @@
 <!-- Generated file: edits here are overwritten on the next release.
      The changelog is maintained at https://dartnative.com/changelog -->
 
+## Forms, rich text and faster plugins
+
+1.9.0 (2026-11-20)
+
+This release makes porting more straightforward: more of the code you
+bring over works as you wrote it, from forms and rich text to themes,
+animations and layouts. Release builds are smaller, shared preferences and
+HTTP are faster, the media picker can use the camera, and locale support
+is improved (#98).
+
+**How to update.** Run `dn upgrade`. `dn downgrade` takes you back to
+1.8.0, and `dn use <release>` switches to any release that `dn releases`
+lists.
+
+**Code push.** After you update, the fixes you send reach only apps
+released with 1.9.0. Make a new release of your app before you send fixes.
+To send a fix to an app you released with 1.8.0, run `dn use 1.8.0` first;
+`dn` tells you when you forget.
+
+### Porting is more straightforward
+
+- **Forms.** `Form` and `TextFormField` validate as you expect, error and
+  helper text show under the field in each platform's style, and a field's
+  icons and taps work.
+- **Text and images.** Text can hold icons, pictures and styled spans, and
+  images take colour filters and blend modes.
+- **Look and accessibility.** Part of an app can have a theme of its own,
+  a box can round each corner differently, and VoiceOver and TalkBack read
+  switches, radio buttons and changing values.
+- **Layout and animation.** Rows and columns take `spacing`, every standard
+  animation curve and spring is there, and more layouts come out as you
+  would expect.
+- **Locale.** Improved locale support: `showDatePicker` and
+  `showDateRangePicker` take `locale` (#98).
+
+### What you may notice in an existing app
+
+- Plain icon names such as `Icons.home` are now filled; the `_outlined`
+  names are outlines.
+- `Card` has a margin, 4 on every side by default. Pass
+  `margin: EdgeInsets.zero` for a card without one.
+- On Android, shadows are drawn with a real blur, their offset and their
+  colour.
+- `AnimationController` is stricter about runs: a new run replaces the one
+  in flight, and `animateBack` follows its target, duration and curve.
+
+### Fixed
+
+- On iOS, a custom back button no longer flickers while the screen updates
+  quickly (#97).
+- Keyboard, drawer, shadow and text field fixes on both platforms, among
+  them a black drawer on iOS and a keyboard that stayed open after a push
+  on Android.
+
+### Smaller builds and the `dn` tool
+
+`dn upgrade` also brings a new `dn`:
+
+- A release build no longer carries the built-in icon fonts your app does
+  not use.
+- On Android, changing a plugin's version no longer needs `dn clean`.
+
+### Plugins
+
+Run `dn pub upgrade <plugin>` to take a new version.
+
+- **Shared preferences 1.1.1.** Writes take about a microsecond and
+  survive the app being killed right after, and an app updated from its
+  Flutter build keeps what it saved.
+- **HTTP 1.1.2.** Requests are faster on iOS, and on Android with the HTTP
+  cache on.
+- **Media picker 1.2.0.** Takes a photo or a video with the camera.
+- **Intl 1.0.2.** Improved locale support: its `Locale` goes straight to
+  the date pickers' `locale`.
+- **SVG 1.0.1, Compressor 1.0.2, Home screen widgets 0.1.1 and Live
+  Activities 0.1.1.** Fixes for iOS, and support for earlier Xcode
+  versions, from Xcode 26.
+
+---
+
 ## Home screen widgets and Live Activities
 
 1.8.0 (2026-11-15)
