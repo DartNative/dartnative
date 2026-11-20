@@ -8,6 +8,12 @@ iOS and Android.
 
 ## Why you'll like it
 
+- **What native apps get, at almost their speed**: your requests go
+  through the phone's own networking, so they get HTTP/2 (and HTTP/3 on
+  iOS), the phone's proxy and VPN settings, an HTTP cache and cookies,
+  none of which dart:io's client gives you.
+  [dartnative_http or dart:io?](#dartnative_http-or-dartio) has the
+  details.
 - **Your UI stays smooth**: the request itself, HTTPS, decompression and
   HTTP/2 run on the platform's own networking threads, not on your app's UI
   thread.
@@ -255,6 +261,42 @@ try {
 - **Already using package:web_socket_channel?**
   `AdapterWebSocketChannel(socket)` turns the socket into a
   `WebSocketChannel`. You don't need that package otherwise.
+
+## dartnative_http or dart:io?
+
+Both are supported, so you can pick the one that fits your app.
+
+**dartnative_http for servers on the internet**, which is what almost
+every app talks to. It sends your requests through the phone's own
+networking, the same code native apps use, so your app gets what they
+get:
+
+- **HTTP/2, and HTTP/3 on iOS.** Many requests to a server travel
+  together over one connection, and HTTP/3 copes better with patchy
+  mobile networks. dart:io only speaks HTTP/1.1.
+- **The phone's proxy and VPN settings**, which dart:io ignores.
+- **An HTTP cache**: when the server allows it, a response is reused
+  instead of downloaded again.
+- **Cookies**, kept for you from one request to the next.
+
+**Almost as fast as a native app.** Your requests run on the same
+NSURLSession and OkHttp that Swift and Kotlin apps use, and going through
+Dart adds very little: well under a millisecond per request on iPhone,
+and about a millisecond on Android. That is a small fraction of the time
+a request spends waiting for a server on the internet.
+
+**dart:io's `HttpClient` for hundreds of requests a second to a server
+that replies instantly**, for example one on the same phone or your local
+network. It does less work per request, which only shows when there is
+no network to wait for.
+
+```dart
+import 'dart:io';
+
+import 'package:http/io_client.dart';
+
+final client = IOClient(HttpClient()); // instead of NativeHttpClient()
+```
 
 ## Platform setup
 
