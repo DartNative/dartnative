@@ -3,6 +3,74 @@
 <!-- Generated file: edits here are overwritten on the next release.
      The changelog is maintained at https://dartnative.com/changelog -->
 
+## Navigation, links and state restoration
+
+1.10.0 (2026-11-22)
+
+This release is about navigation. Each tab can keep its own stack of
+screens; more route types and `Navigator` methods are supported; apps can
+open from links and use routing packages; Android's back gesture previews
+the screen it goes back to; and an app the system closed in the
+background opens again where the user left it.
+
+**How to update.** Run `dn upgrade`. `dn downgrade` takes you back to
+1.9.0, and `dn use <release>` switches to any release that `dn releases`
+lists.
+
+**Code push.** After you update, the fixes you send reach only apps
+released with 1.10.0. Make a new release of your app before you send fixes.
+To send a fix to an app you released with 1.9.0, run `dn use 1.9.0` first;
+`dn` tells you when you forget.
+
+### Navigation
+
+- **A stack per tab.** A `Navigator` inside a tab keeps its own screens,
+  pushed with the platform's transition, with the swipe back on iOS. It
+  takes a `GlobalKey`, `observers` and `onGenerateRoute`.
+- **Routes.** Added `ModalRoute.of`, route arguments, `RouteObserver` and
+  `RouteAware`, `PageRouteBuilder`, `fullscreenDialog`, and the remaining
+  `Navigator` methods, such as `pushAndRemoveUntil`, `removeRoute` and
+  `replace`.
+- **Sheets and dialogs are routes.** They return their result through
+  `Navigator.pop`, observers hear them, and `barrierDismissible`,
+  `isDismissible` and `enableDrag` decide how the user can close them.
+- **Pages and routers.** A `Navigator` can be built from a list of pages,
+  and `App.router` takes the `routerConfig` of a routing package.
+- **Links.** An app opens the screen a link names, both when the link
+  starts it and while it runs.
+- **Back.** A `PopScope` that refuses also stops the swipe back on iOS, and
+  on Android 14 and later the back gesture previews the screen it goes
+  back to.
+
+### State restoration
+
+- With `restorationScopeId` set, an app the system closed in the
+  background opens again where the user left it: its screens and their
+  restorable state, the scroll position of lists and grids, the page of a
+  `PageView` and the text of a field.
+
+### What you may notice in an existing app
+
+- **Restoration on iOS** needs one entry in `ios/Runner/Info.plist`:
+  `com.dartnative.restoration` in `NSUserActivityTypes` (add the array if
+  it is not there). Apps made with `dn create` from this release have it.
+- **Back on Android.** Back on the first screen now goes to the home
+  screen unless a `PopScope` there refuses. An app that turns predictive
+  back off in its manifest (`android:enableOnBackInvokedCallback="false"`)
+  also adds `tools:replace="android:enableOnBackInvokedCallback"` there.
+- `App.navigatorObserver` is now called, and `App.navigatorObservers`
+  takes several.
+- A screen that becomes the first in its stack loses its back button.
+
+### Fixed
+
+- On iOS, a swipe back from a screen reached with `pushReplacement` no
+  longer leaves the stack out of step.
+- `maybePop` no longer closes a sheet or dialog past a `PopScope` that
+  refuses, and `pop` closes the one that came up last.
+
+---
+
 ## Forms, rich text and faster plugins
 
 1.9.0 (2026-11-20)
