@@ -693,6 +693,33 @@ own dependencies, so a DartNative package it uses belongs in
 `dn` commands: `dart test` and `dart pub get` cannot find them, so use
 `dn test` and `dn pub get`.
 
+## A Swift file you added to a plugin is "not in scope" (iOS)
+
+### Symptom
+
+You added a Swift file to your plugin's `ios/Classes` folder, and the
+example app, or any app that takes the plugin through a `path:`
+dependency, fails to build with `Cannot find 'MyNewType' in scope`, naming
+code from the new file. Removing or renaming a file can fail the same way.
+
+### Root cause
+
+An app builds a plugin it takes by path from the plugin's own sources,
+through CocoaPods, and the list of files that build compiles is written
+when `pod install` runs. `dn run` runs `pod install` again when the app's
+Podfile or its set of plugins changes, not when a file inside a plugin
+does, so the build keeps the old list. A plugin from dartpub never meets
+this: its native code arrives built.
+
+### Fix
+
+Run `pod install` in the app's `ios` folder, then build again:
+
+```bash
+cd example/ios && pod install && cd ../..
+dn run
+```
+
 ## Keyboard warning about `TUIKeyplane.right` in the console (iOS 26)
 
 ### Symptom

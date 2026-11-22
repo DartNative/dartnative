@@ -20,8 +20,8 @@ DartNative's `jsonDecodeNative`, state is `ChangeNotifier`/`ValueNotifier`, icon
 
 | Flutter app | This app | Why |
 |---|---|---|
-| `MaterialApp`, `MaterialPageRoute` | `App`; no routes (see Navigation) | DartNative names |
-| `IndexedStack` of three nested `Navigator`s, own tab bar | `IndexedStack` of three tab stacks, own tab bar; each tab stack is an `IndexedStack` of its screens kept in Dart (`lib/nav.dart`) | DartNative's `Navigator` is not a widget: it is one native stack for the whole app (UINavigationController / the Activity back stack), so a tab cannot hold a `Navigator` of its own. Screens below the top one stay mounted and hidden, so they keep their state and scroll position as routes do. |
+| `MaterialApp`, `MaterialPageRoute` | `App`, `PageRoute` | DartNative names (`MaterialPageRoute` is kept as a deprecated alias of `PageRoute`) |
+| `IndexedStack` of three nested `Navigator`s (a `GlobalKey<NavigatorState>` and a `NavigatorObserver` each), own tab bar | the same code: three `Navigator`s with `onGenerateRoute`, keys and the same observer, which hides the tab bar while Product is on top; Collection and Product are pushed with `Navigator.of(context).push(PageRoute(...))`, Product with `RouteSettings(name: 'product')`; the back buttons call `Navigator.of(context).maybePop()` | On iOS each `Navigator` is a `UINavigationController` of its own: Collection and Product are pushed with the system's push transition, and the swipe from the left edge goes back. The screens below the top one stay mounted, with their state and scroll position. The tab bar sits under the `IndexedStack` in a `Column` (see "DartNative gaps"). |
 | Home: `CustomScrollView` of `SliverToBoxAdapter`s and a `SliverGrid` | the same | A `CustomScrollView` whose slivers are `SliverToBoxAdapter`, `SliverPadding` and a fixed-column `SliverGrid` is lazy in DartNative: it is built as rows on the platform's list (UICollectionView with cell recycling / RecyclerView), a row of two cards per grid row, built as they near the screen and let go off it. |
 | Collection grid (`CustomScrollView` + `SliverGrid`, `SliverLayoutBuilder` for the cell extent) | the same lazy `CustomScrollView`; the cell extent from `MediaQuery` width (`(width − 32 − 12) / 2 × 4/3 + 8 + 36 + 8 + 22`) | The description and sort chips scroll with the grid, which `FastGrid`/`GridView.builder` cannot hold (no header); the lazy `CustomScrollView` is the mechanism that recycles native cells for this layout. `SliverLayoutBuilder` is not needed: the cross extent is the screen width less the padding. |
 | Search results `ListView.builder` | `ListView.builder` (`padding: EdgeInsets.zero`) | Lowered by DartNative to `FastList`: UICollectionView / RecyclerView with cell recycling, rows built as they near the screen. The "N results" line stays fixed above it. |
@@ -38,9 +38,6 @@ DartNative's `jsonDecodeNative`, state is `ChangeNotifier`/`ValueNotifier`, icon
 
 ## Decisions where the spec is silent (DartNative-specific)
 
-- No push/pop transition: a tab's screens are shown and hidden in place (the tab stacks above), so
-  there is no slide animation and no edge-swipe back on iOS; the back button and Android's system back
-  pop the active tab's stack.
 - The tab bar is hidden while the active tab's top screen is a Product screen, as in the Flutter app.
 - The cart badge is laid beside the tab's element (not inside it) so XCUITest sees `cart-badge` as an
   element of its own; touches on it reach the tab under it (`IgnorePointer`).
@@ -58,7 +55,7 @@ DartNative's `jsonDecodeNative`, state is `ChangeNotifier`/`ValueNotifier`, icon
 
 | What | Where | What the app does instead |
 |---|---|---|
-| No `Navigator` widget, so no nested navigators | Tab stacks | Dart-side stacks in `IndexedStack`s; no push transition, no edge-swipe back |
+| A `bottomNavigationBar` built from a `SafeArea` (the Flutter app's `TabBar`) is sized differently by DartNative's `Scaffold` than by Flutter's | Tab bar | `Column(children: [Expanded(child: IndexedStack(...)), TabBar(...)])`, the same layout |
 | A horizontal lazy list ignores `ListView.padding` on iOS and gives each item the list's full height (`DNFlexSetPadding` handles the vertical list and the grid, not `DNHorizontalFastListDataSource`) | Home chips and collections, sort chips, recommendations | `horizontalList()`: the top and bottom padding outside the list (the list is the content's height), the start and end padding on the first and last items, where it scrolls with them as a list's padding does |
 | No in-app browser in `dartnative_url_launcher` | Check out | Opens the system browser, which the spec allows when the framework has none |
 | On iOS 27 with the iOS 27 SDK, UIKit draws the status bar's scroll edge effect over the top ≈ 102 pt of the screen on any scroll view there; DartNative offers its style (`automatic`, `soft`, `hard`) but no way to hide it | Home: the "Everbloom" header scrolls with the content, so at rest it sits partly under the fade | Left at the system's `automatic` (a light fade over the header's upper half); `hard` blurred the whole header |

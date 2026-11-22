@@ -1320,7 +1320,7 @@ Scaffold it with `dn create` (see
 [getting_started.md](getting_started.md)) and add your plugin as a path
 dependency — never hand-build the native boilerplate from scratch, and never
 use raw `flutter create` output (its `AppDelegate` doesn't set up the
-dartnative root view, which yields a white screen). Two debugging tips that
+dartnative root view, which yields a white screen). Three debugging tips that
 save hours:
 
 - **Android:** debug app-side build failures with `./gradlew assembleDebug`
@@ -1331,6 +1331,10 @@ save hours:
   `ios/Podfile.lock`, re-run `dn pub get`, then `pod install`. Never add
   manual `pod 'dartnative_…'` lines — pods are auto-discovered; manual
   entries cause "multiple dependencies with different sources".
+- **iOS, a Swift file added, removed or renamed:** run `pod install` in the
+  example's `ios` folder before the next build. Until then the example
+  builds the plugin's old file list and fails with "Cannot find '…' in
+  scope" (see [troubleshooting.md](troubleshooting.md)).
 
 ### Read the registry from your own tools
 

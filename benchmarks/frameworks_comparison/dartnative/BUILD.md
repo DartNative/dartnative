@@ -6,7 +6,7 @@ All commands run from the project root. `dn` is the DartNative tool (Flutter-lik
 
 | Tool | Version |
 |---|---|
-| DartNative | 1.7.0 |
+| DartNative | 1.10.0 |
 | Plugins | dartnative_http 1.1, dartnative_url_launcher 1.0 |
 | Xcode | 27.2 (27B5028f), iOS 27.2 SDK; simulator iPhone 17 Pro, iOS 27.2 |
 | CocoaPods | 1.16.2 |
@@ -66,7 +66,7 @@ With `DEVELOPMENT_TEAM` unset, the build runs with code signing disabled (`CODE_
 dn build ios --release --no-codesign
 ```
 
-Output: `build/ios/iphoneos/Runner.app`, unsigned. Both were built with DartNative 1.7.0.
+Output: `build/ios/iphoneos/Runner.app`, unsigned. Both were built with DartNative 1.10.0.
 
 ## 3. Install and launch on a connected iPhone
 

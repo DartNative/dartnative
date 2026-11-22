@@ -2,7 +2,6 @@ import 'package:dartnative/dartnative.dart';
 
 import '../api.dart';
 import '../app_state.dart';
-import '../nav.dart';
 import '../theme.dart';
 import '../widgets.dart';
 
@@ -126,7 +125,7 @@ class _ProductScreenState extends State<ProductScreen> {
     return Tap(
       id: 'back',
       label: 'Back',
-      onTap: () => TabScope.of(context).pop(),
+      onTap: () => Navigator.of(context).maybePop(),
       child: Container(
         width: 40,
         height: 40,

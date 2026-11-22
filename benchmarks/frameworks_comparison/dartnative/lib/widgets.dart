@@ -1,7 +1,6 @@
 import 'package:dartnative/dartnative.dart';
 
 import 'api.dart';
-import 'nav.dart';
 import 'screens/collection.dart';
 import 'screens/product.dart';
 import 'theme.dart';
@@ -325,7 +324,7 @@ class NavBar extends StatelessWidget {
             Tap(
               id: 'back',
               label: 'Back',
-              onTap: () => TabScope.of(context).pop(),
+              onTap: () => Navigator.of(context).maybePop(),
               child: const SizedBox(
                 width: 44,
                 height: 44,
@@ -358,12 +357,19 @@ class Screen extends StatelessWidget {
   }
 }
 
+const String productRouteName = 'product';
+
 void openProduct(BuildContext context, String handle) {
-  TabScope.of(context).push(ProductScreen(handle: handle), isProduct: true);
+  Navigator.of(context).push(PageRoute<void>(
+    settings: const RouteSettings(name: productRouteName),
+    builder: (BuildContext context) => ProductScreen(handle: handle),
+  ));
 }
 
 void openCollection(BuildContext context, CollectionSummary collection) {
-  TabScope.of(context).push(CollectionScreen(collection: collection));
+  Navigator.of(context).push(PageRoute<void>(
+    builder: (BuildContext context) => CollectionScreen(collection: collection),
+  ));
 }
 
 /// Calls [onLoadMore] when the scroll position is within one viewport of the end.

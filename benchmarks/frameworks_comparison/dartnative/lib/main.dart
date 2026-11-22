@@ -1,12 +1,14 @@
+import 'dart:async';
+
 import 'package:dartnative/dartnative.dart';
 
 import 'app_state.dart';
 import 'dartnative_plugin_registrant.dart';
-import 'nav.dart';
 import 'screens/cart.dart';
 import 'screens/home.dart';
 import 'screens/search.dart';
 import 'theme.dart';
+import 'widgets.dart';
 
 /// Launch timing lines for diagnosis, compiled in only with
 /// `--dart-define=SHOPBENCH_DIAG=true` (the benchmark build has none).
@@ -46,13 +48,6 @@ class EverbloomApp extends StatelessWidget {
   }
 }
 
-/// The three tabs, each with its own stack of screens, and the bottom bar.
-final List<TabStack> tabStacks = <TabStack>[
-  TabStack(const HomeScreen()),
-  TabStack(const SearchScreen()),
-  TabStack(const CartScreen()),
-];
-
 class Shell extends StatefulWidget {
   const Shell({super.key});
 
@@ -61,55 +56,99 @@ class Shell extends StatefulWidget {
 }
 
 class _ShellState extends State<Shell> {
-  late final List<Widget> _tabs = <Widget>[
-    for (final TabStack s in tabStacks) TabScope(stack: s, child: TabView(stack: s)),
-  ];
+  final List<GlobalKey<NavigatorState>> _keys =
+      List<GlobalKey<NavigatorState>>.generate(3, (_) => GlobalKey<NavigatorState>());
+  late final List<_TopRouteObserver> _observers =
+      List<_TopRouteObserver>.generate(3, (_) => _TopRouteObserver(_onRoutesChanged));
 
-  @override
-  void initState() {
-    super.initState();
-    currentTab.addListener(_changed);
-    for (final TabStack s in tabStacks) {
-      s.addListener(_changed);
-    }
-  }
+  static const List<Widget> _roots = <Widget>[HomeScreen(), SearchScreen(), CartScreen()];
 
-  @override
-  void dispose() {
-    currentTab.removeListener(_changed);
-    for (final TabStack s in tabStacks) {
-      s.removeListener(_changed);
-    }
-    super.dispose();
-  }
-
-  void _changed() {
-    if (mounted) setState(() {});
+  void _onRoutesChanged() {
+    // Observer callbacks can fire while the navigator is building; defer.
+    scheduleMicrotask(() {
+      if (mounted) setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final int tab = currentTab.value;
-    final bool hideTabBar = tabStacks[tab].topIsProduct;
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (bool didPop, dynamic result) {
-        if (didPop) return;
-        final TabStack stack = tabStacks[currentTab.value];
-        if (stack.canPop) {
-          stack.pop();
-        } else {
-          SystemNavigator.pop();
-        }
+    return ValueListenableBuilder<int>(
+      valueListenable: currentTab,
+      builder: (BuildContext context, int tab, Widget? _) {
+        final bool hideTabBar = _observers[tab].topIsProduct;
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (bool didPop, Object? result) {
+            if (didPop) return;
+            final NavigatorState? nav = _keys[tab].currentState;
+            if (nav != null && nav.canPop()) {
+              nav.pop();
+            } else {
+              SystemNavigator.pop();
+            }
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Expanded(
+                child: IndexedStack(
+                  index: tab,
+                  children: <Widget>[
+                    for (int i = 0; i < 3; i++)
+                      Navigator(
+                        key: _keys[i],
+                        observers: <NavigatorObserver>[_observers[i]],
+                        onGenerateRoute: (RouteSettings s) => PageRoute<void>(
+                          settings: s,
+                          builder: (BuildContext context) => _roots[i],
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              if (!hideTabBar) TabBar(selected: tab),
+            ],
+          ),
+        );
       },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Expanded(child: IndexedStack(index: tab, children: _tabs)),
-          if (!hideTabBar) TabBar(selected: tab),
-        ],
-      ),
     );
+  }
+}
+
+class _TopRouteObserver extends NavigatorObserver {
+  _TopRouteObserver(this.onChange);
+  final VoidCallback onChange;
+  final List<Route<dynamic>> _stack = <Route<dynamic>>[];
+
+  bool get topIsProduct => _stack.isNotEmpty && _stack.last.settings.name == productRouteName;
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    _stack.add(route);
+    onChange();
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    _stack.remove(route);
+    onChange();
+  }
+
+  @override
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    _stack.remove(route);
+    onChange();
+  }
+
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+    final int i = oldRoute == null ? -1 : _stack.indexOf(oldRoute);
+    if (i >= 0 && newRoute != null) {
+      _stack[i] = newRoute;
+    } else if (newRoute != null) {
+      _stack.add(newRoute);
+    }
+    onChange();
   }
 }
 

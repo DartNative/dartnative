@@ -408,19 +408,24 @@ class _FieldShell extends StatelessWidget {
 /// the whole box and the focused outline follows focus, the way a native
 /// outlined field behaves.
 InputDecoration _inputBox({required String hint, required double vertical}) {
+  final border = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(10),
+    borderSide: const BorderSide(color: Color(0xFF38383A), width: 0.5),
+  );
   return InputDecoration(
     hintText: hint,
     hintStyle: TextStyle(color: kTextSecondary),
     filled: true,
     fillColor: kRowBg,
     contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: vertical),
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide: const BorderSide(color: Color(0xFF38383A), width: 0.5),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide: BorderSide(color: kSegTint, width: 1),
-    ),
+    border: border,
+    // The dark theme lights the outline of the focused field; the light
+    // theme's tint is white on a white page, so there the outline stays.
+    focusedBorder: playgroundPalette.brightness == Brightness.dark
+        ? OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: kSegTint, width: 1),
+          )
+        : border,
   );
 }
