@@ -24,6 +24,15 @@ DARTNATIVE FRAMEWORK LICENSE
    builds, and the sign-in tokens issued by https://dartpub.dev.
    "First-Party Plugins" means Licensor's plugins distributed through
    https://dartpub.dev.
+   "Interpreted Mode" means running program code, in any language, that
+   calls the Software's programming interfaces and is not compiled into
+   the application, including code run through an interpreter and code
+   the application downloads. Debug and profile builds, hot reload, hot
+   restart and tests run with the Software's own tooling, and updates
+   delivered through Licensor's CodePush service, are not Interpreted
+   Mode.
+   "DartNative Go" means the application published under that name by
+   Licensor, and its source code.
 
 2. LICENSE GRANT
    A valid license token grants Licensee a limited, non-exclusive,
@@ -57,9 +66,11 @@ DARTNATIVE FRAMEWORK LICENSE
    (f) register application identifiers (bundle identifiers or
        application ids) that Licensee does not ship, or register them to
        keep them from others; Licensor may release an identifier so
-       registered; or
+       registered;
    (g) list as Team Members persons who do not work for the Organization,
-       or use one Plan for several unrelated organizations.
+       or use one Plan for several unrelated organizations; or
+   (h) run the Software in Interpreted Mode, or distribute an application,
+       package or tool that does, except as Section 8 allows.
 
 4. SUNSET COMMITMENT
    4.1 Discontinuation. The Software shall be deemed "Discontinued" upon the
@@ -118,3 +129,19 @@ DARTNATIVE FRAMEWORK LICENSE
    7.4 Trademarks. The names of the third-party components in Section 5 are
        the marks of their respective owners and identify those components
        only. DartNative is an independent product of Presence Network Inc.
+
+8. DARTNATIVE GO
+   8.1 Purpose. DartNative Go is a demonstration application. It runs
+       projects in Interpreted Mode so that people can try the interface,
+       the core features and the plugins of DartNative. Its performance is
+       not that of an application built with the Software.
+   8.2 Exception. As the only exception to Section 3(h): (a) any person
+       may run projects in DartNative Go to develop, try and show them; and
+       (b) a Licensee may build DartNative Go from its source code, changed
+       or not, to use it for their own development or to contribute to it.
+   8.3 Limits. The exception does not allow: (a) distributing to end users,
+       under any name, DartNative Go, a copy or changed version of it, or
+       any other application that runs the Software in Interpreted Mode; or
+       (b) using DartNative Go to provide a finished product to end users.
+   8.4 Its source code. The source code of DartNative Go is under its own
+       open-source license. That license grants no right to the Software.
