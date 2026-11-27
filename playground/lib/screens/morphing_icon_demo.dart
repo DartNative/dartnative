@@ -37,7 +37,7 @@ class MorphingIconDemo extends StatefulWidget {
 class _MorphingIconDemoState extends State<MorphingIconDemo>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
-  double _slider = 0.0;
+  final ValueNotifier<double> _progress = ValueNotifier<double>(0.0);
   bool _autoPlaying = false;
 
   // Note: no WidgetsBindingObserver needed. The framework's Ticker
@@ -48,17 +48,19 @@ class _MorphingIconDemoState extends State<MorphingIconDemo>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 800),
-    )..addListener(() {
-        setState(() => _slider = _controller.value);
-      });
+    _controller =
+        AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 800),
+        )..addListener(() {
+          _progress.value = _controller.value;
+        });
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _progress.dispose();
     super.dispose();
   }
 
@@ -98,10 +100,11 @@ class _MorphingIconDemoState extends State<MorphingIconDemo>
         child: ListView(
           children: [
             SizedBox(
-                // Bar clearance is AUTOMATIC (extendBodyBehindAppBar +
-                // null-padding scrollable -> Scaffold applies safeTop+toolbar);
-                // keep only a small gap.
-                height: isIOS26 ? 8 : 12),
+              // Bar clearance is AUTOMATIC (extendBodyBehindAppBar +
+              // null-padding scrollable -> Scaffold applies safeTop+toolbar);
+              // keep only a small gap.
+              height: isIOS26 ? 8 : 12,
+            ),
 
             const _SectionTitle('Path interpolation via CustomPaint'),
             const _SectionBody(
@@ -113,17 +116,23 @@ class _MorphingIconDemoState extends State<MorphingIconDemo>
 
             _Stage(
               height: stageHeight,
-              child: Row(
-                children: [
-                  CustomPaint(
-                    size: Size(halfWidth, stageHeight),
-                    painter: _SquareToCirclePainter(t: _slider),
-                  ),
-                  CustomPaint(
-                    size: Size(halfWidth, stageHeight),
-                    painter: _PlayStopPainter(t: _slider),
-                  ),
-                ],
+              child: AnimatedBuilder(
+                animation: _progress,
+                builder: (_, _) {
+                  final t = _progress.value;
+                  return Row(
+                    children: [
+                      CustomPaint(
+                        size: Size(halfWidth, stageHeight),
+                        painter: _SquareToCirclePainter(t: t),
+                      ),
+                      CustomPaint(
+                        size: Size(halfWidth, stageHeight),
+                        painter: _PlayStopPainter(t: t),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
 
@@ -143,12 +152,15 @@ class _MorphingIconDemoState extends State<MorphingIconDemo>
                       // time the leading digit count changes.
                       SizedBox(
                         width: 110,
-                        child: Text(
-                          'Morph: ${(_slider * 100).toStringAsFixed(0)}%',
-                          style: TextStyle(
-                            color: kTextPrimary,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
+                        child: AnimatedBuilder(
+                          animation: _progress,
+                          builder: (_, _) => Text(
+                            'Morph: ${(_progress.value * 100).toStringAsFixed(0)}%',
+                            style: TextStyle(
+                              color: kTextPrimary,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),
@@ -157,7 +169,9 @@ class _MorphingIconDemoState extends State<MorphingIconDemo>
                         onTap: _toggleAutoplay,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 14, vertical: 6),
+                            horizontal: 14,
+                            vertical: 6,
+                          ),
                           decoration: BoxDecoration(
                             color: _autoPlaying
                                 ? const Color(0xFFFF453A)
@@ -177,15 +191,18 @@ class _MorphingIconDemoState extends State<MorphingIconDemo>
                     ],
                   ),
                   const SizedBox(height: 12),
-                  Slider(
-                    value: _slider,
-                    min: 0,
-                    max: 1,
-                    activeColor: const Color(0xFF0A84FF),
-                    inactiveColor: kChipBg,
-                    onChanged: _autoPlaying
-                        ? null
-                        : (v) => setState(() => _slider = v),
+                  AnimatedBuilder(
+                    animation: _progress,
+                    builder: (_, _) => Slider(
+                      value: _progress.value,
+                      min: 0,
+                      max: 1,
+                      activeColor: const Color(0xFF0A84FF),
+                      inactiveColor: kChipBg,
+                      onChanged: _autoPlaying
+                          ? null
+                          : (v) => _progress.value = v,
+                    ),
                   ),
                 ],
               ),

@@ -130,16 +130,12 @@ class _CustomPaintDemoState extends State<CustomPaintDemo>
     _typewriterCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 5000),
-    )
-      ..addListener(() => setState(() {}))
-      ..repeat();
+    )..repeat();
     // Per-letter color wave — one full hue rotation per loop.
     _rainbowCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 4000),
-    )
-      ..addListener(() => setState(() {}))
-      ..repeat();
+    )..repeat();
   }
 
   @override
@@ -177,10 +173,11 @@ class _CustomPaintDemoState extends State<CustomPaintDemo>
         child: ListView(
           children: [
             SizedBox(
-                // Bar clearance is AUTOMATIC (extendBodyBehindAppBar +
-                // null-padding scrollable -> Scaffold applies safeTop+toolbar);
-                // keep only a small gap.
-                height: isIOS26 ? 8 : 12),
+              // Bar clearance is AUTOMATIC (extendBodyBehindAppBar +
+              // null-padding scrollable -> Scaffold applies safeTop+toolbar);
+              // keep only a small gap.
+              height: isIOS26 ? 8 : 12,
+            ),
 
             // ── Star polygon — Path + fill + stroke ────────────────────
             const _SectionTitle('1.  Star polygon (Path + fill + stroke)'),
@@ -277,7 +274,8 @@ class _CustomPaintDemoState extends State<CustomPaintDemo>
 
             // ── Gradient bars + radial swatch ──────────────────────────
             const _SectionTitle(
-                '5.  Gradient shaders (Paint.shader = ui.Gradient.linear / ui.Gradient.radial)'),
+              '5.  Gradient shaders (Paint.shader = ui.Gradient.linear / ui.Gradient.radial)',
+            ),
             const _SectionBody(
               'Fills painted shapes with a CGGradient (iOS) / '
               'android.graphics.LinearGradient + RadialGradient (Android). '
@@ -296,7 +294,8 @@ class _CustomPaintDemoState extends State<CustomPaintDemo>
 
             // ── Paragraph — drawParagraph (multi-line, mixed styles) ───
             const _SectionTitle(
-                '6.  Paragraph (ui.ParagraphBuilder + drawParagraph)'),
+              '6.  Paragraph (ui.ParagraphBuilder + drawParagraph)',
+            ),
             const _SectionBody(
               'Multi-line wrapped text with mixed-style spans inside a '
               'CustomPainter — exercises the Flutter-compat '
@@ -316,7 +315,8 @@ class _CustomPaintDemoState extends State<CustomPaintDemo>
 
             // ── Paragraph parity showcase ──────────────────────────────
             const _SectionTitle(
-                '7.  Paragraph parity — height / shadows / background / letterSpacing / overline / decoration colour'),
+              '7.  Paragraph parity — height / shadows / background / letterSpacing / overline / decoration colour',
+            ),
             const _SectionBody(
               'Visually exercises every TextStyle / ParagraphStyle field. '
               'Each column isolates a feature group, so a field that is '
@@ -343,7 +343,8 @@ class _CustomPaintDemoState extends State<CustomPaintDemo>
 
             // ── Paragraph layout-level showcase (RTL + justify) ────────
             const _SectionTitle(
-                '8.  Paragraph layout — RTL + justify + maxLines/ellipsis + paragraph line-height'),
+              '8.  Paragraph layout — RTL + justify + maxLines/ellipsis + paragraph line-height',
+            ),
             const _SectionBody(
               'Three columns demonstrating ParagraphStyle.textDirection '
               '(RTL with Arabic), TextAlign.justify (works on iOS / Android '
@@ -362,7 +363,8 @@ class _CustomPaintDemoState extends State<CustomPaintDemo>
 
             // ── Paragraph measured metrics ─────────────────────────────
             const _SectionTitle(
-                '9.  Paragraph measured metrics (sync FFI roundtrip)'),
+              '9.  Paragraph measured metrics (sync FFI roundtrip)',
+            ),
             const _SectionBody(
               'Paragraph.layout(constraints) calls the native text-shaping '
               'engine (CTFramesetter on iOS, StaticLayout on Android) '
@@ -384,7 +386,8 @@ class _CustomPaintDemoState extends State<CustomPaintDemo>
 
             // ── Per-line metrics (getLineMetrics) ──────────────────────
             const _SectionTitle(
-                '10.  Paragraph per-line metrics (getLineMetrics)'),
+              '10.  Paragraph per-line metrics (getLineMetrics)',
+            ),
             const _SectionBody(
               'Paragraph.getLineMetrics() returns a List<LineMetrics> '
               '— one entry per rendered line with ascent / descent / '
@@ -405,7 +408,8 @@ class _CustomPaintDemoState extends State<CustomPaintDemo>
 
             // ── Hit testing (getBoxesForRange + getPositionForOffset) ──
             const _SectionTitle(
-                '11.  Paragraph hit testing (getBoxesForRange + getPositionForOffset)'),
+              '11.  Paragraph hit testing (getBoxesForRange + getPositionForOffset)',
+            ),
             const _SectionBody(
               'Tap inside the paragraph. Blue caret = the character '
               'under your finger (`getPositionForOffset`, accurate '
@@ -449,7 +453,8 @@ class _CustomPaintDemoState extends State<CustomPaintDemo>
 
             // ── StrutStyle — forced per-line height ────────────────
             const _SectionTitle(
-                '12.  Paragraph strut (StrutStyle, forceStrutHeight)'),
+              '12.  Paragraph strut (StrutStyle, forceStrutHeight)',
+            ),
             const _SectionBody(
               'StrutStyle.forceStrutHeight = uniform row heights, '
               'useful for tabular layout. All text is fontSize 14 '
@@ -526,7 +531,8 @@ class _CustomPaintDemoState extends State<CustomPaintDemo>
 
             // ── fontFeatures + fontVariations ─────────────────────────
             const _SectionTitle(
-                '15.  TextStyle.fontVariations (+ fontFeatures)'),
+              '15.  TextStyle.fontVariations (+ fontFeatures)',
+            ),
             const _SectionBody(
               'fontVariations: [weight(N)] axis applied across three '
               'weights. Expect progressively heavier glyphs '
@@ -581,12 +587,15 @@ class _CustomPaintDemoState extends State<CustomPaintDemo>
             const SizedBox(height: 10),
             _Stage(
               height: 110,
-              child: CustomPaint(
-                size: Size(canvasWidth, 110),
-                painter: _TypewriterPainter(
-                  text: _typewriterText,
-                  // 1.4 × value: reaches full reveal at t≈0.71 then dwells.
-                  progress: (_typewriterCtrl.value * 1.4).clamp(0.0, 1.0),
+              child: AnimatedBuilder(
+                animation: _typewriterCtrl,
+                builder: (_, _) => CustomPaint(
+                  size: Size(canvasWidth, 110),
+                  painter: _TypewriterPainter(
+                    text: _typewriterText,
+                    // 1.4 × value: reaches full reveal at t≈0.71 then dwells.
+                    progress: (_typewriterCtrl.value * 1.4).clamp(0.0, 1.0),
+                  ),
                 ),
               ),
             ),
@@ -604,11 +613,14 @@ class _CustomPaintDemoState extends State<CustomPaintDemo>
             const SizedBox(height: 10),
             _Stage(
               height: 110,
-              child: CustomPaint(
-                size: Size(canvasWidth, 110),
-                painter: _PerLetterColorPainter(
-                  text: _rainbowText,
-                  phase: _rainbowCtrl.value,
+              child: AnimatedBuilder(
+                animation: _rainbowCtrl,
+                builder: (_, _) => CustomPaint(
+                  size: Size(canvasWidth, 110),
+                  painter: _PerLetterColorPainter(
+                    text: _rainbowText,
+                    phase: _rainbowCtrl.value,
+                  ),
                 ),
               ),
             ),
@@ -655,12 +667,15 @@ class _TypewriterPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final n = _revealedCount;
     final visible = text.substring(0, n);
-    final pb = ui.ParagraphBuilder(ui.ParagraphStyle(
-      fontSize: 22,
-      fontWeight: FontWeight.w600,
-    ))
-      ..pushStyle(ui.TextStyle(color: kTextPrimary))
-      ..addText(visible);
+    final pb =
+        ui.ParagraphBuilder(
+            ui.ParagraphStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+            ),
+          )
+          ..pushStyle(ui.TextStyle(color: kTextPrimary))
+          ..addText(visible);
     final p = pb.build()
       ..layout(ui.ParagraphConstraints(width: size.width - 32));
     final textX = 16.0;
@@ -706,11 +721,13 @@ class _PerLetterColorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final pb = ui.ParagraphBuilder(ui.ParagraphStyle(
-      fontSize: 34,
-      fontWeight: FontWeight.w800,
-      textAlign: TextAlign.center,
-    ));
+    final pb = ui.ParagraphBuilder(
+      ui.ParagraphStyle(
+        fontSize: 34,
+        fontWeight: FontWeight.w800,
+        textAlign: TextAlign.center,
+      ),
+    );
     final n = text.length;
     for (var i = 0; i < n; i++) {
       // `phase - i/N` (not `+`) makes the colour band travel LEFT→RIGHT
@@ -1047,7 +1064,7 @@ class _GradientShowcasePainter extends CustomPainter {
       [
         const Color(0xFF30D158),
         const Color(0xFF0A84FF),
-        const Color(0xFFBF5AF2)
+        const Color(0xFFBF5AF2),
       ],
     ];
     for (var i = 0; i < gradients.length; i++) {
@@ -1125,106 +1142,126 @@ class _ParagraphShowcasePainter extends CustomPainter {
     final colWidth = (size.width - insetH * 2 - gap * 2) / 3;
 
     // ── Column 1: left-aligned heading + body ─────────────────────
-    final col1 = (ui.ParagraphBuilder(
-      const ui.ParagraphStyle(
-        textAlign: TextAlign.left,
-        fontFamily: null,
-        fontSize: 14,
-      ),
-    )
-          ..pushStyle(TextStyle(
-            color: kTextPrimary,
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-          ))
-          ..addText('Native paragraphs.\n')
-          ..popStyle()
-          // Spacer span — a small zero-content line that creates a
-          // visible gap between the heading and the body. Using a
-          // separate span (rather than '\n\n') keeps the heading line's
-          // natural height predictable across iOS / Android line-metric
-          // differences.
-          ..pushStyle(const TextStyle(fontSize: 6))
-          ..addText('\n')
-          ..popStyle()
-          ..pushStyle(TextStyle(
-            color: kTextSecondary,
-            fontSize: 12,
-            height: 1.35,
-          ))
-          ..addText(
-              'Wrapped at a width inside a CustomPainter — no Skia involved. '
-              'Each span carries its own color, size, and weight.'))
-        .build()
-      ..layout(ui.ParagraphConstraints(width: colWidth));
+    final col1 =
+        (ui.ParagraphBuilder(
+                const ui.ParagraphStyle(
+                  textAlign: TextAlign.left,
+                  fontFamily: null,
+                  fontSize: 14,
+                ),
+              )
+              ..pushStyle(
+                TextStyle(
+                  color: kTextPrimary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              )
+              ..addText('Native paragraphs.\n')
+              ..popStyle()
+              // Spacer span — a small zero-content line that creates a
+              // visible gap between the heading and the body. Using a
+              // separate span (rather than '\n\n') keeps the heading line's
+              // natural height predictable across iOS / Android line-metric
+              // differences.
+              ..pushStyle(const TextStyle(fontSize: 6))
+              ..addText('\n')
+              ..popStyle()
+              ..pushStyle(
+                TextStyle(
+                  color: kTextSecondary,
+                  fontSize: 12,
+                  height: 1.35,
+                ),
+              )
+              ..addText(
+                'Wrapped at a width inside a CustomPainter — no Skia involved. '
+                'Each span carries its own color, size, and weight.',
+              ))
+            .build()
+          ..layout(ui.ParagraphConstraints(width: colWidth));
 
     canvas.drawParagraph(col1, const Offset(insetH, 16));
 
     // ── Column 2: centred caption with italic emphasis ────────────
-    final col2 = (ui.ParagraphBuilder(
-      const ui.ParagraphStyle(
-        textAlign: TextAlign.center,
-        fontFamily: null,
-        fontSize: 13,
-      ),
-    )
-          ..pushStyle(TextStyle(
-            color: kTextSecondary,
-            fontSize: 13,
-            height: 1.3,
-          ))
-          ..addText('Mixed runs — ')
-          ..popStyle()
-          ..pushStyle(const TextStyle(
-            color: Color(0xFFFFD60A),
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            fontStyle: FontStyle.italic,
-          ))
-          ..addText('italic + bold')
-          ..popStyle()
-          ..pushStyle(TextStyle(
-            color: kTextSecondary,
-            fontSize: 13,
-            height: 1.3,
-          ))
-          ..addText(' — render in the same paragraph.'))
-        .build()
-      ..layout(ui.ParagraphConstraints(width: colWidth));
+    final col2 =
+        (ui.ParagraphBuilder(
+                const ui.ParagraphStyle(
+                  textAlign: TextAlign.center,
+                  fontFamily: null,
+                  fontSize: 13,
+                ),
+              )
+              ..pushStyle(
+                TextStyle(
+                  color: kTextSecondary,
+                  fontSize: 13,
+                  height: 1.3,
+                ),
+              )
+              ..addText('Mixed runs — ')
+              ..popStyle()
+              ..pushStyle(
+                const TextStyle(
+                  color: Color(0xFFFFD60A),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.italic,
+                ),
+              )
+              ..addText('italic + bold')
+              ..popStyle()
+              ..pushStyle(
+                TextStyle(
+                  color: kTextSecondary,
+                  fontSize: 13,
+                  height: 1.3,
+                ),
+              )
+              ..addText(' — render in the same paragraph.'))
+            .build()
+          ..layout(ui.ParagraphConstraints(width: colWidth));
 
     canvas.drawParagraph(col2, Offset(insetH + colWidth + gap, 16));
 
     // ── Column 3: right-aligned attribution, underlined link ──────
-    final col3 = (ui.ParagraphBuilder(
-      const ui.ParagraphStyle(
-        textAlign: TextAlign.right,
-        fontFamily: null,
-        fontSize: 12,
-      ),
-    )
-          ..pushStyle(TextStyle(
-            color: kTextSecondary,
-            fontSize: 12,
-          ))
-          ..addText('Implemented for\n')
-          ..popStyle()
-          ..pushStyle(const TextStyle(
-            color: Color(0xFF0A84FF),
-            fontSize: 12,
-            decoration: TextDecoration.underline,
-            decorationColor: Color(0xFF0A84FF),
-          ))
-          ..addText('dartnative\n')
-          ..popStyle()
-          ..pushStyle(TextStyle(
-            color: kTextSecondary,
-            fontSize: 12,
-            decoration: TextDecoration.lineThrough,
-            decorationColor: kTextSecondary,
-          ))
-          ..addText('\nStrikethrough Text'))
-        .build()
-      ..layout(ui.ParagraphConstraints(width: colWidth));
+    final col3 =
+        (ui.ParagraphBuilder(
+                const ui.ParagraphStyle(
+                  textAlign: TextAlign.right,
+                  fontFamily: null,
+                  fontSize: 12,
+                ),
+              )
+              ..pushStyle(
+                TextStyle(
+                  color: kTextSecondary,
+                  fontSize: 12,
+                ),
+              )
+              ..addText('Implemented for\n')
+              ..popStyle()
+              ..pushStyle(
+                const TextStyle(
+                  color: Color(0xFF0A84FF),
+                  fontSize: 12,
+                  decoration: TextDecoration.underline,
+                  decorationColor: Color(0xFF0A84FF),
+                ),
+              )
+              ..addText('dartnative\n')
+              ..popStyle()
+              ..pushStyle(
+                TextStyle(
+                  color: kTextSecondary,
+                  fontSize: 12,
+                  decoration: TextDecoration.lineThrough,
+                  decorationColor: kTextSecondary,
+                ),
+              )
+              ..addText('\nStrikethrough Text'))
+            .build()
+          ..layout(ui.ParagraphConstraints(width: colWidth));
 
     canvas.drawParagraph(col3, Offset(insetH + (colWidth + gap) * 2, 16));
   }
@@ -1249,103 +1286,123 @@ class _ParagraphParityPainter extends CustomPainter {
     // Renders the same body text at three line-height multipliers so the
     // vertical spacing visibly grows top-to-bottom. If `height` isn't
     // honoured, all three blocks would look identical.
-    final col1 = (ui.ParagraphBuilder(
-      const ui.ParagraphStyle(
-        textAlign: TextAlign.left,
-        fontSize: 11,
-        height: 1.0,
-      ),
-    )
-          ..pushStyle(TextStyle(
-            color: kTextPrimary,
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-          ))
-          ..addText('Line-height\n')
-          ..popStyle()
-          ..pushStyle(const TextStyle(
-            color: Color(0xFF30D158),
-            fontSize: 11,
-            height: 1.0,
-          ))
-          ..addText('1.0  text with tight line height\n')
-          ..popStyle()
-          ..pushStyle(const TextStyle(
-            color: Color(0xFFFFD60A),
-            fontSize: 11,
-            height: 1.4,
-          ))
-          ..addText('1.4  text with airy line height\n')
-          ..popStyle()
-          ..pushStyle(const TextStyle(
-            color: Color(0xFFFF453A),
-            fontSize: 11,
-            height: 1.8,
-          ))
-          ..addText('1.8  text with big line height'))
-        .build()
-      ..layout(ui.ParagraphConstraints(width: colWidth));
+    final col1 =
+        (ui.ParagraphBuilder(
+                const ui.ParagraphStyle(
+                  textAlign: TextAlign.left,
+                  fontSize: 11,
+                  height: 1.0,
+                ),
+              )
+              ..pushStyle(
+                TextStyle(
+                  color: kTextPrimary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              )
+              ..addText('Line-height\n')
+              ..popStyle()
+              ..pushStyle(
+                const TextStyle(
+                  color: Color(0xFF30D158),
+                  fontSize: 11,
+                  height: 1.0,
+                ),
+              )
+              ..addText('1.0  text with tight line height\n')
+              ..popStyle()
+              ..pushStyle(
+                const TextStyle(
+                  color: Color(0xFFFFD60A),
+                  fontSize: 11,
+                  height: 1.4,
+                ),
+              )
+              ..addText('1.4  text with airy line height\n')
+              ..popStyle()
+              ..pushStyle(
+                const TextStyle(
+                  color: Color(0xFFFF453A),
+                  fontSize: 11,
+                  height: 1.8,
+                ),
+              )
+              ..addText('1.8  text with big line height'))
+            .build()
+          ..layout(ui.ParagraphConstraints(width: colWidth));
 
     canvas.drawParagraph(col1, const Offset(insetH, 12));
 
     // ── Column 2: shadows + backgroundColor + letterSpacing ──────
-    final col2 = (ui.ParagraphBuilder(
-      const ui.ParagraphStyle(
-        textAlign: TextAlign.center,
-        fontSize: 12,
-      ),
-    )
-          ..pushStyle(TextStyle(
-            color: kTextPrimary,
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-          ))
-          ..addText('Shadows + bg + kern\n')
-          ..popStyle()
-          // Shadow: bright magenta drop shadow with a big offset and
-          // large blur — chosen to be visually unmistakable. If the
-          // shadow doesn't render, "SHADOW" looks like a plain white
-          // word with no glow.
-          ..pushStyle(TextStyle(
-            color: kTextPrimary,
-            fontSize: 28,
-            fontWeight: FontWeight.w900,
-            shadows: [
-              Shadow(
-                color: Color(0xFFFF2DA0),
-                offset: Offset(0, 4),
-                blurRadius: 12,
-              ),
-            ],
-          ))
-          ..addText('SHADOW\n')
-          ..popStyle()
-          // Background colour swatch behind one word — yellow under
-          // black text. Hard to miss.
-          ..pushStyle(const TextStyle(
-            color: Color(0xFF000000),
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-            backgroundColor: Color(0xFFFFD60A),
-          ))
-          ..addText('  highlighted  ')
-          ..popStyle()
-          ..pushStyle(TextStyle(
-            color: kTextSecondary,
-            fontSize: 11,
-          ))
-          ..addText('\n')
-          ..popStyle()
-          // Letter spacing — exaggerated tracking so it can't be
-          // confused with normal spacing.
-          ..pushStyle(TextStyle(
-            color: kTextSecondary,
-            fontSize: 14,
-            letterSpacing: 5.0,
-          ))
-          ..addText('S P A C E D'))
-        .build()
-      ..layout(ui.ParagraphConstraints(width: colWidth));
+    final col2 =
+        (ui.ParagraphBuilder(
+                const ui.ParagraphStyle(
+                  textAlign: TextAlign.center,
+                  fontSize: 12,
+                ),
+              )
+              ..pushStyle(
+                TextStyle(
+                  color: kTextPrimary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              )
+              ..addText('Shadows + bg + kern\n')
+              ..popStyle()
+              // Shadow: bright magenta drop shadow with a big offset and
+              // large blur — chosen to be visually unmistakable. If the
+              // shadow doesn't render, "SHADOW" looks like a plain white
+              // word with no glow.
+              ..pushStyle(
+                TextStyle(
+                  color: kTextPrimary,
+                  fontSize: 28,
+                  fontWeight: FontWeight.w900,
+                  shadows: [
+                    Shadow(
+                      color: Color(0xFFFF2DA0),
+                      offset: Offset(0, 4),
+                      blurRadius: 12,
+                    ),
+                  ],
+                ),
+              )
+              ..addText('SHADOW\n')
+              ..popStyle()
+              // Background colour swatch behind one word — yellow under
+              // black text. Hard to miss.
+              ..pushStyle(
+                const TextStyle(
+                  color: Color(0xFF000000),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  backgroundColor: Color(0xFFFFD60A),
+                ),
+              )
+              ..addText('  highlighted  ')
+              ..popStyle()
+              ..pushStyle(
+                TextStyle(
+                  color: kTextSecondary,
+                  fontSize: 11,
+                ),
+              )
+              ..addText('\n')
+              ..popStyle()
+              // Letter spacing — exaggerated tracking so it can't be
+              // confused with normal spacing.
+              ..pushStyle(
+                TextStyle(
+                  color: kTextSecondary,
+                  fontSize: 14,
+                  letterSpacing: 5.0,
+                ),
+              )
+              ..addText('S P A C E D'))
+            .build()
+          ..layout(ui.ParagraphConstraints(width: colWidth));
 
     canvas.drawParagraph(col2, Offset(insetH + colWidth + gap, 12));
 
@@ -1356,52 +1413,61 @@ class _ParagraphParityPainter extends CustomPainter {
     // iOS approximates it via baseline offset. The third
     // row below toggles between the two platforms — on Android it
     // looks like plain text, on iOS it shows a green line above.
-    final col3 = (ui.ParagraphBuilder(
-      const ui.ParagraphStyle(
-        textAlign: TextAlign.left,
-        fontSize: 14,
-        height: 1.4,
-      ),
-    )
-          ..pushStyle(TextStyle(
-            color: kTextPrimary,
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-          ))
-          ..addText('Decorations\n')
-          ..popStyle()
-          // Underline — line is bright red, text is white.
-          ..pushStyle(TextStyle(
-            color: kTextPrimary,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            decoration: TextDecoration.underline,
-            decorationColor: Color(0xFFFF453A),
-          ))
-          ..addText('underline RED\n')
-          ..popStyle()
-          // Strikethrough — line is bright yellow, text is white.
-          ..pushStyle(TextStyle(
-            color: kTextPrimary,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            decoration: TextDecoration.lineThrough,
-            decorationColor: Color(0xFFFFD60A),
-          ))
-          ..addText('strike YELLOW\n')
-          ..popStyle()
-          // Overline — iOS shows a green line above; Android currently falls
-          // back to plain text (documented limitation).
-          ..pushStyle(TextStyle(
-            color: kTextSecondary,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            decoration: TextDecoration.overline,
-            decorationColor: Color(0xFF30D158),
-          ))
-          ..addText('overline GREEN (iOS only)'))
-        .build()
-      ..layout(ui.ParagraphConstraints(width: colWidth));
+    final col3 =
+        (ui.ParagraphBuilder(
+                const ui.ParagraphStyle(
+                  textAlign: TextAlign.left,
+                  fontSize: 14,
+                  height: 1.4,
+                ),
+              )
+              ..pushStyle(
+                TextStyle(
+                  color: kTextPrimary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              )
+              ..addText('Decorations\n')
+              ..popStyle()
+              // Underline — line is bright red, text is white.
+              ..pushStyle(
+                TextStyle(
+                  color: kTextPrimary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  decoration: TextDecoration.underline,
+                  decorationColor: Color(0xFFFF453A),
+                ),
+              )
+              ..addText('underline RED\n')
+              ..popStyle()
+              // Strikethrough — line is bright yellow, text is white.
+              ..pushStyle(
+                TextStyle(
+                  color: kTextPrimary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  decoration: TextDecoration.lineThrough,
+                  decorationColor: Color(0xFFFFD60A),
+                ),
+              )
+              ..addText('strike YELLOW\n')
+              ..popStyle()
+              // Overline — iOS shows a green line above; Android currently falls
+              // back to plain text (documented limitation).
+              ..pushStyle(
+                TextStyle(
+                  color: kTextSecondary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  decoration: TextDecoration.overline,
+                  decorationColor: Color(0xFF30D158),
+                ),
+              )
+              ..addText('overline GREEN (iOS only)'))
+            .build()
+          ..layout(ui.ParagraphConstraints(width: colWidth));
 
     canvas.drawParagraph(col3, Offset(insetH + (colWidth + gap) * 2, 12));
   }
@@ -1421,85 +1487,105 @@ class _ParagraphLayoutPainter extends CustomPainter {
 
     // ── Column 1: RTL (Arabic) ───────────────────────────────────
     // RTL paragraphs flip start/end alignment and reverse glyph order.
-    final col1 = (ui.ParagraphBuilder(
-      const ui.ParagraphStyle(
-        textAlign: TextAlign.start,
-        textDirection: TextDirection.rtl,
-        fontSize: 14,
-        height: 1.3,
-      ),
-    )
-          ..pushStyle(TextStyle(
-            color: kTextPrimary,
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-          ))
-          ..addText('RTL\n')
-          ..popStyle()
-          ..pushStyle(TextStyle(
-            color: kTextSecondary,
-            fontSize: 13,
-          ))
-          ..addText(
-              'مرحبا بالعالم. هذه فقرة قصيرة باللغة العربية لاختبار اتجاه النص.'))
-        .build()
-      ..layout(ui.ParagraphConstraints(width: colWidth));
+    final col1 =
+        (ui.ParagraphBuilder(
+                const ui.ParagraphStyle(
+                  textAlign: TextAlign.start,
+                  textDirection: TextDirection.rtl,
+                  fontSize: 14,
+                  height: 1.3,
+                ),
+              )
+              ..pushStyle(
+                TextStyle(
+                  color: kTextPrimary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              )
+              ..addText('RTL\n')
+              ..popStyle()
+              ..pushStyle(
+                TextStyle(
+                  color: kTextSecondary,
+                  fontSize: 13,
+                ),
+              )
+              ..addText(
+                'مرحبا بالعالم. هذه فقرة قصيرة باللغة العربية لاختبار اتجاه النص.',
+              ))
+            .build()
+          ..layout(ui.ParagraphConstraints(width: colWidth));
 
     canvas.drawParagraph(col1, const Offset(insetH, 12));
 
     // ── Column 2: Justified ──────────────────────────────────────
-    final col2 = (ui.ParagraphBuilder(
-      const ui.ParagraphStyle(
-        textAlign: TextAlign.justify,
-        fontSize: 12,
-        height: 1.2,
-      ),
-    )
-          ..pushStyle(TextStyle(
-            color: kTextPrimary,
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-          ))
-          ..addText('Justify\n')
-          ..popStyle()
-          ..pushStyle(TextStyle(
-            color: kTextSecondary,
-            fontSize: 11,
-          ))
-          ..addText('Words spread to both edges. iOS honours this everywhere; '
-              'Android needs API 26+ for inter-word justification.'))
-        .build()
-      ..layout(ui.ParagraphConstraints(width: colWidth));
+    final col2 =
+        (ui.ParagraphBuilder(
+                const ui.ParagraphStyle(
+                  textAlign: TextAlign.justify,
+                  fontSize: 12,
+                  height: 1.2,
+                ),
+              )
+              ..pushStyle(
+                TextStyle(
+                  color: kTextPrimary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              )
+              ..addText('Justify\n')
+              ..popStyle()
+              ..pushStyle(
+                TextStyle(
+                  color: kTextSecondary,
+                  fontSize: 11,
+                ),
+              )
+              ..addText(
+                'Words spread to both edges. iOS honours this everywhere; '
+                'Android needs API 26+ for inter-word justification.',
+              ))
+            .build()
+          ..layout(ui.ParagraphConstraints(width: colWidth));
 
     canvas.drawParagraph(col2, Offset(insetH + colWidth + gap, 12));
 
     // ── Column 3: maxLines + ellipsis ────────────────────────────
-    final col3 = (ui.ParagraphBuilder(
-      const ui.ParagraphStyle(
-        textAlign: TextAlign.left,
-        fontSize: 12,
-        maxLines: 3,
-        ellipsis: '…',
-        height: 1.25,
-      ),
-    )
-          ..pushStyle(TextStyle(
-            color: kTextPrimary,
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-          ))
-          ..addText('maxLines: 3 + ellipsis\n')
-          ..popStyle()
-          ..pushStyle(TextStyle(
-            color: kTextSecondary,
-            fontSize: 11,
-          ))
-          ..addText('This is a long paragraph that should overflow past three '
-              'lines so the truncation kicks in. The fourth and following '
-              'lines must NOT render — instead a trailing ellipsis ("…") '
-              'appears at the cut-off point on the third line.'))
-        .build()
-      ..layout(ui.ParagraphConstraints(width: colWidth));
+    final col3 =
+        (ui.ParagraphBuilder(
+                const ui.ParagraphStyle(
+                  textAlign: TextAlign.left,
+                  fontSize: 12,
+                  maxLines: 3,
+                  ellipsis: '…',
+                  height: 1.25,
+                ),
+              )
+              ..pushStyle(
+                TextStyle(
+                  color: kTextPrimary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              )
+              ..addText('maxLines: 3 + ellipsis\n')
+              ..popStyle()
+              ..pushStyle(
+                TextStyle(
+                  color: kTextSecondary,
+                  fontSize: 11,
+                ),
+              )
+              ..addText(
+                'This is a long paragraph that should overflow past three '
+                'lines so the truncation kicks in. The fourth and following '
+                'lines must NOT render — instead a trailing ellipsis ("…") '
+                'appears at the cut-off point on the third line.',
+              ))
+            .build()
+          ..layout(ui.ParagraphConstraints(width: colWidth));
 
     canvas.drawParagraph(col3, Offset(insetH + (colWidth + gap) * 2, 12));
   }
@@ -1529,33 +1615,40 @@ class _ParagraphMetricsPainter extends CustomPainter {
     // deliberate overflow on what would be a 6th line that the
     // `maxLines: 5` + ellipsis truncates — this is what makes
     // `didExceedMaxLines` read `true` in the metrics list at right.
-    final body = (ui.ParagraphBuilder(
-      const ui.ParagraphStyle(
-        textAlign: TextAlign.left,
-        fontSize: 13,
-        maxLines: 5,
-        ellipsis: '…',
-        height: 1.3,
-      ),
-    )
-          ..pushStyle(TextStyle(
-            color: kTextPrimary,
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-          ))
-          ..addText('A paragraph that wraps.\n')
-          ..popStyle()
-          ..pushStyle(TextStyle(
-            color: kTextSecondary,
-            fontSize: 12,
-            height: 1.0,
-          ))
-          ..addText('Native shaping measures it. Values show at right. '
-              'Truncated by maxLines: 5, '
-              'so didExceedMaxLines reads true. '
-              'but text still wraps and ellipsizes as expected.'))
-        .build()
-      ..layout(ui.ParagraphConstraints(width: leftWidth));
+    final body =
+        (ui.ParagraphBuilder(
+                const ui.ParagraphStyle(
+                  textAlign: TextAlign.left,
+                  fontSize: 13,
+                  maxLines: 5,
+                  ellipsis: '…',
+                  height: 1.3,
+                ),
+              )
+              ..pushStyle(
+                TextStyle(
+                  color: kTextPrimary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
+              )
+              ..addText('A paragraph that wraps.\n')
+              ..popStyle()
+              ..pushStyle(
+                TextStyle(
+                  color: kTextSecondary,
+                  fontSize: 12,
+                  height: 1.0,
+                ),
+              )
+              ..addText(
+                'Native shaping measures it. Values show at right. '
+                'Truncated by maxLines: 5, '
+                'so didExceedMaxLines reads true. '
+                'but text still wraps and ellipsizes as expected.',
+              ))
+            .build()
+          ..layout(ui.ParagraphConstraints(width: leftWidth));
 
     canvas.drawParagraph(body, const Offset(insetH, 12));
 
@@ -1574,17 +1667,23 @@ class _ParagraphMetricsPainter extends CustomPainter {
     ];
 
     // Heading on the right column.
-    final heading = (ui.ParagraphBuilder(
-      const ui.ParagraphStyle(textAlign: TextAlign.left, fontSize: 12),
-    )
-          ..pushStyle(TextStyle(
-            color: kTextPrimary,
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-          ))
-          ..addText('measured metrics'))
-        .build()
-      ..layout(ui.ParagraphConstraints(width: rightWidth));
+    final heading =
+        (ui.ParagraphBuilder(
+                const ui.ParagraphStyle(
+                  textAlign: TextAlign.left,
+                  fontSize: 12,
+                ),
+              )
+              ..pushStyle(
+                TextStyle(
+                  color: kTextPrimary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              )
+              ..addText('measured metrics'))
+            .build()
+          ..layout(ui.ParagraphConstraints(width: rightWidth));
     canvas.drawParagraph(heading, Offset(rightX, 12));
 
     // Each metric on its own row. Use drawText (single-line op) for the
@@ -1630,29 +1729,36 @@ class _ParagraphLineMetricsPainter extends CustomPainter {
         size.width - insetH * 2 - 120; // leave room for the legend
     const originY = 14.0;
 
-    final paragraph = (ui.ParagraphBuilder(
-      const ui.ParagraphStyle(
-        textAlign: TextAlign.left,
-        fontSize: 13,
-        height: 1.35,
-      ),
-    )
-          ..pushStyle(TextStyle(
-            color: kTextPrimary,
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-          ))
-          ..addText('Per-line bounds.\n')
-          ..popStyle()
-          ..pushStyle(TextStyle(
-            color: kTextSecondary,
-            fontSize: 12,
-          ))
-          ..addText('Boxes drawn straight from getLineMetrics(): top edge at '
-              'baseline−ascent, height = ascent + descent. '
-              'They should hug each rendered line.'))
-        .build()
-      ..layout(ui.ParagraphConstraints(width: paragraphWidth));
+    final paragraph =
+        (ui.ParagraphBuilder(
+                const ui.ParagraphStyle(
+                  textAlign: TextAlign.left,
+                  fontSize: 13,
+                  height: 1.35,
+                ),
+              )
+              ..pushStyle(
+                TextStyle(
+                  color: kTextPrimary,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                ),
+              )
+              ..addText('Per-line bounds.\n')
+              ..popStyle()
+              ..pushStyle(
+                TextStyle(
+                  color: kTextSecondary,
+                  fontSize: 12,
+                ),
+              )
+              ..addText(
+                'Boxes drawn straight from getLineMetrics(): top edge at '
+                'baseline−ascent, height = ascent + descent. '
+                'They should hug each rendered line.',
+              ))
+            .build()
+          ..layout(ui.ParagraphConstraints(width: paragraphWidth));
 
     // Draw the line bounds BEFORE drawing the paragraph itself so the
     // text renders on top of the boxes.
@@ -1756,20 +1862,23 @@ class _ParagraphHitTestPainter extends CustomPainter {
     const originY = paragraphInsetY;
     final paragraphWidth = size.width - insetH * 2;
 
-    final paragraph = (ui.ParagraphBuilder(
-      const ui.ParagraphStyle(
-        textAlign: TextAlign.left,
-        fontSize: 14,
-        height: 1.25,
-      ),
-    )
-          ..pushStyle(TextStyle(
-            color: kTextPrimary,
-            fontSize: 14,
-          ))
-          ..addText(_bodyText))
-        .build()
-      ..layout(ui.ParagraphConstraints(width: paragraphWidth));
+    final paragraph =
+        (ui.ParagraphBuilder(
+                const ui.ParagraphStyle(
+                  textAlign: TextAlign.left,
+                  fontSize: 14,
+                  height: 1.25,
+                ),
+              )
+              ..pushStyle(
+                TextStyle(
+                  color: kTextPrimary,
+                  fontSize: 14,
+                ),
+              )
+              ..addText(_bodyText))
+            .build()
+          ..layout(ui.ParagraphConstraints(width: paragraphWidth));
 
     // Highlight the word containing the resolved char on each tap.
     // Painted BEFORE drawParagraph so the glyphs sit on top of the
@@ -1780,8 +1889,10 @@ class _ParagraphHitTestPainter extends CustomPainter {
       final tapPosition = paragraph.getPositionForOffset(probe!);
       final wordRange = _wordRangeAt(_bodyText, tapPosition.offset);
       if (wordRange != null) {
-        final wordBoxes =
-            paragraph.getBoxesForRange(wordRange.$1, wordRange.$2);
+        final wordBoxes = paragraph.getBoxesForRange(
+          wordRange.$1,
+          wordRange.$2,
+        );
         if (wordBoxes.isNotEmpty) {
           final highlightPaint = Paint()
             ..style = PaintingStyle.fill
@@ -1843,8 +1954,10 @@ class _ParagraphHitTestPainter extends CustomPainter {
     var caretX = 0.0;
     var caretTop = 0.0;
     var caretBottom = 0.0;
-    final caretBoxes =
-        paragraph.getBoxesForRange(position.offset, position.offset + 1);
+    final caretBoxes = paragraph.getBoxesForRange(
+      position.offset,
+      position.offset + 1,
+    );
     if (caretBoxes.isNotEmpty) {
       final cb = caretBoxes.first;
       final pastEnd = position.offset >= _bodyText.length;
@@ -1852,8 +1965,10 @@ class _ParagraphHitTestPainter extends CustomPainter {
       caretTop = cb.top;
       caretBottom = cb.bottom;
     } else if (position.offset >= _bodyText.length) {
-      final lastBoxes =
-          paragraph.getBoxesForRange(_bodyText.length - 1, _bodyText.length);
+      final lastBoxes = paragraph.getBoxesForRange(
+        _bodyText.length - 1,
+        _bodyText.length,
+      );
       if (lastBoxes.isNotEmpty) {
         final cb = lastBoxes.first;
         caretX = cb.right;
@@ -2023,31 +2138,39 @@ class _StrutDemoPainter extends CustomPainter {
     required StrutStyle? strutStyle,
     required String headerLabel,
   }) {
-    final paragraph = (ui.ParagraphBuilder(
-      ui.ParagraphStyle(
-        textAlign: TextAlign.left,
-        fontSize: 14,
-        strutStyle: strutStyle,
-      ),
-    )
-          ..pushStyle(TextStyle(
-            color: kTextPrimary,
-            fontSize: 14,
-          ))
-          ..addText('HELLO\n'
-              'normal text\n'
-              '🚀 with emoji\n'
-              'check strut.'))
-        .build()
-      ..layout(ui.ParagraphConstraints(width: width));
+    final paragraph =
+        (ui.ParagraphBuilder(
+                ui.ParagraphStyle(
+                  textAlign: TextAlign.left,
+                  fontSize: 14,
+                  strutStyle: strutStyle,
+                ),
+              )
+              ..pushStyle(
+                TextStyle(
+                  color: kTextPrimary,
+                  fontSize: 14,
+                ),
+              )
+              ..addText(
+                'HELLO\n'
+                'normal text\n'
+                '🚀 with emoji\n'
+                'check strut.',
+              ))
+            .build()
+          ..layout(ui.ParagraphConstraints(width: width));
 
     final metrics = paragraph.getLineMetrics();
 
     // Pass criterion: line heights all equal within a 2-px tolerance
     // (Android's setLineSpacing(2f, …) trims 2 px from the final
     // line — known artifact, not a strut failure).
-    final allMatch = metrics.length >= 2 &&
-        metrics.skip(1).every(
+    final allMatch =
+        metrics.length >= 2 &&
+        metrics
+            .skip(1)
+            .every(
               (m) => (m.height - metrics.first.height).abs() <= 2.0,
             );
 
@@ -2125,53 +2248,60 @@ class _ForegroundPaintDemoPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     const insetH = 16.0;
-    final paragraph = (ui.ParagraphBuilder(
-      const ui.ParagraphStyle(
-        textAlign: TextAlign.left,
-        fontSize: 32,
-        height: 1.4,
-      ),
-    )
-          // Row 1: plain solid colour.
-          ..pushStyle(TextStyle(
-            color: kTextPrimary,
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-          ))
-          ..addText('Plain text\n')
-          ..popStyle()
-          // Row 2: stroked outline via foreground Paint.
-          ..pushStyle(TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-            foreground: Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 1.5
-              ..color = const Color(0xFFFF453A),
-          ))
-          ..addText('Outline\n')
-          ..popStyle()
-          // Row 3: gradient fill via foreground Paint + shader.
-          ..pushStyle(TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-            foreground: Paint()
-              ..shader = ui.Gradient.linear(
-                const Offset(0, 0),
-                const Offset(260, 0),
-                const [
-                  Color(0xFFFF453A), // red
-                  Color(0xFFFF9F0A), // orange
-                  Color(0xFFFFD60A), // yellow
-                  Color(0xFF30D158), // green
-                  Color(0xFF0A84FF), // blue
-                  Color(0xFFBF5AF2), // purple
-                ],
-              ),
-          ))
-          ..addText('Gradient'))
-        .build()
-      ..layout(ui.ParagraphConstraints(width: size.width - insetH * 2));
+    final paragraph =
+        (ui.ParagraphBuilder(
+                const ui.ParagraphStyle(
+                  textAlign: TextAlign.left,
+                  fontSize: 32,
+                  height: 1.4,
+                ),
+              )
+              // Row 1: plain solid colour.
+              ..pushStyle(
+                TextStyle(
+                  color: kTextPrimary,
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+              ..addText('Plain text\n')
+              ..popStyle()
+              // Row 2: stroked outline via foreground Paint.
+              ..pushStyle(
+                TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  foreground: Paint()
+                    ..style = PaintingStyle.stroke
+                    ..strokeWidth = 1.5
+                    ..color = const Color(0xFFFF453A),
+                ),
+              )
+              ..addText('Outline\n')
+              ..popStyle()
+              // Row 3: gradient fill via foreground Paint + shader.
+              ..pushStyle(
+                TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  foreground: Paint()
+                    ..shader = ui.Gradient.linear(
+                      const Offset(0, 0),
+                      const Offset(260, 0),
+                      const [
+                        Color(0xFFFF453A), // red
+                        Color(0xFFFF9F0A), // orange
+                        Color(0xFFFFD60A), // yellow
+                        Color(0xFF30D158), // green
+                        Color(0xFF0A84FF), // blue
+                        Color(0xFFBF5AF2), // purple
+                      ],
+                    ),
+                ),
+              )
+              ..addText('Gradient'))
+            .build()
+          ..layout(ui.ParagraphConstraints(width: size.width - insetH * 2));
 
     canvas.drawParagraph(paragraph, const Offset(insetH, 14));
   }
@@ -2211,7 +2341,11 @@ class _DrawImageDemoPainter extends CustomPainter {
         ..color = kRowBg;
       canvas.drawRect(
         Rect.fromLTWH(
-            insetH, insetV, size.width - insetH * 2, size.height - insetV * 2),
+          insetH,
+          insetV,
+          size.width - insetH * 2,
+          size.height - insetV * 2,
+        ),
         phPaint,
       );
       canvas.drawText(
@@ -2368,17 +2502,18 @@ class _FontFeaturesDemoPainter extends CustomPainter {
     // Word with a mix of round + straight glyphs so weight changes
     // read clearly. "Aa" shows uppercase stem + lowercase counter
     // diff well across weights.
-    final paragraph = (ui.ParagraphBuilder(
-      const ui.ParagraphStyle(
-        textAlign: TextAlign.left,
-        fontSize: 36,
-        height: 1.1,
-      ),
-    )
-          ..pushStyle(style)
-          ..addText('Aa'))
-        .build()
-      ..layout(ui.ParagraphConstraints(width: width));
+    final paragraph =
+        (ui.ParagraphBuilder(
+                const ui.ParagraphStyle(
+                  textAlign: TextAlign.left,
+                  fontSize: 36,
+                  height: 1.1,
+                ),
+              )
+              ..pushStyle(style)
+              ..addText('Aa'))
+            .build()
+          ..layout(ui.ParagraphConstraints(width: width));
 
     canvas.drawParagraph(paragraph, Offset(origin.dx, origin.dy + 32));
   }
@@ -2440,21 +2575,24 @@ class _LeadingDistributionDemoPainter extends CustomPainter {
     // single-line height). `Ag` has both an ascender and a
     // descender so the "centered" claim has full glyph bounds to
     // align against.
-    final paragraph = (ui.ParagraphBuilder(
-      ui.ParagraphStyle(
-        textAlign: TextAlign.left,
-        fontSize: 22,
-        height: 2.5,
-        leadingDistribution: distribution,
-      ),
-    )
-          ..pushStyle(TextStyle(
-            color: kTextPrimary,
-            fontSize: 22,
-          ))
-          ..addText('Ag\nBd'))
-        .build()
-      ..layout(ui.ParagraphConstraints(width: width));
+    final paragraph =
+        (ui.ParagraphBuilder(
+                ui.ParagraphStyle(
+                  textAlign: TextAlign.left,
+                  fontSize: 22,
+                  height: 2.5,
+                  leadingDistribution: distribution,
+                ),
+              )
+              ..pushStyle(
+                TextStyle(
+                  color: kTextPrimary,
+                  fontSize: 22,
+                ),
+              )
+              ..addText('Ag\nBd'))
+            .build()
+          ..layout(ui.ParagraphConstraints(width: width));
 
     final paragraphTop = origin.dy + 18;
     final metrics = paragraph.getLineMetrics();
@@ -2478,13 +2616,18 @@ class _LeadingDistributionDemoPainter extends CustomPainter {
     for (var i = 0; i < metrics.length; i++) {
       final m = metrics[i];
       final lineTop = m.baseline - (m.height - m.descent);
-      final rect =
-          Rect.fromLTWH(origin.dx, paragraphTop + lineTop, width, m.height);
+      final rect = Rect.fromLTWH(
+        origin.dx,
+        paragraphTop + lineTop,
+        width,
+        m.height,
+      );
       canvas.drawRect(
-          rect,
-          Paint()
-            ..style = PaintingStyle.fill
-            ..color = rowTint[i % 2]);
+        rect,
+        Paint()
+          ..style = PaintingStyle.fill
+          ..color = rowTint[i % 2],
+      );
       canvas.drawRect(rect, outline);
       canvas.drawLine(
         Offset(rect.left, paragraphTop + m.baseline),
