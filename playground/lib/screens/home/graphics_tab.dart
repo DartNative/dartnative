@@ -19,8 +19,9 @@ class GraphicsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = PlaygroundTheme.of(context);
     return Container(
-      color: kHomeBg,
+      color: t.homeBg,
       child: ListView(
         children: [
           SizedBox(height: tabListTopGap(context)),
@@ -33,7 +34,9 @@ class GraphicsTab extends StatelessWidget {
             onTap: (ctx) => Navigator.push(
               ctx,
               PageRoute(
-                  builder: (_) => const CanvasDemo(), settings: '/canvas'),
+                builder: (_) => const CanvasDemo(),
+                settings: '/canvas',
+              ),
             ),
           ),
           DemoRow(

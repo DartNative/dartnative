@@ -28,8 +28,9 @@ class ShowcaseTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = PlaygroundTheme.of(context);
     return Container(
-      color: kHomeBg,
+      color: t.homeBg,
       child: ListView(
         children: [
           SizedBox(height: tabListTopGap(context, fallback: 20)),
@@ -37,7 +38,8 @@ class ShowcaseTab extends StatelessWidget {
             gradient: const [Color(0xFFFA243C), Color(0xFF8E2431)],
             icon: CupertinoIcons.music_note_2,
             title: 'Music',
-            pitch: 'Floating glass tab bar with a live mini player above it. '
+            pitch:
+                'Floating glass tab bar with a live mini player above it. '
                 'Scroll to minimise, tap to open the full player.',
             tags: const ['UITabAccessory', 'UISearchTab', 'real playback'],
             onTap: (ctx) => Navigator.push(
@@ -52,7 +54,8 @@ class ShowcaseTab extends StatelessWidget {
             gradient: const [Color(0xFF1ED760), Color(0xFF0C3B1E)],
             icon: CupertinoIcons.music_mic,
             title: 'Spotify demo',
-            pitch: 'The now-playing screen, recreated: a looping video behind '
+            pitch:
+                'The now-playing screen, recreated: a looping video behind '
                 'the controls and lyrics that follow the song. Open an iPhone '
                 'Duo flat and the lyrics move beside the player.',
             tags: const ['video player', 'synced lyrics', 'two panes'],
@@ -68,7 +71,8 @@ class ShowcaseTab extends StatelessWidget {
             gradient: const [Color(0xFF25F4EE), Color(0xFFFE2C55)],
             icon: CupertinoIcons.tv_music_note_fill,
             title: 'TikTok-style feed and profile',
-            pitch: 'Enjoy a TikTok feed with instant infinite scrolling, pull '
+            pitch:
+                'Enjoy a TikTok feed with instant infinite scrolling, pull '
                 'to refresh, Picture in Picture, AirPlay and background '
                 'controls. Swipe left to show the profile screen.',
             tags: const ['PageView', 'video player', 'pull to refresh'],
@@ -84,7 +88,8 @@ class ShowcaseTab extends StatelessWidget {
             gradient: const [Color(0xFF2A1B4A), Color(0xFF4A1B2A)],
             icon: CupertinoIcons.music_albums_fill,
             title: 'Carousel',
-            pitch: 'Cover flow that snaps: cards scale as they pass and the '
+            pitch:
+                'Cover flow that snaps: cards scale as they pass and the '
                 'screen repaints to the centred album.',
             tags: const ['drag + spring', 'per-frame transforms'],
             onTap: (ctx) => Navigator.push(
@@ -99,7 +104,8 @@ class ShowcaseTab extends StatelessWidget {
             gradient: const [Color(0xFFFF6B00), Color(0xFF8E1B1B)],
             icon: CupertinoIcons.play_rectangle_fill,
             title: 'Infinite Video Scrolling',
-            pitch: 'A vertical feed of full-screen videos with no end. One '
+            pitch:
+                'A vertical feed of full-screen videos with no end. One '
                 'swipe, one page, on the platform\'s own paging, and the next '
                 'video is already showing its first frame when it arrives.',
             tags: const ['PageView', 'pooled players', 'prefetch'],
@@ -118,10 +124,10 @@ class ShowcaseTab extends StatelessWidget {
             // The keyboard follows the finger down on iOS only.
             pitch: Platform.isIOS
                 ? 'Native list scrolling, rubber-band physics, and an input '
-                    'bar that rides the keyboard: drag the messages down and '
-                    'the keyboard follows your finger.'
+                      'bar that rides the keyboard: drag the messages down and '
+                      'the keyboard follows your finger.'
                 : 'Native list scrolling, rubber-band physics, and a '
-                    'keyboard-attached input bar.',
+                      'keyboard-attached input bar.',
             tags: const ['UITableView', 'RecyclerView', 'no Skia'],
             onTap: (ctx) => Navigator.push(
               ctx,
@@ -135,7 +141,8 @@ class ShowcaseTab extends StatelessWidget {
             gradient: const [Color(0xFF30D158), Color(0xFF0A84FF)],
             icon: CupertinoIcons.photo_on_rectangle,
             title: 'ChatGPT Picker',
-            pitch: 'The attach flow, replicated: a panel that opens over the '
+            pitch:
+                'The attach flow, replicated: a panel that opens over the '
                 'keyboard, becomes the photo grid, and throws the picked '
                 'photos into the composer.',
             tags: const ['over the keyboard', 'one morphing panel'],
@@ -151,7 +158,8 @@ class ShowcaseTab extends StatelessWidget {
             gradient: const [Color(0xFFFF375F), Color(0xFFBF5AF2)],
             icon: CupertinoIcons.smiley,
             title: 'Stickers Keyboard',
-            pitch: 'A sticker sheet takes the keyboard\'s place over the same '
+            pitch:
+                'A sticker sheet takes the keyboard\'s place over the same '
                 'composer, and every sticker in it, in the field and in the '
                 'thread keeps animating.',
             tags: const ['over the keyboard', 'live stickers'],
@@ -167,7 +175,8 @@ class ShowcaseTab extends StatelessWidget {
             gradient: const [Color(0xFF12343B), Color(0xFF2D5F5D)],
             icon: CupertinoIcons.textformat_alt,
             title: 'Live Text',
-            pitch: 'A message types itself in real native text, emoji and '
+            pitch:
+                'A message types itself in real native text, emoji and '
                 'all, straight from the pack this device is set to.',
             tags: const ['native labels', 'device emoji'],
             onTap: (ctx) => Navigator.push(
@@ -184,7 +193,8 @@ class ShowcaseTab extends StatelessWidget {
               gradient: const [Color(0xFFFF2D6F), Color(0xFFFFC300)],
               icon: CupertinoIcons.paintbrush_fill,
               title: 'Color Picker',
-              pitch: 'The system color picker drives the screen behind it, '
+              pitch:
+                  'The system color picker drives the screen behind it, '
                   'live as you drag.',
               tags: const ['UIColorPickerViewController', 'iOS only'],
               onTap: (ctx) => Navigator.push(
@@ -199,7 +209,8 @@ class ShowcaseTab extends StatelessWidget {
             gradient: const [Color(0xFFBF5AF2), Color(0xFFFF375F)],
             icon: CupertinoIcons.rectangle_stack_fill,
             title: 'Hero Animations',
-            pitch: 'Story viewer that morphs from tile to fullscreen — '
+            pitch:
+                'Story viewer that morphs from tile to fullscreen — '
                 'drag down to dismiss.',
             tags: const ['native overlay'],
             onTap: (ctx) => Navigator.push(
@@ -211,7 +222,8 @@ class ShowcaseTab extends StatelessWidget {
             gradient: const [Color(0xFFFF9F0A), Color(0xFFFF453A)],
             icon: CupertinoIcons.square_stack_3d_up_fill,
             title: 'Staggered Cards',
-            pitch: 'Entrance choreography from AnimatedOpacity + '
+            pitch:
+                'Entrance choreography from AnimatedOpacity + '
                 'AnimatedSlide — pure implicit animation.',
             tags: const ['implicit animations'],
             onTap: (ctx) => Navigator.push(
@@ -226,7 +238,8 @@ class ShowcaseTab extends StatelessWidget {
             gradient: const [Color(0xFF64D2FF), Color(0xFF0A84FF)],
             icon: CupertinoIcons.drop_fill,
             title: 'BackdropFilter',
-            pitch: 'Real native blur — UIVisualEffectView and RenderEffect, '
+            pitch:
+                'Real native blur — UIVisualEffectView and RenderEffect, '
                 'no Skia.',
             tags: const ['UIVisualEffectView', 'RenderEffect'],
             onTap: (ctx) => Navigator.push(
@@ -241,20 +254,24 @@ class ShowcaseTab extends StatelessWidget {
             gradient: const [Color(0xFF30D158), Color(0xFF64D2FF)],
             icon: CupertinoIcons.paintbrush_fill,
             title: 'Canvas Surface',
-            pitch: 'CustomPainter on a Metal-backed Skia surface, driven '
+            pitch:
+                'CustomPainter on a Metal-backed Skia surface, driven '
                 'over FFI from the main isolate.',
             tags: const ['Skia', 'FFI'],
             onTap: (ctx) => Navigator.push(
               ctx,
               PageRoute(
-                  builder: (_) => const CanvasDemo(), settings: '/canvas'),
+                builder: (_) => const CanvasDemo(),
+                settings: '/canvas',
+              ),
             ),
           ),
           ShowcaseCard(
             gradient: const [Color(0xFF30D158), Color(0xFF0A84FF)],
             icon: CupertinoIcons.sidebar_left,
             title: 'Side Drawer',
-            pitch: 'The push-style drawer and its native release feel — '
+            pitch:
+                'The push-style drawer and its native release feel — '
                 'drag it, flick it, let go mid-way.',
             tags: const ['gesture', 'release feel', 'push style'],
             onTap: (ctx) => Navigator.push(
