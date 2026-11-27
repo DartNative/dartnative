@@ -340,34 +340,19 @@ class CanvasDemo extends StatefulWidget {
 }
 
 class _CanvasDemoState extends State<CanvasDemo> {
-  // ── Core Animation demo state ─────────────────────────────────────────────
-
-  bool _visible = true;
-  double _scale = 1.0;
-  Timer? _coreAnimTimer;
-
   // ── Frosted glass image ───────────────────────────────────────────────────
 
   SkiaImage? _bgImage;
 
-  // Persist painter across rebuilds so _time isn't reset by setState.
+  // Persist ALL painters across rebuilds so their animation clocks aren't reset
+  // when `_bgImage` loads or any ancestor rebuilds.
+  final _gooeyPainter = GooeyBlobPainter();
+  LiquidGlassShaderPainter? _glassPainter;
   final _dissolvePainter = TextParticleEffect(text: 'SKIA');
 
   @override
   void initState() {
     super.initState();
-    // Toggle the Core Animation widgets every 1.6 s so observers can see
-    // UIKit's implicit animations running alongside the Skia surface.
-    _coreAnimTimer = Timer.periodic(const Duration(milliseconds: 1600), (_) {
-      // Dart timers keep firing in background; each toggle animates and pays
-      // a full relayout. Skip while backgrounded (checked per tick — cheaper
-      // than observer wiring for a demo).
-      if (!WidgetsBinding.instance.isForeground) return;
-      setState(() {
-        _visible = !_visible;
-        _scale = _visible ? 1.0 : 0.6;
-      });
-    });
     // Load the background image for the frosted-glass shader asynchronously.
     _loadBgImage();
   }
@@ -403,7 +388,10 @@ class _CanvasDemoState extends State<CanvasDemo> {
           image.dispose();
           return;
         }
-        setState(() => _bgImage = image);
+        setState(() {
+          _bgImage = image;
+          _glassPainter = LiquidGlassShaderPainter(image: image);
+        });
       }
     } catch (e, st) {
       dnLog('[canvas_demo] _loadBgImage error: $e\n$st');
@@ -412,7 +400,6 @@ class _CanvasDemoState extends State<CanvasDemo> {
 
   @override
   void dispose() {
-    _coreAnimTimer?.cancel();
     _bgImage?.dispose();
     super.dispose();
   }
@@ -438,10 +425,11 @@ class _CanvasDemoState extends State<CanvasDemo> {
         child: ListView(
           children: [
             SizedBox(
-                // Bar clearance is AUTOMATIC (extendBodyBehindAppBar +
-                // null-padding scrollable -> Scaffold applies safeTop+toolbar);
-                // keep only a small gap.
-                height: isIOS26 ? 8 : 24),
+              // Bar clearance is AUTOMATIC (extendBodyBehindAppBar +
+              // null-padding scrollable -> Scaffold applies safeTop+toolbar);
+              // keep only a small gap.
+              height: isIOS26 ? 8 : 24,
+            ),
 
             // ── Section header ──────────────────────────────────────────────
             Padding(
@@ -461,13 +449,13 @@ class _CanvasDemoState extends State<CanvasDemo> {
               child: Text(
                 Platform.isAndroid
                     ? 'CanvasSurface embeds a Skia Graphite Vulkan SurfaceView '
-                        'inside the native view hierarchy. The CustomPainter '
-                        'runs in the main Dart isolate over dart:ffi — no '
-                        'separate engine, no secondary isolate.'
+                          'inside the native view hierarchy. The CustomPainter '
+                          'runs in the main Dart isolate over dart:ffi — no '
+                          'separate engine, no secondary isolate.'
                     : 'CanvasSurface embeds a Skia Graphite CAMetalLayer inside '
-                        'the UIKit hierarchy. The CustomPainter runs in the '
-                        'main Dart isolate over dart:ffi — no separate '
-                        'engine, no secondary isolate.',
+                          'the UIKit hierarchy. The CustomPainter runs in the '
+                          'main Dart isolate over dart:ffi — no separate '
+                          'engine, no secondary isolate.',
                 style: TextStyle(color: kTextSecondary, fontSize: 15),
               ),
             ),
@@ -482,7 +470,7 @@ class _CanvasDemoState extends State<CanvasDemo> {
             CanvasSurface(
               height: 220,
               backgroundColor: const Color(0xFFFFFFFF),
-              painter: GooeyBlobPainter(),
+              painter: _gooeyPainter,
             ),
             const SizedBox(height: 4),
             Padding(
@@ -501,11 +489,11 @@ class _CanvasDemoState extends State<CanvasDemo> {
               subtitle: 'SkSL RuntimeEffect · liquid glass SDF shader',
             ),
             const SizedBox(height: 8),
-            if (_bgImage != null)
+            if (_glassPainter != null)
               CanvasSurface(
                 height: 280,
                 backgroundColor: const Color(0xFFE6E0D6),
-                painter: LiquidGlassShaderPainter(image: _bgImage),
+                painter: _glassPainter!,
               )
             else
               Container(
@@ -563,46 +551,20 @@ class _CanvasDemoState extends State<CanvasDemo> {
                   : 'Opacity + Container · native UIView/CALayer',
             ),
             const SizedBox(height: 16),
-            Center(
-              child: Opacity(
-                opacity: _visible ? 1.0 : 0.15,
-                child: Container(
-                  width: 120 * _scale,
-                  height: 120 * _scale,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Color(0xFF6B21A8), Color(0xFF1D4ED8)],
-                    ),
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'CA',
-                      style: TextStyle(
-                        color: Color(0xFFFFFFFF),
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            const _CoreAnimationBox(),
             const SizedBox(height: 8),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 Platform.isAndroid
                     ? 'Tier 1 widgets (Opacity + Container) map to native '
-                        'View/RenderNode — zero Skia overhead. State changes '
-                        'drive HWUI property updates natively. Tier 1 and '
-                        'Tier 2 composite on the same GPU pass.'
+                          'View/RenderNode — zero Skia overhead. State changes '
+                          'drive HWUI property updates natively. Tier 1 and '
+                          'Tier 2 composite on the same GPU pass.'
                     : 'Tier 1 widgets (Opacity + Container) map to native '
-                        'UIView/CALayer — zero Skia overhead. State changes '
-                        'drive Core Animation property updates natively. Tier '
-                        '1 and Tier 2 composite on the same GPU pass.',
+                          'UIView/CALayer — zero Skia overhead. State changes '
+                          'drive Core Animation property updates natively. Tier '
+                          '1 and Tier 2 composite on the same GPU pass.',
                 style: TextStyle(color: kTextSecondary, fontSize: 12),
                 textAlign: TextAlign.center,
               ),
@@ -633,12 +595,16 @@ class _CanvasDemoState extends State<CanvasDemo> {
               label: 'Binary (bare tier)',
               value: Platform.isAndroid ? '4.2 MB arm64' : '7.8 MB arm64',
             ),
-            const _InfoRow(label: 'Frame driver', value: 'Display vsync (up to 120 Hz)'),
+            const _InfoRow(
+              label: 'Frame driver',
+              value: 'Display vsync (up to 120 Hz)',
+            ),
             const _InfoRow(label: 'Isolate', value: 'Main (no secondary)'),
             _InfoRow(
               label: 'Tier 1 renderer',
-              value:
-                  Platform.isAndroid ? 'HWUI (RenderNode)' : 'Core Animation',
+              value: Platform.isAndroid
+                  ? 'HWUI (RenderNode)'
+                  : 'Core Animation',
             ),
             _InfoRow(
               label: 'Tier 1 cost',
@@ -648,6 +614,72 @@ class _CanvasDemoState extends State<CanvasDemo> {
             ),
             const SizedBox(height: 48),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+// ── _CoreAnimationBox ────────────────────────────────────────────────────────
+// Isolated into its own StatefulWidget so its 1.6 s toggle never rebuilds the
+// surrounding CanvasDemo ListView or resets the Skia surfaces above it.
+
+class _CoreAnimationBox extends StatefulWidget {
+  const _CoreAnimationBox();
+
+  @override
+  State<_CoreAnimationBox> createState() => _CoreAnimationBoxState();
+}
+
+class _CoreAnimationBoxState extends State<_CoreAnimationBox> {
+  bool _visible = true;
+  double _scale = 1.0;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(milliseconds: 1600), (_) {
+      if (!WidgetsBinding.instance.isForeground) return;
+      setState(() {
+        _visible = !_visible;
+        _scale = _visible ? 1.0 : 0.6;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Opacity(
+        opacity: _visible ? 1.0 : 0.15,
+        child: Container(
+          width: 120 * _scale,
+          height: 120 * _scale,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF6B21A8), Color(0xFF1D4ED8)],
+            ),
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: const Center(
+            child: Text(
+              'CA',
+              style: TextStyle(
+                color: Color(0xFFFFFFFF),
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ),
       ),
     );
