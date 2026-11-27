@@ -19,8 +19,9 @@ class MediaTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = PlaygroundTheme.of(context);
     return Container(
-      color: kHomeBg,
+      color: t.homeBg,
       child: ListView(
         children: [
           SizedBox(height: tabListTopGap(context)),
@@ -96,7 +97,9 @@ class MediaTab extends StatelessWidget {
             onTap: (ctx) => Navigator.push(
               ctx,
               PageRoute(
-                  builder: (_) => const HlsDemo(), settings: '/video-hls'),
+                builder: (_) => const HlsDemo(),
+                settings: '/video-hls',
+              ),
             ),
           ),
           const SectionHeader('CAMERA'),
@@ -108,7 +111,9 @@ class MediaTab extends StatelessWidget {
             onTap: (ctx) => Navigator.push(
               ctx,
               PageRoute(
-                  builder: (_) => const CameraDemo(), settings: '/camera'),
+                builder: (_) => const CameraDemo(),
+                settings: '/camera',
+              ),
             ),
           ),
           const SectionHeader('AUDIO'),

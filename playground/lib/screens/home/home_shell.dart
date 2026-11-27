@@ -61,11 +61,22 @@ class _PlaygroundHomeState extends State<PlaygroundHome> {
   /// bar's selected-tab tint in dark theme (see the BottomNavigationBar
   /// below). Null on iOS and pre-Android-12 devices, which fall back to the
   /// framework's own default.
-  static final ColorScheme? _dynamicScheme =
-      DynamicColor.colorScheme(brightness: Brightness.dark);
+  static final ColorScheme? _dynamicScheme = DynamicColor.colorScheme(
+    brightness: Brightness.dark,
+  );
 
   // The global is already restored (main awaits restorePlaygroundTheme).
   bool _dark = playgroundPalette.brightness == Brightness.dark;
+
+  // Persisted tab widgets: each tab and row subscribes to PlaygroundTheme.of,
+  // so neither tab switches nor theme flips need to recreate the tab list.
+  late final List<Widget> _tabs = <Widget>[
+    ShowcaseTab(),
+    WidgetsTab(),
+    GraphicsTab(),
+    MediaTab(),
+    SystemTab(),
+  ];
 
   PlaygroundPalette get _palette => _dark ? kDarkPalette : kLightPalette;
 
@@ -87,17 +98,22 @@ class _PlaygroundHomeState extends State<PlaygroundHome> {
     // Keep the Navigator's push-default in sync with the theme.
     SystemChrome.defaultStyle = playgroundOverlayStyle();
     final barColor = drawerOpen ? Colors.transparent : _palette.barBg;
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarBrightness: _dark ? Brightness.dark : Brightness.light,
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: _dark ? Brightness.light : Brightness.dark,
-      systemNavigationBarIconBrightness:
-          _dark ? Brightness.light : Brightness.dark,
-      systemNavigationBarColor:
-          isIOS26 || Platform.isAndroid ? Colors.transparent : barColor,
-      systemNavigationBarDividerColor:
-          isIOS26 || Platform.isAndroid ? Colors.transparent : barColor,
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarBrightness: _dark ? Brightness.dark : Brightness.light,
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: _dark ? Brightness.light : Brightness.dark,
+        systemNavigationBarIconBrightness: _dark
+            ? Brightness.light
+            : Brightness.dark,
+        systemNavigationBarColor: isIOS26 || Platform.isAndroid
+            ? Colors.transparent
+            : barColor,
+        systemNavigationBarDividerColor: isIOS26 || Platform.isAndroid
+            ? Colors.transparent
+            : barColor,
+      ),
+    );
   }
 
   void _toggleTheme() {
@@ -149,8 +165,11 @@ class _PlaygroundHomeState extends State<PlaygroundHome> {
         ),
         child: Row(
           children: [
-            Icon(_icons[i],
-                size: 20, color: selected ? kAccentBlue : t.textSecondary),
+            Icon(
+              _icons[i],
+              size: 20,
+              color: selected ? kAccentBlue : t.textSecondary,
+            ),
             const SizedBox(width: 12),
             Text(
               _titles[i],
@@ -214,8 +233,10 @@ class _PlaygroundHomeState extends State<PlaygroundHome> {
                         const SizedBox(height: 2),
                         Text(
                           '@lisataylor',
-                          style:
-                              TextStyle(color: t.textSecondary, fontSize: 13),
+                          style: TextStyle(
+                            color: t.textSecondary,
+                            fontSize: 13,
+                          ),
                         ),
                       ],
                     ),
@@ -236,16 +257,7 @@ class _PlaygroundHomeState extends State<PlaygroundHome> {
   @override
   Widget build(BuildContext context) {
     final t = _palette;
-    // Tabs are created per build (NOT const) so a theme flip re-runs their
-    // build — const instances would be identical() across rebuilds and the
-    // reconciler would skip them, leaving stale colors.
-    final tabs = <Widget>[
-      ShowcaseTab(),
-      WidgetsTab(),
-      GraphicsTab(),
-      MediaTab(),
-      SystemTab(),
-    ];
+    final tabs = _tabs;
     return PlaygroundTheme(
       palette: t,
       child: Scaffold(
@@ -288,8 +300,10 @@ class _PlaygroundHomeState extends State<PlaygroundHome> {
         appBar: AppBar(
           leading: Builder(
             builder: (ctx) => IconButton(
-              icon:
-                  Icon(CupertinoIcons.line_horizontal_3, color: t.textPrimary),
+              icon: Icon(
+                CupertinoIcons.line_horizontal_3,
+                color: t.textPrimary,
+              ),
               onPressed: () => Scaffold.of(ctx).toggleDrawer(),
             ),
           ),

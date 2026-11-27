@@ -19,8 +19,9 @@ class WidgetsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = PlaygroundTheme.of(context);
     return Container(
-      color: kHomeBg,
+      color: t.homeBg,
       child: ListView(
         children: [
           SizedBox(height: tabListTopGap(context)),
