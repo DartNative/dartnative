@@ -35,21 +35,8 @@ import 'home/demo_ui.dart';
 // at the left visually and matches the displayed sigma (= 0).
 const double _maxSigma = 30.0;
 
-class BackdropFilterDemo extends StatefulWidget {
+class BackdropFilterDemo extends StatelessWidget {
   const BackdropFilterDemo({super.key});
-
-  @override
-  State<BackdropFilterDemo> createState() => _BackdropFilterDemoState();
-}
-
-class _BackdropFilterDemoState extends State<BackdropFilterDemo> {
-  double _imageFilteredSlider = 0.0; // 0..1 → scaled to 0..30 sigma
-  double _backdropFilterSlider = 0.0;
-
-  double get _imageSigma => _imageFilteredSlider * _maxSigma;
-  double get _backdropSigma => _backdropFilterSlider * _maxSigma;
-
-  static const String _photoAsset = 'assets/backdrop_filter_sample.jpg';
 
   @override
   Widget build(BuildContext context) {
@@ -72,107 +59,17 @@ class _BackdropFilterDemoState extends State<BackdropFilterDemo> {
         child: ListView(
           children: [
             SizedBox(
-                // Bar clearance is AUTOMATIC (extendBodyBehindAppBar +
-                // null-padding scrollable -> Scaffold applies safeTop+toolbar);
-                // keep only a small gap.
-                height: isIOS26 ? 8 : 12),
-
-            // ── Section 1: ImageFiltered (blur the text, not the photo) ─────
-            const _SectionTitle('1.  ImageFiltered — blurs the TEXT'),
-            const _SectionBody(
-              'The photo stays sharp. Only the text on top of it gets '
-              'blurred as you drag the slider. Use this for frosted text '
-              'or soft icons.',
-            ),
-            const SizedBox(height: 10),
-            _Stage(
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Image.asset(_photoAsset, fit: BoxFit.cover),
-                  ),
-                  Positioned.fill(
-                    child: Center(
-                      child: ImageFiltered(
-                        imageFilter: ImageFilter.blur(
-                          sigmaX: _imageSigma,
-                          sigmaY: _imageSigma,
-                        ),
-                        child: const Text(
-                          'Frosted text',
-                          style: TextStyle(
-                            color: Color(0xFFFFFFFF),
-                            fontSize: 38,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 14),
-            _SigmaSlider(
-              label: 'Blur sigma',
-              value: _imageFilteredSlider,
-              sigma: _imageSigma,
-              onChanged: (v) => setState(() => _imageFilteredSlider = v),
+              // Bar clearance is AUTOMATIC (extendBodyBehindAppBar +
+              // null-padding scrollable -> Scaffold applies safeTop+toolbar);
+              // keep only a small gap.
+              height: isIOS26 ? 8 : 12,
             ),
 
+            // Each example owns its own State so dragging one slider never
+            // rebuilds or re-snapshots the other filter on the main thread.
+            const _ImageFilteredSection(),
             const SizedBox(height: 32),
-
-            // ── Section 2: BackdropFilter (blur the photo inside a circle) ──
-            const _SectionTitle('2.  BackdropFilter — blurs the PHOTO'),
-            const _SectionBody(
-              'A circular region in the middle of the photo. The photo '
-              'INSIDE the circle blurs as sigma rises; the photo outside '
-              'stays sharp. Use this for frosted-glass overlays.',
-            ),
-            const SizedBox(height: 10),
-            _Stage(
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Image.asset(_photoAsset, fit: BoxFit.cover),
-                  ),
-                  Positioned.fill(
-                    child: Center(
-                      child: ClipOval(
-                        child: SizedBox(
-                          width: 220,
-                          height: 220,
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(
-                              sigmaX: _backdropSigma,
-                              sigmaY: _backdropSigma,
-                            ),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: const Color(0x33FFFFFF),
-                                border: Border.all(
-                                  color: const Color(0xFFFFFFFF),
-                                  width: 2,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 14),
-            _SigmaSlider(
-              label: 'Blur sigma',
-              value: _backdropFilterSlider,
-              sigma: _backdropSigma,
-              onChanged: (v) => setState(() => _backdropFilterSlider = v),
-            ),
-
+            const _BackdropFilterSection(),
             const SizedBox(height: 28),
 
             Padding(
@@ -193,6 +90,155 @@ class _BackdropFilterDemoState extends State<BackdropFilterDemo> {
           ],
         ),
       ),
+    );
+  }
+}
+
+const String _kBackdropPhotoAsset = 'assets/backdrop_filter_sample.jpg';
+
+class _ImageFilteredSection extends StatefulWidget {
+  const _ImageFilteredSection();
+
+  @override
+  State<_ImageFilteredSection> createState() => _ImageFilteredSectionState();
+}
+
+class _ImageFilteredSectionState extends State<_ImageFilteredSection> {
+  double _slider = 0.0;
+  // Cache the photo widget so dragging the slider doesn't recreate Image.asset.
+  late final Widget _photo = Image.asset(
+    _kBackdropPhotoAsset,
+    fit: BoxFit.cover,
+  );
+
+  double get _sigma => _slider * _maxSigma;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const _SectionTitle('1.  ImageFiltered — blurs the TEXT'),
+        const _SectionBody(
+          'The photo stays sharp. Only the text on top of it gets '
+          'blurred as you drag the slider. Use this for frosted text '
+          'or soft icons.',
+        ),
+        const SizedBox(height: 10),
+        _Stage(
+          child: Stack(
+            children: [
+              Positioned.fill(child: _photo),
+              Positioned.fill(
+                child: Center(
+                  child: ImageFiltered(
+                    imageFilter: ImageFilter.blur(
+                      sigmaX: _sigma,
+                      sigmaY: _sigma,
+                    ),
+                    child: const Text(
+                      'Frosted text',
+                      style: TextStyle(
+                        color: Color(0xFFFFFFFF),
+                        fontSize: 38,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
+        _SigmaSlider(
+          label: 'Blur sigma',
+          value: _slider,
+          sigma: _sigma,
+          onChanged: (v) {
+            // Quantize to 0.5-sigma increments (60 steps across 0..30) so
+            // sub-pixel drag jitter doesn't flood CIGaussianBlur snapshots.
+            final q = (v * 60).round() / 60;
+            if (q != _slider) setState(() => _slider = q);
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _BackdropFilterSection extends StatefulWidget {
+  const _BackdropFilterSection();
+
+  @override
+  State<_BackdropFilterSection> createState() => _BackdropFilterSectionState();
+}
+
+class _BackdropFilterSectionState extends State<_BackdropFilterSection> {
+  double _slider = 0.0;
+  late final Widget _photo = Image.asset(
+    _kBackdropPhotoAsset,
+    fit: BoxFit.cover,
+  );
+
+  double get _sigma => _slider * _maxSigma;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const _SectionTitle('2.  BackdropFilter — blurs the PHOTO'),
+        const _SectionBody(
+          'A circular region in the middle of the photo. The photo '
+          'INSIDE the circle blurs as sigma rises; the photo outside '
+          'stays sharp. Use this for frosted-glass overlays.',
+        ),
+        const SizedBox(height: 10),
+        _Stage(
+          child: Stack(
+            children: [
+              Positioned.fill(child: _photo),
+              Positioned.fill(
+                child: Center(
+                  child: ClipOval(
+                    child: SizedBox(
+                      width: 220,
+                      height: 220,
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(
+                          sigmaX: _sigma,
+                          sigmaY: _sigma,
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: const Color(0x33FFFFFF),
+                            border: Border.all(
+                              color: const Color(0xFFFFFFFF),
+                              width: 2,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
+        _SigmaSlider(
+          label: 'Blur sigma',
+          value: _slider,
+          sigma: _sigma,
+          onChanged: (v) {
+            final q = (v * 60).round() / 60;
+            if (q != _slider) setState(() => _slider = q);
+          },
+        ),
+      ],
     );
   }
 }
